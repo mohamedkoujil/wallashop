@@ -4,6 +4,7 @@
     <h1>Detalle del Producto</h1>
     <div v-if="product">
       <h2>{{ product.productName }}</h2>
+      <p>{{ product.category }}</p>
       <p>{{ product.description }}</p>
       <p>Precio: {{ product.price }}</p>
       <p>Ubicación: {{ product.location }}</p>
