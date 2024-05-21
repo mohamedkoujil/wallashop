@@ -1,17 +1,19 @@
 <template>
-    <div>
-      <h1>Home Page</h1>
-      <!-- Your home page content goes here -->
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'HomePage'
-  }
-  </script>
-  
-  <style>
-  /* Your component styles go here */
-  </style>
-  
+  <div class="home-page">
+    <h1>Home Page</h1>
+    <p>Welcome to the homepage!</p>
+    <!-- Include more homepage content here -->
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'HomePage',
+};
+</script>
+
+<style scoped>
+.home-page {
+  padding: 20px;
+}
+</style>
