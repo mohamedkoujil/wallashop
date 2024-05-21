@@ -7,16 +7,14 @@
   <router-link to="/edit-profile">Edit Profile</router-link>
 </nav>
   <router-view/>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
   }
 }
 </script>
