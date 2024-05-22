@@ -12,51 +12,41 @@
 <body>
   <header class="header">
     <div class="header-top">
-      <button class="header-menu-btn"><i class="fas fa-ellipsis-v"></i></button>
       <div class="header-logo">
-        <img src="/logotipo.png" alt="WallaShop" width="300" height="300">
+        <img src="/logotipo-sinfondo.png" alt="WallaShop" class="logo">
       </div>
       <div class="header-search">
-        <input type="text" placeholder="Buscar productos...">
-        <button class="search-btn"><i class="fas fa-search"></i> Buscar</button>
+        <input type="text" placeholder="Busca productos...">
       </div>
       <div class="header-buttons">
         <button class="btn">Registrarse</button>
-        <button class="btn">Iniciar sesión</button>
+        <button class="btn">Iniciar Sesión</button>
       </div>
     </div>
   </header>
   <noscript>
-    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    <strong>Lo sentimos, pero <%= htmlWebpackPlugin.options.title %> no funciona correctamente sin JavaScript habilitado. Por favor, actívalo para continuar.</strong>
   </noscript>
   <div id="app"></div>
-  
+
   <footer class="footer">
     <div class="footer-content">
-      <div class="footer-column">
-        <h4>About Us</h4>
-        <p>En WallaShop, la seguretat i la fiabilitat són la nostra prioritat. Construïm una plataforma sòlida i accessible per a les teves compres i vendes en línia. Uneix-te a nosaltres per a un futur digital més segur i fiable.</p>
+      <div class="footer-logo">
+        <img src="/logotipo-sinfondo.png" alt="WallaShop" class="logo">
       </div>
-      <div class="footer-column">
-        <h4>Categories</h4>
-        <ul>
-          <li><a href="#">Electronica</a></li>
-          <li><a href="#">Roba</a></li>
-          <li><a href="#">Llibres</a></li>
-          <li><a href="#">Mobles</a></li>
-          
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h4>Contact Us</h4>
-        <p>Email: info@wallashop.com</p>
-        <p>Phone: 123-456-7890</p>
+      <div class="footer-social">
+        <p>WallaShop</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
       </div>
     </div>
     <div class="footer-bottom">
       <p>&copy; 2024 Wallashop. All rights reserved.</p>
     </div>
   </footer>
-  
 </body>
 </html>
