@@ -56,6 +56,14 @@
   let loginButton = document.getElementById('login-btn');
   let registerButton = document.getElementById('register-btn');
 
+  loginButton.addEventListener('click', function () {
+    window.location.href = '/login.html';
+  });
+
+  registerButton.addEventListener('click', function () {
+    window.location.href = '/register.html';
+  });
+
   let userLocalStorage = localStorage.getItem('user');
 
   if (userLocalStorage) {
