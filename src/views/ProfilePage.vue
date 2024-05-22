@@ -1,27 +1,27 @@
 <template>
   <div class="profile-page">
-    <h1>Profile Page</h1>
-    <div v-if="profile">
-      <p><strong>Email:</strong> {{ profile.email }}</p>
-      <p><strong>Location:</strong> {{ profile.location }}</p>
-      <p><strong>Profile Picture:</strong></p>
-      <img :src="profile.profilePicture" alt="Profile Picture" />
-      <p><strong>Level:</strong> {{ profile.nivell }}</p>
-      <p><strong>Rate:</strong> {{ profile.rate }}</p>
-    </div>
-    <div v-else>
-      <p>Loading...</p>
-    </div>
+    <ProfileCard :profile="profile" />
   </div>
 </template>
 
 <script>
+import ProfileCard from '@/components/ProfileCard.vue';
+
 export default {
   name: 'ProfilePage',
+  components: {
+    ProfileCard
+  },
   data() {
     return {
-      profile: null,
-      apiUrl: 'http://your-api-endpoint/profile', // Reemplaza con tu URL de la API
+      profile: {
+        email: '',
+        location: '',
+        profilePicture: '',
+        nivell: '',
+        rate: 0
+      },
+      apiUrl: 'http://3.84.240.27:8080/index.php?path=profile'
     };
   },
   methods: {
@@ -45,9 +45,8 @@ export default {
 <style scoped>
 .profile-page {
   padding: 20px;
-}
-img {
-  max-width: 150px;
-  border-radius: 50%;
+  max-width: 800px;
+  margin: auto;
+  background-color: #F4F4F4;
 }
 </style>
