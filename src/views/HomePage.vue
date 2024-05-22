@@ -6,18 +6,21 @@
       <li v-for="category in categories" :key="category.id" @click="filterCategory(category.category)">{{ category.category }}</li>
     </ul>
     <h2>Listado de Productos</h2>
-    <ul>
-      <div v-for="product in products" :key="product.id">
-        <router-link :to="'/product/' + product.id">
-          <li>{{ product.productname }} - {{ product.price }}€</li>
-        </router-link>
-      </div>
-    </ul>
+    <section class="product-container">
+      <router-link :to="'/product/' + product.id" v-for="product in products" :key="product.id">
+        <product-card :product="product"></product-card>
+      </router-link>
+    </section>
+    
   </div>
 </template>
 
 <script>
+import ProductCard from '../components/productCard.vue';
 export default {
+  components: {
+    ProductCard
+  },
   data() {
     return {
       allProducts: [],
@@ -66,4 +69,16 @@ export default {
 </script>
 
 <style>
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+  cursor: pointer;
+}
+.product-container {
+  display: flex;
+}
 </style>
