@@ -2,9 +2,8 @@
   <div>
     <!--Listado de categorias-->
     <ul>
-      <li v-for="category in categories" :key="category.id">
-        <div @click="filterCategory(category.category)">{{ category.category }}</div>
-      </li>
+      <li @click="filterCategory('all')">All</li>
+      <li v-for="category in categories" :key="category.id" @click="filterCategory(category.category)">{{ category.category }}</li>
     </ul>
     <h2>Listado de Productos</h2>
     <ul>
@@ -18,10 +17,10 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
+      allProducts: [],
       products: [],
       categories: [],
       currentCategory: null
@@ -34,9 +33,10 @@ export default {
   methods: {
     async fetchProducts() {
       try {
-        const response = await fetch('http://54.174.66.62:8080/index.php?path=products');
+        const response = await fetch('http://3.84.240.27:8080/index.php?path=products');
         const data = await response.json();
         console.log('Products:', data)
+        this.allProducts = data;
         this.products = data;
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -44,7 +44,7 @@ export default {
     },
     async fetchCategories() {
       try {
-        const response = await fetch('http://54.174.66.62:8080/index.php?path=categories');
+        const response = await fetch('http://3.84.240.27:8080/index.php?path=categories');
         const data = await response.json();
         console.log('Categories:', data)
         this.categories = data;
@@ -55,8 +55,15 @@ export default {
     filterCategory(category) {
       this.currentCategory = category;
       console.log('Current category:', this.currentCategory);
-      this.products = this.products.filter(product => product.category == this.currentCategory);
+      if (category === 'all') {
+        this.products = this.allProducts;
+      } else {
+        this.products = this.allProducts.filter(product => product.category === category);
+      }
     }
   }
 };
 </script>
+
+<style>
+</style>
