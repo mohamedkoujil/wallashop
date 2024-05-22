@@ -1,35 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .register-page {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .register-page h1 {
+      margin-bottom: 20px;
+    }
+    .register-page label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .register-page input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .register-page button {
+      width: 100%;
+      padding: 10px;
+      background-color: #0e2945;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .register-page button:hover {
+      background-color: #8292a4;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-page">
+    <h1>Registrarse</h1>
+    <form id="registerForm">
+      <label for="registerEmail">Correo</label>
+      <input type="email" id="registerEmail" required />
 
+      <label for="registerPassword">Contraseña</label>
+      <input type="password" id="registerPassword" required />
 
+      <button type="submit">Registrarse</button>
+    </form>
+  </div>
 
-
-
-
-
-<script>
+  <script>
     const registerForm = document.getElementById('registerForm');
 
-registerForm.addEventListener('submit', function(event) {
-  event.preventDefault(); // Evita que el formulario se envíe normalmente
-  
-  const email = document.getElementById('registerEmail').value;
-  const password = document.getElementById('registerPassword').value;
+    registerForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // Evita que el formulario se envíe normalmente
+      
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
 
-  // Enviar los datos de registro al servidor
-  fetch('URL_DEL_ENDPOINT_REGISTER', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ email, password })
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Manejar la respuesta del servidor, por ejemplo, mostrar un mensaje de éxito o error al usuario
-    console.log(data);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    // Manejar errores de red u otros errores
-  });
-});
-</script>
+      // Enviar los datos de registro al servidor
+      fetch('http://3.84.240.27:8080/index.php?path=register', { // Reemplaza URL_DEL_ENDPOINT_REGISTER con tu endpoint real
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Manejar la respuesta del servidor, por ejemplo, mostrar un mensaje de éxito o error al usuario
+        if (data.success) {
+          alert('Registro exitoso. Ahora puedes iniciar sesión.');
+          window.location.href = '/login.html'; // Redirigir a la página de inicio de sesión
+        } else {
+          alert('Error en el registro: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Manejar errores de red u otros errores
+        alert('Error en el registro. Por favor, inténtalo de nuevo más tarde.');
+      });
+    });
+  </script>
+</body>
+</html>
