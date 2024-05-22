@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     async fetchProduct() {
-      const response = await fetch(`http://3.84.240.27:8080/index.php?path=product&id=${this.id}`);
+      const response = await fetch(`http://54.227.119.146:8080/index.php?path=product&id=${this.id}`);
       const data = await response.json();
       if (data.status === 'Product not found') {
         this.product = null;
