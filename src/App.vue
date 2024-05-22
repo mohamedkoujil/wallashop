@@ -1,9 +1,6 @@
 <template>
   <nav>
-  <router-link to="/">Home</router-link> |  
-  <router-link to="/profile">Profile</router-link> |
-  <router-link to="/edit-profile">Edit Profile</router-link>
-</nav>
+  </nav>
   <router-view/>
 </template>
 
