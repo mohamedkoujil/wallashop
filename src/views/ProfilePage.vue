@@ -47,6 +47,6 @@ export default {
   padding: 20px;
   max-width: 800px;
   margin: auto;
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
 }
 </style>
