@@ -1,0 +1,41 @@
+
+
+
+
+
+
+
+
+
+
+<script>
+    let loginButton = document.getElementById('login-btn');
+    loginButton.addEventListener('click', function () {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Enviar los datos de inicio de sesión al servidor
+        fetch('http://3.84.240.27:8080/index.php?path=login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.isLoggedIn) {
+                    // Inicio de sesión exitoso, guardar datos en localStorage
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    // Redirigir a la página principal u otra página
+                } else {
+                    // Mostrar mensaje de error al usuario
+                    alert('Inicio de sesión fallido. Verifica tus credenciales.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Manejar errores de red u otros errores
+            });
+    });
+</script>

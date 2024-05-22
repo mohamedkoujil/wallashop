@@ -19,8 +19,8 @@
         <input type="text" placeholder="Busca productos...">
       </div>
       <div class="header-buttons">
-        <button class="btn">Registrarse</button>
-        <button class="btn">Iniciar Sesión</button>
+        <button id="register-btn" class="btn">Registrarse</button>
+        <button id="login-btn" class="btn">Iniciar Sesión</button>
         <div class="user-icon">
         </div>
         <button class="btn-settings">···</button>
@@ -52,4 +52,19 @@
     </div>
   </footer>
 </body>
+<script>
+  let loginButton = document.getElementById('login-btn');
+  let registerButton = document.getElementById('register-btn');
+
+  let userLocalStorage = localStorage.getItem('user');
+
+  if (userLocalStorage) {
+    loginButton.style.display = 'none';
+    registerButton.style.display = 'none';
+  } else {
+    loginButton.style.display = 'block';
+    registerButton.style.display = 'block';
+  }
+
+</script>
 </html>

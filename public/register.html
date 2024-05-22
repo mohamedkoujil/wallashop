@@ -1,0 +1,35 @@
+
+
+
+
+
+
+
+<script>
+    const registerForm = document.getElementById('registerForm');
+
+registerForm.addEventListener('submit', function(event) {
+  event.preventDefault(); // Evita que el formulario se envíe normalmente
+  
+  const email = document.getElementById('registerEmail').value;
+  const password = document.getElementById('registerPassword').value;
+
+  // Enviar los datos de registro al servidor
+  fetch('URL_DEL_ENDPOINT_REGISTER', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, password })
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Manejar la respuesta del servidor, por ejemplo, mostrar un mensaje de éxito o error al usuario
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    // Manejar errores de red u otros errores
+  });
+});
+</script>
