@@ -3,95 +3,118 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro</title>
+  <title>Registrarse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      font-family: 'Merriweather', serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      background-color: #F4F4F4;
       margin: 0;
     }
-    .register-page {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
+
+    .register-container {
+      background-color: white;
+      padding: 20px 40px;
+      border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
     }
-    .register-page h1 {
+
+    .register-container h1 {
       margin-bottom: 20px;
+      font-size: 24px;
+      color: #0E2945;
     }
-    .register-page label {
+
+    .register-container label {
       display: block;
+      text-align: left;
       margin-bottom: 5px;
+      font-weight: bold;
+      color: #0E2945;
     }
-    .register-page input {
+
+    .register-container input {
       width: 100%;
       padding: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      box-sizing: border-box;
     }
-    .register-page button {
+
+    .register-container button {
       width: 100%;
       padding: 10px;
-      background-color: #0e2945;
+      background-color: #0E2945;
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 16px;
     }
-    .register-page button:hover {
-      background-color: #8292a4;
+
+    .register-container button:hover {
+      background-color: #8292A4;
     }
   </style>
 </head>
 <body>
-  <div class="register-page">
+  <div class="register-container">
     <h1>Registrarse</h1>
     <form id="registerForm">
-      <label for="registerEmail">Correo</label>
-      <input type="email" id="registerEmail" required />
+      <label for="personName">Nombre</label>
+      <input type="text" id="personName" required>
 
-      <label for="registerPassword">Contraseña</label>
-      <input type="password" id="registerPassword" required />
+      <label for="email">Correo</label>
+      <input type="email" id="email" required>
 
-      <button type="submit">Registrarse</button>
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" required>
+
+      <label for="location">Ubicación</label>
+      <input type="text" id="location" required>
+
+      <label for="profilePicture">Enlace de la Foto de Perfil</label>
+      <input type="text" id="profilePicture" required>
+
+      <button type="submit" id="register-btn">Registrarse</button>
     </form>
   </div>
 
   <script>
-    const registerForm = document.getElementById('registerForm');
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const personName = document.getElementById('personName').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const location = document.getElementById('location').value;
+      const profilePicture = document.getElementById('profilePicture').value;
 
-    registerForm.addEventListener('submit', function(event) {
-      event.preventDefault(); // Evita que el formulario se envíe normalmente
-      
-      const email = document.getElementById('registerEmail').value;
-      const password = document.getElementById('registerPassword').value;
-
-      // Enviar los datos de registro al servidor
-      fetch('http://3.84.240.27:8080/index.php?path=register', { // Reemplaza URL_DEL_ENDPOINT_REGISTER con tu endpoint real
+      fetch('http://3.84.240.27:8080/index.php?path=register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ personName, email, password, location, profilePicture })
       })
       .then(response => response.json())
       .then(data => {
-        // Manejar la respuesta del servidor, por ejemplo, mostrar un mensaje de éxito o error al usuario
-        if (data.success) {
+        if (data.isRegistered) {
           alert('Registro exitoso. Ahora puedes iniciar sesión.');
-          window.location.href = '/login.html'; // Redirigir a la página de inicio de sesión
+          // Redirigir a la página de inicio de sesión u otra página
         } else {
-          alert('Error en el registro: ' + data.message);
+          alert('Registro fallido. Por favor, inténtalo de nuevo.');
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        // Manejar errores de red u otros errores
         alert('Error en el registro. Por favor, inténtalo de nuevo más tarde.');
       });
     });
