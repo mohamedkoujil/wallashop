@@ -21,9 +21,18 @@
       <div class="header-buttons">
         <button id="register-btn" class="btn">Registrarse</button>
         <button id="login-btn" class="btn">Iniciar Sesión</button>
-        <div class="user-icon">
+        <div class="bar-wrapper" id="bar-wrapper">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
         </div>
-        <button class="btn-settings">···</button>
+        <div class="sidebar-menu" id="sidebar-menu">
+          <ul>
+            <li><a href="../src/views/ProfilePage.vue">Ver Perfil</a></li>
+            <li><a href="../src/views/EditProfile.vue">Editar Perfil</a></li>
+            <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </header>
@@ -51,27 +60,89 @@
       <p>&copy; 2024 Wallashop. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+    let loginButton = document.getElementById('login-btn');
+    let registerButton = document.getElementById('register-btn');
+    let barWrapper = document.getElementById("bar-wrapper");
+    let bars = document.getElementsByClassName("bar");
+    let sidebarMenu = document.getElementById("sidebar-menu");
+    let menuItems = document.querySelectorAll(".sidebar-menu li");
+    let logoutButton = document.getElementById('logout-btn');
+    let click = false;
+
+    loginButton.addEventListener('click', function () {
+      window.location.href = '/login.html';
+    });
+
+    registerButton.addEventListener('click', function () {
+      window.location.href = '/register.html';
+    });
+
+    logoutButton.addEventListener('click', function () {
+      localStorage.removeItem('user');
+      window.location.href = '/';
+    });
+
+    let userLocalStorage = localStorage.getItem('user');
+
+    if (userLocalStorage) {
+      loginButton.style.display = 'none';
+      registerButton.style.display = 'none';
+    } else {
+      loginButton.style.display = 'block';
+      registerButton.style.display = 'block';
+    }
+
+    function timeOutMenuLinks(i, enter) {
+      if (enter) {
+        setTimeout(function() {
+          menuItems[i].className += " link-in";
+        }, 100 * i);
+      } else {
+        setTimeout(function() {
+          menuItems[i].className = "";
+        }, 100 * i);
+      }
+    }
+
+    barWrapper.onclick = function() {
+      click = !click;
+
+      if (click) {
+        barWrapper.className += " is-close menu-open";
+        bars[0].className += " close";
+        bars[bars.length - 1].className += " close";
+        sidebarMenu.className += " menu-open";
+        for (let i = 0; i < menuItems.length; i++) {
+          timeOutMenuLinks(i, true);
+        }
+      } else {
+        barWrapper.className = "bar-wrapper";
+        bars[0].className = "bar";
+        bars[bars.length - 1].className = "bar";
+        setTimeout(function(){
+          sidebarMenu.className = "sidebar-menu";
+        }, 300);
+        for (let i = 0; i < menuItems.length; i++) {
+          timeOutMenuLinks(i, false);
+        }
+      }
+    };
+
+    window.onclick = function(event) {
+      if (!event.target.matches('.bar-wrapper') && !event.target.matches('.bar') && !event.target.matches('.sidebar-menu') && !event.target.matches('.sidebar-menu *')) {
+        if (sidebarMenu.classList.contains('menu-open')) {
+          sidebarMenu.classList.remove('menu-open');
+          barWrapper.className = "bar-wrapper";
+          bars[0].className = "bar";
+          bars[bars.length - 1].className = "bar";
+          for (let i = 0; i < menuItems.length; i++) {
+            timeOutMenuLinks(i, false);
+          }
+        }
+      }
+    };
+  </script>
 </body>
-<script>
-  let loginButton = document.getElementById('login-btn');
-  let registerButton = document.getElementById('register-btn');
-
-  loginButton.addEventListener('click', function () {
-    window.location.href = '/login.html';
-  });
-
-  registerButton.addEventListener('click', function () {
-    window.location.href = '/register.html';
-  });
-
-  let userLocalStorage = localStorage.getItem('user');
-
-  if (userLocalStorage) {
-    loginButton.style.display = 'none';
-    registerButton.style.display = 'none';
-  } else {
-    loginButton.style.display = 'block';
-    registerButton.style.display = 'block';
-  }
-</script>
 </html>

@@ -1,8 +1,13 @@
 /* Estilos generales */
-body {
-  font-family: 'Merriweather', serif;
+body, ul, li {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+body {
+  font-family: 'Merriweather', serif;
   background-color: #F4F4F4; /* Fondo gris claro */
   color: #0E2945; /* Texto principal en azul oscuro */
 }
@@ -56,6 +61,7 @@ body {
   flex: 0 0 auto;
   display: flex;
   gap: 10px;
+  position: relative;
 }
 
 .btn {
@@ -72,26 +78,90 @@ body {
   background-color: #8292A4;
 }
 
-.btn-settings {
-  font-size: 14px; 
-  padding: 8px 12px; 
-  background-color: #E0E0E0; 
-  color: #333; 
-  border: 1px solid #ccc; 
-  border-radius: 4px; 
-  transition: background-color 0.3s ease, color 0.3s ease; 
+.bar-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
-.btn-settings:hover {
-  background-color: #CCC; 
-  color: #222;  
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: #0E2945;
+  margin: 4px 0;
+  transition: 0.4s;
 }
 
-.user-icon {
-  width: 40px; 
-  height: 40px; 
-  border-radius: 100%;
+.is-close .bar:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.is-close .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.is-close .bar:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
+/* Estilos del menú desplegable */
+.sidebar-menu {
+  display: none;
+  position: absolute;
+  top: 50px; /* Ajustar según sea necesario */
+  right: 0;
+  width: 650px;
+  background-color: #0E2945;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: 0.3s ease-in-out;
+  z-index: 1;
+}
+
+.sidebar-menu.menu-open {
+  display: block;
+}
+
+.sidebar-menu ul {
+  padding: 10px;
+  list-style: none;
+}
+
+.sidebar-menu li {
+  font-size: 14px; /* Ajustado para mejor visibilidad */
+  text-transform: capitalize;
+  margin: 10px 0;
+}
+
+.sidebar-menu a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-menu a:hover {
   background-color: #8292A4;
+  color: #fff;
+}
+
+.link-in {
+  transform: translateX(0);
+}
+
+.sidebar-menu li {
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Estilos adicionales para el botón de cierre de sesión */
+#logout-btn:hover {
+  background-color: #ff4c4c;
+  color: white;
 }
 
 /* Estilos del footer */
