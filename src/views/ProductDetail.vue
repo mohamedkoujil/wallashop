@@ -1,4 +1,3 @@
-<!-- src/components/DetallaProducto.vue -->
 <template>
   <div class="product-detail">
     <h1>Detalle del Producto</h1>
@@ -6,14 +5,14 @@
       <img :src="product.images" alt="Product image" class="product-image">
       <div class="product-info">
         <h2>{{ product.productName }}</h2>
-        <p class="product-category">{{ product.category }}</p>
-        <p class="product-description">{{ product.description }}</p>
-        <p class="product-price">Precio: {{ product.price }}</p>
-        <p class="product-location">Ubicación: {{ product.location }}</p>
-        <p class="product-owner">Propietario: {{ product.ownername }} - {{ product.owneremail }}</p>
+        <p class="product-category"><strong>Categoría:</strong> {{ product.category }}</p>
+        <p class="product-description"><strong>Descripción:</strong> {{ product.description }}</p>
+        <p class="product-price"><strong>Precio:</strong> {{ product.price }} €</p>
+        <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
+        <p class="product-owner"><strong>Propietario:</strong> {{ product.ownername }} - {{ product.owneremail }}</p>
       </div>
     </div>
-    <div id="loading" v-else>
+    <div v-else id="loading">
       <div class="loader">
         <div class="justify-content-center jimu-primary-loading"></div>
       </div>
@@ -34,22 +33,26 @@ export default {
   },
   methods: {
     async fetchProduct() {
-      const response = await fetch(`http://54.175.247.76:8080/index.php?path=product&id=${this.id}`);
-      const data = await response.json();
-      if (data.status === 'Product not found') {
-        this.product = null;
-      } else {
-        console.log('Product:', data);
-        setTimeout(() => {
-          this.product = data;
-        }, 750);
+      try {
+        const response = await fetch(`http://54.175.247.76:8080/index.php?path=product&id=${this.id}`);
+        const data = await response.json();
+        if (data.status === 'Product not found') {
+          this.product = null;
+        } else {
+          console.log('Product:', data);
+          setTimeout(() => {
+            this.product = data;
+          }, 750);
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
       }
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
 
 body {
@@ -61,31 +64,49 @@ body {
 
 .product-detail {
   padding: 20px;
+  text-align: center;
 }
 
 h1, h2 {
   font-weight: 700;
+  color: #0E2945;
 }
 
 .product-content {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   gap: 20px;
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
 .product-image {
-  width: 30%;
-  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  border: 2px solid #0E2945;
 }
 
 .product-info {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
   gap: 10px;
 }
 
 .product-category, .product-description, .product-price, .product-location, .product-owner {
   font-weight: 400;
+  font-size: 16px;
+}
+
+.product-category strong, .product-description strong, .product-price strong, .product-location strong, .product-owner strong {
+  color: #0E2945;
 }
 
 #loading {
