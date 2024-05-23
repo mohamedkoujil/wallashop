@@ -1,11 +1,9 @@
 <template>
     <div class="product-card">
-        <h2 class="product-name">{{ product.productName }}</h2>
+        <img class="product-img" :src="product.images" alt="Product image">
+        <h2 class="product-name">{{ product.productname }}</h2>
         <p class="product-category">{{ product.category }}</p>
-        <p class="product-description">{{ product.description }}</p>
         <p class="product-price">Precio: {{ product.price }}€</p>
-        <p class="product-location">Ubicación: {{ product.location }}</p>
-        <p class="product-owner">Propietario: {{ product.ownername }} - {{ product.owneremail }}</p>
     </div>
 </template>
 
@@ -70,5 +68,13 @@ export default {
     font-size: 12px;
     margin-bottom: 5px;
     color: #657680;
+}
+
+.product-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 </style>
