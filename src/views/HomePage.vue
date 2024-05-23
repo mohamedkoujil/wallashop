@@ -11,6 +11,7 @@
         <product-card :product="product"></product-card>
       </router-link>
     </section>
+    <button id="add-product" @click="addProduct">Añadir producto</button>
   </div>
 </template>
 
@@ -31,11 +32,12 @@ export default {
   mounted() {
     this.fetchProducts();
     this.fetchCategories();
+    window.addEventListener('scroll', this.handleScroll);
   },
   methods: {
     async fetchProducts() {
       try {
-        const response = await fetch('http://34.234.97.167:8080/index.php?path=products');
+        const response = await fetch('http://100.27.221.69:8080/index.php?path=products');
         const data = await response.json();
         console.log('Products:', data)
         this.allProducts = data;
@@ -46,7 +48,7 @@ export default {
     },
     async fetchCategories() {
       try {
-        const response = await fetch('http://34.234.97.167:8080/index.php?path=categories');
+        const response = await fetch('http://100.27.221.69:8080/index.php?path=categories');
         const data = await response.json();
         console.log('Categories:', data)
         this.categories = data;
@@ -62,7 +64,10 @@ export default {
       } else {
         this.products = this.allProducts.filter(product => product.category === category);
       }
-    }
+    },
+    addProduct() {
+      this.$router.push('/add-product');
+    },
   }
 };
 </script>
@@ -103,5 +108,28 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+#add-product {
+  position: sticky;
+  bottom: 1em;
+  display: block;
+  margin: 2em auto;
+  padding: 1em 2em;
+  background-color: #0E2945;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#add-product:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+#add-product:active {
+  transform: translateY(+0px);
 }
 </style>
