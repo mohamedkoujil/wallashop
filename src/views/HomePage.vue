@@ -1,17 +1,16 @@
 <template>
   <div>
     <!--Listado de categorias-->
-    <ul>
-      <li @click="filterCategory('all')">All</li>
-      <li v-for="category in categories" :key="category.id" @click="filterCategory(category.category)">{{ category.category }}</li>
-    </ul>
+    <div class="categories">
+      <button @click="filterCategory('all')">All</button>
+      <button v-for="category in categories" :key="category.id" @click="filterCategory(category.category)">{{ category.category }}</button>
+    </div>
     <h2>Listado de Productos</h2>
     <section class="product-container">
       <router-link :to="'/product/' + product.id" v-for="product in products" :key="product.id">
         <product-card :product="product"></product-card>
       </router-link>
     </section>
-    
   </div>
 </template>
 
@@ -69,15 +68,36 @@ export default {
 </script>
 
 <style>
-ul {
+.categories {
+  margin-top: -9em;
   list-style-type: none;
   padding: 0;
+  padding: 2em;
+  border-radius: 5px;
 }
-li {
+
+.categories button {
   display: inline-block;
   margin: 0 10px;
   cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #0E2945;
+  color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 1em;
+  border-radius: 5px;
+  border: none;
 }
+
+.categories button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.categories button:active {
+  transform: translateY(+0px);
+}
+
 .product-container {
   display: flex;
 }
