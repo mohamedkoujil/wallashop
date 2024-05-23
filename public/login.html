@@ -85,18 +85,26 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      fetch('http://3.84.240.27:8080/index.php?path=login', {
+      console.log('Submitting login form:', { email, password }); // Debug
+
+      fetch('http://54.175.247.76:8080/index.php?path=login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email, password })
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => {
+        console.log('Response data:', data); // Debug
         if (data.isLoggedIn) {
           localStorage.setItem('user', JSON.stringify(data.user));
-          // Redirigir a la página principal u otra página
+          window.location.href = '/'; // Redirigir a la página principal u otra página
         } else {
           alert('Inicio de sesión fallido. Verifica tus credenciales.');
         }
