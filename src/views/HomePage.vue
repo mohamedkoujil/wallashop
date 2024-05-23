@@ -69,7 +69,8 @@ export default {
 
 <style>
 .categories {
-  margin-top: -9em;
+  display: flex;
+  margin: -9em 0 0 15.85em;
   list-style-type: none;
   padding: 0;
   padding: 2em;
