@@ -103,7 +103,9 @@
       .then(data => {
         console.log('Response data:', data); // Debug
         if (data.isLoggedIn) {
-          localStorage.setItem('user', JSON.stringify(data.user));
+          console.log('Login successful!'); // Debug
+          localStorage.setItem('isLoggedIn', true); // Guardar el estado de inicio de sesión
+          localStorage.setItem('user', JSON.stringify(data.user)); // Guardar los datos del usuario
           window.location.href = '/'; // Redirigir a la página principal u otra página
         } else {
           alert('Inicio de sesión fallido. Verifica tus credenciales.');

@@ -18,6 +18,8 @@
       <div class="header-search">
         <input type="text" id="search-input" placeholder="Busca productos...">
       </div>
+      <div id="usrLogedPfp">
+      </div>
       <div class="header-buttons">
         <button id="register-btn" class="btn">Registrarse</button>
         <button id="login-btn" class="btn">Iniciar Sesión</button>
@@ -80,6 +82,7 @@
 
     logoutButton.addEventListener('click', function () {
       localStorage.removeItem('user');
+      localStorage.removeItem('isLoggedIn');
       window.location.href = '/';
     });
 
@@ -108,6 +111,20 @@
         click = false;
       }
     };
+
+    let user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      let usrLogedPfp = document.getElementById('usrLogedPfp');
+      usrLogedPfp.style.display = 'flex';
+      let usrName = document.createElement('p');
+      usrName.textContent = user.personname;
+      usrLogedPfp.appendChild(usrName);
+      let pfp = document.createElement('img');
+      pfp.src = user.profilepicture;
+      pfp.alt = 'Foto de perfil';
+      pfp.classList.add('pfp');
+      usrLogedPfp.appendChild(pfp);
+    }
   </script>
 </body>
 </html>
