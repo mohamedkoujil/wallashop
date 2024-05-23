@@ -67,7 +67,6 @@
     let barWrapper = document.getElementById("bar-wrapper");
     let bars = document.getElementsByClassName("bar");
     let sidebarMenu = document.getElementById("sidebar-menu");
-    let menuItems = document.querySelectorAll(".sidebar-menu li");
     let logoutButton = document.getElementById('logout-btn');
     let click = false;
 
@@ -94,53 +93,19 @@
       registerButton.style.display = 'block';
     }
 
-    function timeOutMenuLinks(i, enter) {
-      if (enter) {
-        setTimeout(function() {
-          menuItems[i].className += " link-in";
-        }, 100 * i);
-      } else {
-        setTimeout(function() {
-          menuItems[i].className = "";
-        }, 100 * i);
-      }
-    }
-
     barWrapper.onclick = function() {
       click = !click;
-
       if (click) {
-        barWrapper.className += " is-close menu-open";
-        bars[0].className += " close";
-        bars[bars.length - 1].className += " close";
-        sidebarMenu.className += " menu-open";
-        for (let i = 0; i < menuItems.length; i++) {
-          timeOutMenuLinks(i, true);
-        }
+        sidebarMenu.style.display = 'block';
       } else {
-        barWrapper.className = "bar-wrapper";
-        bars[0].className = "bar";
-        bars[bars.length - 1].className = "bar";
-        setTimeout(function(){
-          sidebarMenu.className = "sidebar-menu";
-        }, 300);
-        for (let i = 0; i < menuItems.length; i++) {
-          timeOutMenuLinks(i, false);
-        }
+        sidebarMenu.style.display = 'none';
       }
     };
 
     window.onclick = function(event) {
-      if (!event.target.matches('.bar-wrapper') && !event.target.matches('.bar') && !event.target.matches('.sidebar-menu') && !event.target.matches('.sidebar-menu *')) {
-        if (sidebarMenu.classList.contains('menu-open')) {
-          sidebarMenu.classList.remove('menu-open');
-          barWrapper.className = "bar-wrapper";
-          bars[0].className = "bar";
-          bars[bars.length - 1].className = "bar";
-          for (let i = 0; i < menuItems.length; i++) {
-            timeOutMenuLinks(i, false);
-          }
-        }
+      if (!event.target.closest('.bar-wrapper') && !event.target.closest('.sidebar-menu')) {
+        sidebarMenu.style.display = 'none';
+        click = false;
       }
     };
   </script>
