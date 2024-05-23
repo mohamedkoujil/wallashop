@@ -68,6 +68,7 @@
 <body>
   <div class="register-container">
     <h1>Registrarse</h1>
+    <p id="errores"></p>
     <form id="registerForm">
       <label for="personName">Nombre</label>
       <input type="text" id="personName" required>
@@ -90,34 +91,38 @@
 
   <script>
     document.getElementById('registerForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const personName = document.getElementById('personName').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const location = document.getElementById('location').value;
-      const profilePicture = document.getElementById('profilePicture').value;
+    event.preventDefault();
+    const personName = document.getElementById('personName').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const location = document.getElementById('location').value;
+    const profilePicture = document.getElementById('profilePicture').value;
 
-      fetch('http://3.84.240.27:8080/index.php?path=register', {
+    fetch('http://54.175.247.76:8080/index.php?path=register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ personName, email, password, location, profilePicture })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.isRegistered) {
-          alert('Registro exitoso. Ahora puedes iniciar sesión.');
-          // Redirigir a la página de inicio de sesión u otra página
+    })
+    .then(response => {
+        return response.json().then(data => {
+            if (!response.ok) {
+                throw new Error(data.message || 'Error en el registro');
+            }
+            return data;
+        });
+    })
+    .then(data => {
+        console.log(data.status);
+        if (data.status != 'success') {
+            document.getElementById('errores').innerText = data.message;  
         } else {
-          alert('Registro fallido. Por favor, inténtalo de nuevo.');
+            window.location.href = 'login.html';
         }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Error en el registro. Por favor, inténtalo de nuevo más tarde.');
-      });
-    });
+    })
+});
+
   </script>
 </body>
 </html>
