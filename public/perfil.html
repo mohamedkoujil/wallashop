@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WallaShop</title>
+    <title>WallaShop - Perfil</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body, ul, li {
@@ -19,14 +19,12 @@
             color: #0E2945; 
         }
 
-        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        
         .header {
             background-color: #FFF;
             padding: 10px 20px;
@@ -94,11 +92,10 @@
             transition: 0.4s;
         }
 
-        
         .sidebar-menu {
             display: none;
             position: absolute;
-            top: 50px; 
+            top: 50px;
             right: 0;
             width: 200px;
             background-color: #0E2945;
@@ -181,11 +178,6 @@
 
         .card p {
             color: #777;
-        }
-
-
-        #category {
-            padding-right: 20px;
         }
 
         .footer {
@@ -289,7 +281,7 @@
                 </div>
                 <div class="sidebar-menu" id="sidebar-menu">
                     <ul>
-                        <li><a href="../src/views/ProfilePage.vue">Ver Perfil</a></li>
+                        <li><a href="./perfil.html">Ver Perfil</a></li>
                         <li><a href="../src/views/EditProfile.vue">Editar Perfil</a></li>
                         <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
                     </ul>
@@ -305,7 +297,16 @@
                 <p>Aquí podrás subir productos, y visualizar los que ya tienes.</p>
                 <div class="productos-lista">
                     <div class="compra card">
-                        
+                        <h3>Producto 1</h3>
+                        <p>Descripción del producto 1.</p>
+                    </div>
+                    <div class="compra card">
+                        <h3>Producto 2</h3>
+                        <p>Descripción del producto 2.</p>
+                    </div>
+                    <div class="compra card">
+                        <h3>Producto 3</h3>
+                        <p>Descripción del producto 3.</p>
                     </div>
                 </div>
             </div>
@@ -317,7 +318,16 @@
                 <p>Aquí podrás ver tus productos comprados y las compras en curso, finalizadas.</p>
                 <div class="compras-lista">
                     <div class="compra card">
-                        
+                        <h3>Compra 1</h3>
+                        <p>Descripción de la compra 1.</p>
+                    </div>
+                    <div class="compra card">
+                        <h3>Compra 2</h3>
+                        <p>Descripción de la compra 2.</p>
+                    </div>
+                    <div class="compra card">
+                        <h3>Compra 3</h3>
+                        <p>Descripción de la compra 3.</p>
                     </div>
                 </div>
             </div>
@@ -326,8 +336,19 @@
         <section id="favoritos" class="section">
             <div class="container">
                 <h2>Favoritos</h2>
-                <div class="compra card">
-                        
+                <div class="compras-lista">
+                    <div class="compra card">
+                        <h3>Favorito 1</h3>
+                        <p>Descripción del favorito 1.</p>
+                    </div>
+                    <div class="compra card">
+                        <h3>Favorito 2</h3>
+                        <p>Descripción del favorito 2.</p>
+                    </div>
+                    <div class="compra card">
+                        <h3>Favorito 3</h3>
+                        <p>Descripción del favorito 3.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -352,5 +373,69 @@
             <p>&copy; 2024 WallaShop. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+      let loginButton = document.getElementById('login-btn');
+      let registerButton = document.getElementById('register-btn');
+      let barWrapper = document.getElementById("bar-wrapper");
+      let bars = document.getElementsByClassName("bar");
+      let sidebarMenu = document.getElementById("sidebar-menu");
+      let logoutButton = document.getElementById('logout-btn');
+      let click = false;
+
+      loginButton.addEventListener('click', function () {
+        window.location.href = '/login.html';
+      });
+
+      registerButton.addEventListener('click', function () {
+        window.location.href = '/register.html';
+      });
+
+      logoutButton.addEventListener('click', function () {
+        localStorage.removeItem('user');
+        localStorage.removeItem('isLoggedIn');
+        window.location.href = '/';
+      });
+
+      let userLocalStorage = localStorage.getItem('user');
+
+      if (userLocalStorage) {
+        loginButton.style.display = 'none';
+        registerButton.style.display = 'none';
+      } else {
+        loginButton.style.display = 'block';
+        registerButton.style.display = 'block';
+      }
+
+      barWrapper.onclick = function() {
+        click = !click;
+        if (click) {
+          sidebarMenu.style.display = 'block';
+        } else {
+          sidebarMenu.style.display = 'none';
+        }
+      };
+
+      window.onclick = function(event) {
+        if (!event.target.closest('.bar-wrapper') && !event.target.closest('.sidebar-menu')) {
+          sidebarMenu.style.display = 'none';
+          click = false;
+        }
+      };
+
+      let user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        let usrLogedPfp = document.getElementById('usrLogedPfp');
+        usrLogedPfp.style.display = 'flex';
+        let usrName = document.createElement('p');
+        usrName.textContent = user.personname;
+        usrLogedPfp.appendChild(usrName);
+        let pfp = document.createElement('img');
+        pfp.src = user.profilepicture;
+        pfp.alt = 'Foto de perfil';
+        pfp.classList.add('pfp');
+        usrLogedPfp.appendChild(pfp);
+      }
+    </script>
 </body>
 </html>
