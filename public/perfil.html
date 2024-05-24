@@ -336,7 +336,7 @@
         <section id="favoritos" class="section">
             <div class="container">
                 <h2>Favoritos</h2>
-                <div class="compras-lista">
+                <div class="favorites-lista">
                     <div class="compra card">
                         <h3>Favorito 1</h3>
                         <p>Descripción del favorito 1.</p>
@@ -436,6 +436,51 @@
         pfp.classList.add('pfp');
         usrLogedPfp.appendChild(pfp);
       }
+
+      let products = fetch('http://54.90.65.129:8080/index.php?path=products-for-sale&userid='+user.id)
+        .then(response => response.json())
+        .then(data => data.forEach(product => {
+                let productCard = document.createElement('div');
+                productCard.classList.add('card');
+                let productName = document.createElement('h3');
+                productName.textContent = product.name;
+                let productDescription = document.createElement('p');
+                productDescription.textContent = product.description;
+                productCard.appendChild(productName);
+                productCard.appendChild(productDescription);
+                document.getElementById('productos').appendChild(productCard);
+                document.querySelector('.productos-lista').appendChild(productCard);
+            }));
+
+        let purchases = fetch('http://54.90.65.129:8080/index.php?path=purchase-history&userid=1')
+        .then(response => response.json())
+        .then(data => data.forEach(purchase => {
+                let purchaseCard = document.createElement('div');
+                purchaseCard.classList.add('card');
+                let purchaseName = document.createElement('h3');
+                purchaseName.textContent = purchase.name;
+                let purchaseDescription = document.createElement('p');
+                purchaseDescription.textContent = purchase.description;
+                purchaseCard.appendChild(purchaseName);
+                purchaseCard.appendChild(purchaseDescription);
+                document.getElementById('compras').appendChild(purchaseCard);
+                document.querySelector('.compras-lista').appendChild(purchaseCard);
+            }));
+
+        let favorites = fetch('http://54.90.65.129:8080/index.php?path=favorites&&userid=1')
+        .then(response => response.json())
+        .then(data => data.forEach(favorite => {
+                let favoriteCard = document.createElement('div');
+                favoriteCard.classList.add('card');
+                let favoriteName = document.createElement('h3');
+                favoriteName.textContent = favorite.name;
+                let favoriteDescription = document.createElement('p');
+                favoriteDescription.textContent = favorite.description;
+                favoriteCard.appendChild(favoriteName);
+                favoriteCard.appendChild(favoriteDescription);
+                document.getElementById('favoritos').appendChild(favoriteCard);
+                document.querySelector('.favorites-lista').appendChild(favoriteCard);
+            }));
     </script>
 </body>
 </html>

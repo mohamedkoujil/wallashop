@@ -21,7 +21,7 @@ export default {
         nivell: '',
         rate: 0
       },
-      apiUrl: 'http://54.226.222.35:8080/index.php?path=profile'
+      apiUrl: 'http://54.90.65.129:8080/index.php?path=profile'
     };
   },
   methods: {

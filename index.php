@@ -210,5 +210,14 @@ elseif ($method == 'GET' && $path == 'sales-history') {
     echo json_encode($salesHistory);
 }
 
+// Listar productos en venta de un usuario
+elseif ($method == 'GET' && $path == 'products-for-sale') {
+    $userId = $_GET['userid'];
+    $query = "SELECT * FROM product WHERE ownerid = '$userId'";
+    $result = pg_query($conn, $query);
+    $productsForSale = pg_fetch_all($result);
+    echo json_encode($productsForSale);
+}
+
 pg_close($conn);
 ?>
