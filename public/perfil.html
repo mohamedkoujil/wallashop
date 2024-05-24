@@ -3,188 +3,354 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallashop</title>
+    <title>WallaShop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Reset de estilos */
-        * {
+        body, ul, li {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            vertical-align: middle;
         }
 
-        /* Estilos generales */
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 20px;
+            font-family: 'Roboto', sans-serif;
+            background-color: #F4F4F4; 
+            color: #0E2945; 
         }
 
-        header {
-            background-color: #333;
-            color: #fff;
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
         }
 
-        header h1 {
-            margin: 0;
+        
+        .header {
+            background-color: #FFF;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        nav ul {
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-logo {
+            flex: 0 0 auto;
+        }
+
+        .header-logo img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .header-search {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .header-buttons {
+            flex: 0 0 auto;
+            display: flex;
+            gap: 10px;
+            position: relative;
+        }
+
+        .btn {
+            background-color: #0E2945;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #8292A4;
+        }
+
+        .bar-wrapper {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: #0E2945;
+            margin: 4px 0;
+            transition: 0.4s;
+        }
+
+        
+        .sidebar-menu {
+            display: none;
+            position: absolute;
+            top: 50px; 
+            right: 0;
+            width: 200px;
+            background-color: #0E2945;
+            border-radius: 4px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .sidebar-menu ul {
+            padding: 10px;
             list-style: none;
         }
 
-        nav ul li {
-            display: inline;
-            margin-right: 20px;
+        .sidebar-menu li {
+            font-size: 14px; 
+            text-transform: capitalize;
+            margin: 10px 0;
         }
 
-        nav ul li a {
+        .sidebar-menu a {
             color: #fff;
             text-decoration: none;
+            padding: 10px;
+            display: block;
+            transition: background-color 0.3s ease;
         }
 
-        section {
-            margin-bottom: 30px;
+        .sidebar-menu a:hover {
+            background-color: #8292A4;
+        }
+
+        .sidebar-menu.menu-open {
+            display: block;
+        }
+
+        #logout-btn:hover {
+            background-color: #ff4c4c;
+            color: white;
+        }
+
+        .section {
+            padding: 40px 0;
         }
 
         h2 {
+            color: #333;
             margin-bottom: 10px;
         }
 
-        .product {
-            background-color: #fff;
-            padding: 10px;
-            border: 1px solid #ccc;
-            margin-bottom: 10px;
+        p {
+            color: #666;
+            line-height: 1.6;
         }
 
-        .product p {
-            margin-bottom: 5px;
+        .productos-lista, .compras-lista {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .card p {
+            color: #777;
+        }
+
+
+        #category {
+            padding-right: 20px;
+        }
+
+        .footer {
+            background-color: #FFF;
+            padding: 20px 0;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .footer-social {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .social-icons a img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icons a img:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-bottom {
+            margin-top: 20px;
+            border-top: 1px solid #8292A4;
+            padding-top: 10px;
+        }
+
+        #usrLogedPfp {
+            display: none;
+            justify-content: space-around;
+            align-items: center;
+            border-radius: 10px;
+            padding: 5px;
+            background-color: #0E2945;
+            color: white;
+            cursor: pointer;
+            margin: 0 2em 0 -4em;
+            width: 10em;
+            transition: transform 0.3s ease;
+        }
+
+        #usrLogedPfp:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        #usrLogedPfp:active {
+            transform: translateY(0);
+        }
+
+        #usrLogedPfp img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Wallashop</h1>
-        <nav>
-            <ul>
-                <li><a href="#transacciones">Transacciones</a></li>
-                <li><a href="#gestion-productos">Gestiona tus productos</a></li>
-                <li><a href="#gestion-compras">Gestiona tus Compras</a></li>
-                <li><a href="#favoritos">Favoritos</a></li>
-                <li><a href="#finalizadas">Finalizadas</a></li>
-            </ul>
-        </nav>
+    <header class="header">
+        <div class="header-top">
+            <div class="header-logo">
+                <a href="/"><img src="./logotipo-sinfondo.png" alt="WallaShop" class="logo"></a>
+            </div>
+            <div class="header-search">
+                <h1>Visualiza tu Perfil</h1>
+                <br>
+                <h2>Aquí podrás ver tus productos comprados, vendidos y favoritos</h2>
+            </div>
+            <div id="usrLogedPfp">
+            </div>
+            <div class="header-buttons">
+                <button id="register-btn" class="btn">Registrarse</button>
+                <button id="login-btn" class="btn">Iniciar Sesión</button>
+                <div class="bar-wrapper" id="bar-wrapper">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+                <div class="sidebar-menu" id="sidebar-menu">
+                    <ul>
+                        <li><a href="../src/views/ProfilePage.vue">Ver Perfil</a></li>
+                        <li><a href="../src/views/EditProfile.vue">Editar Perfil</a></li>
+                        <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <section id="transacciones">
-        <h2>Transacciones</h2>
-        <p>Aquí podrás subir productos, y visualizar los que ya tienes.</p>
-        <p>00 Bu...</p>
-        <div>
-            <h3>En venta</h3>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>$XX.YY</p>
+    <main>
+        <section id="productos" class="section">
+            <div class="container">
+                <h2>Gestiona tus productos</h2>
+                <p>Aquí podrás subir productos, y visualizar los que ya tienes.</p>
+                <div class="productos-lista">
+                    <div class="compra card">
+                        
+                    </div>
+                </div>
             </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>$XX.YY</p>
-            </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>$XX.YY</p>
-            </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>$XX.YY</p>
-            </div>
-        </div>
-        <div>
-            <h3>Vendidos</h3>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>SXX.YY</p>
-            </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>SXX.YY</p>
-            </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>SXX.YY</p>
-            </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>SXX.YY</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="gestion-productos">
-        <h2>Gestiona tus productos</h2>
-        <p>Aquí podrás subir productos, y visualizar los que ya tienes.</p>
-    </section>
+        <section id="compras" class="section">
+            <div class="container">
+                <h2>Gestiona tus Compras</h2>
+                <p>Aquí podrás ver tus productos comprados y las compras en curso, finalizadas.</p>
+                <div class="compras-lista">
+                    <div class="compra card">
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <section id="gestion-compras">
-        <h2>Gestiona tus Compras</h2>
-        <p>Aquí podrás ver tus productos comprados y las compras en curso.</p>
-        <div>
-            <h3>Favoritos</h3>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>$XX.YY</p>
+        <section id="favoritos" class="section">
+            <div class="container">
+                <h2>Favoritos</h2>
+                <div class="compra card">
+                        
+                </div>
             </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>$XX.YY</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-social">
+                <p>WallaShop</p>
+                <div class="social-icons">
+                    <a href="#"><img src="instagram.png" alt="Instagram"></a>
+                    <a href="#"><img src="facebook.png" alt="Facebook"></a>
+                    <a href="#"><img src="twitter.png" alt="Twitter"></a>
+                    <a href="#"><img src="youtube.png" alt="YouTube"></a>
+                </div>
             </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>$XX.YY</p>
-            </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>$XX.YY</p>
-            </div>
-        </div>
-        <div>
-            <h3>Finalizadas</h3>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>SXX.YY</p>
-            </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>SXX.YY</p>
-            </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>SXX.YY</p>
-            </div>
-            <div class="product">
-                <p>Product</p>
-                <p>Description of product</p>
-                <p>SXX.YY</p>
+            <div class="footer-logo">
+                <img src="./logotipo-sinfondo.png" alt="WallaShop" class="logo">
             </div>
         </div>
-    </section>
+        <div class="footer-bottom">
+            <p>&copy; 2024 WallaShop. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
