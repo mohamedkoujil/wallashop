@@ -37,7 +37,7 @@ export default {
   methods: {
     async fetchProducts() {
       try {
-        const response = await fetch('http://100.27.221.69:8080/index.php?path=products');
+        const response = await fetch('http://54.226.222.35:8080/index.php?path=products');
         const data = await response.json();
         console.log('Products:', data)
         this.allProducts = data;
@@ -48,7 +48,7 @@ export default {
     },
     async fetchCategories() {
       try {
-        const response = await fetch('http://100.27.221.69:8080/index.php?path=categories');
+        const response = await fetch('http://54.226.222.35:8080/index.php?path=categories');
         const data = await response.json();
         console.log('Categories:', data)
         this.categories = data;

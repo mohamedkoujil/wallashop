@@ -54,7 +54,7 @@ export default {
             const ownerId = JSON.parse(localStorage.getItem('user')).id;
             console.log('Product:', this.description, this.location, this.price, this.images, ownerId, this.productName, this.category);
             try {
-                const response = await fetch('http://100.27.221.69:8080/index.php?path=product', {
+                const response = await fetch('http://54.226.222.35:8080/index.php?path=product', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
