@@ -443,7 +443,7 @@
                 let productCard = document.createElement('div');
                 productCard.classList.add('card');
                 let productName = document.createElement('h3');
-                productName.textContent = product.name;
+                productName.textContent = product.productname;
                 let productDescription = document.createElement('p');
                 productDescription.textContent = product.description;
                 productCard.appendChild(productName);
@@ -458,7 +458,7 @@
                 let purchaseCard = document.createElement('div');
                 purchaseCard.classList.add('card');
                 let purchaseName = document.createElement('h3');
-                purchaseName.textContent = purchase.name;
+                purchaseName.textContent = purchase.productname;
                 let purchaseDescription = document.createElement('p');
                 purchaseDescription.textContent = purchase.description;
                 purchaseCard.appendChild(purchaseName);
@@ -473,7 +473,7 @@
                 let favoriteCard = document.createElement('div');
                 favoriteCard.classList.add('card');
                 let favoriteName = document.createElement('h3');
-                favoriteName.textContent = favorite.name;
+                favoriteName.textContent = favorite.productname;
                 let favoriteDescription = document.createElement('p');
                 favoriteDescription.textContent = favorite.description;
                 favoriteCard.appendChild(favoriteName);

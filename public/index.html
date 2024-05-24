@@ -30,7 +30,7 @@
         </div>
         <div class="sidebar-menu" id="sidebar-menu">
           <ul>
-            <li><a href="./perfil.html">Ver Perfil</a></li>
+            <li><a href="./perfil .html">Ver Perfil</a></li>
             <li><a href="../src/views/EditProfile.vue">Editar Perfil</a></li>
             <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
           </ul>
@@ -115,6 +115,8 @@
     let user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       let usrLogedPfp = document.getElementById('usrLogedPfp');
+      //link to vue profile view(router-link)
+
       usrLogedPfp.style.display = 'flex';
       let usrName = document.createElement('p');
       usrName.textContent = user.personname;

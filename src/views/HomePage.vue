@@ -109,7 +109,7 @@ export default {
 }
 
 .categories button:hover {
-  transform: translateX(5px);
+  transform: translateX(10px);
   
 }
 
@@ -126,8 +126,8 @@ export default {
 
 #add-product {
   position: sticky;
+  left: 52%;
   bottom: 1em;
-  display: block;
   margin: 2em auto;
   padding: 1em 2em;
   background-color: #0E2945;
@@ -136,6 +136,7 @@ export default {
   border-radius: 5px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  
 }
 
 #add-product:hover {
