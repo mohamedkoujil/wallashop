@@ -1,37 +1,40 @@
 <template>
-    <form @submit.prevent="addProduct">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" v-model="productName" required>
-        </div>
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea id="description" v-model="description" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="price">Price</label>
-            <input type="number" id="price" v-model="price" required>
-        </div>
-        <div class="form-group">
-            <label for="location">{{location}}</label>
-            <input type="text" id="location" v-model="location" required>
-        </div>
-        <div class="form-group">
-            <label for="category">Category</label>
-            <select id="category" v-model="category" required>
-                <option value="Electronics">Electronics</option>
-                <option value="Clothing">Clothing</option>
-                <option value="Home">Home</option>
-                <option value="Sports">Sports</option>
-                <option value="Books">Books</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="image">Image URL</label>
-            <input type="text" id="image" v-model="images" required>
-        </div>
-        <button type="submit">Add product</button>
-    </form>
+    <div class="product-form-container">
+        <form @submit.prevent="addProduct" class="product-form">
+            <h1>Agregar Producto</h1>
+            <div class="form-group">
+                <label for="name">Nombre</label>
+                <input type="text" id="name" v-model="productName" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Descripción</label>
+                <textarea id="description" v-model="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="price">Precio</label>
+                <input type="number" id="price" v-model="price" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Ubicación</label>
+                <input type="text" id="location" v-model="location" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Categoría</label>
+                <select id="category" v-model="category" required>
+                    <option value="Electronics">Electrónica</option>
+                    <option value="Clothing">Ropa</option>
+                    <option value="Home">Hogar</option>
+                    <option value="Sports">Deportes</option>
+                    <option value="Books">Libros</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="image">URL de la Imagen</label>
+                <input type="text" id="image" v-model="images" required>
+            </div>
+            <button type="submit" class="submit-button">Agregar Producto</button>
+        </form>
+    </div>
 </template>
 
 <script>
@@ -74,7 +77,7 @@ export default {
                 if (data.status === 'Product added') {
                     this.$router.push('/');
                 } else {
-                    alert('Error adding product');
+                    alert('Error al agregar el producto');
                 }
             } catch (error) {
                 console.error('Error adding product:', error);
@@ -94,143 +97,75 @@ body {
     box-sizing: border-box;
 }
 
-.product-detail {
-    padding: 20px;
-    text-align: center;
-}
-
-h1,
-h2 {
-    font-weight: 700;
-    color: #0E2945;
-}
-
-.product-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-}
-
-.product-image {
-    width: 100%;
-    max-width: 400px;
-    border-radius: 10px;
-    border: 2px solid #0E2945;
-}
-
-.product-info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    gap: 10px;
-}
-
-.product-category,
-.product-description,
-.product-price,
-.product-location,
-.product-owner {
-    font-weight: 400;
-    font-size: 16px;
-}
-
-.product-category strong,
-.product-description strong,
-.product-price strong,
-.product-location strong,
-.product-owner strong {
-    color: #0E2945;
-}
-
-#loading {
+.product-form-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    padding: 20px;
+    
 }
 
-.loader {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+.product-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+    padding-right: 55px;
+}
+#category {
+    padding-right: 511px; 
 }
 
-.jimu-primary-loading:before,
-.jimu-primary-loading:after {
-    position: absolute;
-    top: 0;
-    content: '';
+.product-form h1 {
+    font-weight: 700;
+    color: #0E2945;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.jimu-primary-loading:before {
-    left: -19.992px;
+.form-group {
+    margin-bottom: 15px;
 }
 
-.jimu-primary-loading:after {
-    left: 19.992px;
-    -webkit-animation-delay: 0.32s !important;
-    animation-delay: 0.32s !important;
+.form-group label {
+    display: block;
+    font-weight: 700;
+    color: #0E2945;
+    margin-bottom: 5px;
 }
 
-.jimu-primary-loading:before,
-.jimu-primary-loading:after,
-.jimu-primary-loading {
-    background: #076fe5;
-    -webkit-animation: loading-keys-app-loading 0.8s infinite ease-in-out;
-    animation: loading-keys-app-loading 0.8s infinite ease-in-out;
-    width: 13.6px;
-    height: 32px;
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
-.jimu-primary-loading {
-    text-indent: -9999em;
-    margin: auto;
-    position: absolute;
-    right: calc(50% - 6.8px);
-    top: calc(50% - 16px);
-    -webkit-animation-delay: 0.16s !important;
-    animation-delay: 0.16s !important;
+.form-group textarea {
+    resize: vertical;
 }
 
-@-webkit-keyframes loading-keys-app-loading {
-    0%,
-    80%,
-    100% {
-        opacity: .75;
-        box-shadow: 0 0 #076fe5;
-        height: 32px;
-    }
-
-    40% {
-        opacity: 1;
-        box-shadow: 0 -8px #076fe5;
-        height: 40px;
-    }
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0E2945;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-@keyframes loading-keys-app-loading {
-    0%,
-    80%,
-    100% {
-        opacity: .75;
-        box-shadow: 0 0 #076fe5;
-        height: 32px;
-    }
-
-    40% {
-        opacity: 1;
-        box-shadow: 0 -8px #076fe5;
-        height: 40px;
-    }
+.submit-button:hover {
+    background-color: #092134;
 }
 </style>
