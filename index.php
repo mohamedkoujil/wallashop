@@ -131,8 +131,6 @@ elseif ($method == 'POST' && $path == 'register') {
     }
 }
 
-
-
 // Iniciar sesión
 elseif ($method == 'POST' && $path == 'login') {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -183,6 +181,33 @@ elseif ($method == 'DELETE' && $path == 'valoracion') {
     } else {
         echo json_encode(['status' => 'Error deleting valoration']);
     }
+}
+
+// Listar productos favoritos de un usuario
+elseif ($method == 'GET' && $path == 'favorites') {
+    $userId = $_GET['userid'];
+    $query = "SELECT p.* FROM favorite f JOIN product p ON f.productid = p.id WHERE f.userid = '$userId'";
+    $result = pg_query($conn, $query);
+    $favorites = pg_fetch_all($result);
+    echo json_encode($favorites);
+}
+
+// Listar historial de compras de un usuario
+elseif ($method == 'GET' && $path == 'purchase-history') {
+    $userId = $_GET['userid'];
+    $query = "SELECT t.*, p.* FROM transaction t JOIN product p ON t.productid = p.id WHERE t.buyerid = '$userId'";
+    $result = pg_query($conn, $query);
+    $purchaseHistory = pg_fetch_all($result);
+    echo json_encode($purchaseHistory);
+}
+
+// Listar historial de ventas de un usuario
+elseif ($method == 'GET' && $path == 'sales-history') {
+    $userId = $_GET['userid'];
+    $query = "SELECT t.*, p.* FROM transaction t JOIN product p ON t.productid = p.id WHERE t.ownerid = '$userId'";
+    $result = pg_query($conn, $query);
+    $salesHistory = pg_fetch_all($result);
+    echo json_encode($salesHistory);
 }
 
 pg_close($conn);
