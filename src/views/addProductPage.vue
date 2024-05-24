@@ -21,11 +21,8 @@
             <div class="form-group">
                 <label for="category">Categoría</label>
                 <select id="category" v-model="category" required>
-                    <option value="Electronics">Electrónica</option>
-                    <option value="Clothing">Ropa</option>
-                    <option value="Home">Hogar</option>
-                    <option value="Sports">Deportes</option>
-                    <option value="Books">Libros</option>
+                    <option value="" disabled selected>Selecciona una categoría</option>
+                    <option v-for="category in categories" :key="category.id" :value="category.category">{{ category.category }}</option>
                 </select>
             </div>
             <div class="form-group">
@@ -44,18 +41,37 @@ export default {
             productName: '',
             description: '',
             price: null,
-            location: JSON.parse(localStorage.getItem('user')).location,
-            category: null,
-            images: ''
+            location: '',
+            category: '',
+            images: '',
+            categories: []
         };
     },
     created() {
-        console.log('Location:', this.location);
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            this.location = user.location;
+        }
+        this.getCategories();
     },
     methods: {
+        async getCategories() {
+            try {
+                const response = await fetch('http://54.226.222.35:8080/index.php?path=categories');
+                const data = await response.json();
+                this.categories = data;
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        },
+
         async addProduct() {
-            const ownerId = JSON.parse(localStorage.getItem('user')).id;
-            console.log('Product:', this.description, this.location, this.price, this.images, ownerId, this.productName, this.category);
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                alert('No estás autenticado.');
+                return;
+            }
+            const ownerId = user.id;
             try {
                 const response = await fetch('http://54.226.222.35:8080/index.php?path=product', {
                     method: 'POST',
@@ -73,7 +89,6 @@ export default {
                     })
                 });
                 const data = await response.json();
-                console.log('Product added:', data);
                 if (data.status === 'Product added') {
                     this.$router.push('/');
                 } else {
@@ -104,7 +119,6 @@ body {
     min-height: 100vh;
     background-color: #f9f9f9;
     padding: 20px;
-    
 }
 
 .product-form {
@@ -114,10 +128,6 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 500px;
     width: 100%;
-    padding-right: 55px;
-}
-#category {
-    padding-right: 511px; 
 }
 
 .product-form h1 {
