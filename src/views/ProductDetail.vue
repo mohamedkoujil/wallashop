@@ -212,23 +212,22 @@ h1, h2 {
 .heart-container {
   --heart-color: rgb(240, 8, 0);
   position: relative;
+  left: 95%;
   width: 30px;
   height: 30px;
   transition: .3s;
-  
-  
-
 }
 
 .heart-container .checkbox {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  left: -5px;
+  top: -5px;
+  width: 110%;
+  height: 110%;
   opacity: 0;
   z-index: 20;
   cursor: pointer;
-  padding: 5em;
- 
+  padding: 10em;
 }
 
 .heart-container .svg-container {
