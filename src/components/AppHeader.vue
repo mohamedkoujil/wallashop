@@ -6,6 +6,7 @@
       </div>
       <div class="header-search">
         <input type="text" id="search-input" placeholder="Busca productos...">
+        <button id="search-submit" @click="emitSearch">Buscar</button>
       </div>
       <div v-if="user" class="header-user" @click="toggleMenu" @mouseleave="toggleMenuMouseover">
         <p>{{ user.personname }}</p>
@@ -51,6 +52,9 @@ export default {
       localStorage.removeItem('user');
       this.user = null;
       this.$router.push('/');
+    },
+    emitSearch() {
+      this.$emit('search', document.getElementById('search-input').value);
     }
   },
   watch: {
@@ -97,6 +101,21 @@ export default {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#search-submit {
+  background-color: #0E2945;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  transition: 0.3s;
+}
+
+#search-submit:hover {
+  transform: translateY(-5px);
 }
 
 .header-buttons {

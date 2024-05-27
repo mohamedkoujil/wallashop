@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <AppHeader />
-    <router-view></router-view>
+    <AppHeader @search="handleSearch"/>
+    <router-view :searchTerm="searchTerm"></router-view>
   </div>
 </template>
 
@@ -12,6 +12,17 @@ export default {
   name: 'App',
   components: {
     AppHeader
+  },
+  data() {
+    return {
+      searchTerm: ''
+    };
+  },
+  methods: {
+    handleSearch(searchTerm) {
+      this.searchTerm = searchTerm;
+      //console.log('Search term:', searchTerm);
+    }
   }
 }
 </script>
