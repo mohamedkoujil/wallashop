@@ -1,40 +1,42 @@
 <template>
-  <AppHeader @search="handleSearch"></AppHeader>
-  <div class="product-detail">
-    <h1>Detalle del Producto</h1>
-    <div class="product-content" v-if="product">
-      <img :src="product.images" alt="Product image" class="product-image">
-      <div class="product-info">
-        <h2>{{ product.productName }}</h2>
-        <p class="product-category"><strong>Categoría:</strong> {{ product.category }}</p>
-        <p class="product-description"><strong>Descripción:</strong> {{ product.description }}</p>
-        <p class="product-price"><strong>Precio:</strong> {{ product.price }} €</p>
-        <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
-        <p class="product-owner"><strong>Propietario:</strong> {{ product.ownername }} - {{ product.owneremail }}</p>
-        <div class="heart-container" title="Like">
-          <input type="checkbox" class="checkbox" id="Give-It-An-Id" @change="toggleFavorite" :checked="isFavorite">
-          <div class="svg-container">
-            <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
-            </svg>
-            <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path>
-            </svg>
-            <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-              <polygon points="10,10 20,20"></polygon>
-              <polygon points="10,50 20,50"></polygon>
-              <polygon points="20,80 30,70"></polygon>
-              <polygon points="90,10 80,20"></polygon>
-              <polygon points="90,50 80,50"></polygon>
-              <polygon points="80,80 70,70"></polygon>
-            </svg>
+  <div>
+    <AppHeader @search="handleSearch"></AppHeader>
+    <div class="product-detail">
+      <h1>Detalle del Producto</h1>
+      <div class="product-content" v-if="product">
+        <img :src="product.images" alt="Product image" class="product-image">
+        <div class="product-info">
+          <h2>{{ product.productname }}</h2>
+          <p class="product-category"><strong>Categoría:</strong> {{ product.category }}</p>
+          <p class="product-description"><strong>Descripción:</strong> {{ product.description }}</p>
+          <p class="product-price"><strong>Precio:</strong> {{ product.price }} €</p>
+          <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
+          <p class="product-owner"><strong>Propietario:</strong> {{ product.ownername }} - {{ product.owneremail }}</p>
+          <div class="heart-container" title="Like" @click="toggleFavorite">
+            <input type="checkbox" class="checkbox" id="Give-It-An-Id" v-model="isFavorite">
+            <div class="svg-container">
+              <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
+              </svg>
+              <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path>
+              </svg>
+              <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="10,10 20,20"></polygon>
+                <polygon points="10,50 20,50"></polygon>
+                <polygon points="20,80 30,70"></polygon>
+                <polygon points="90,10 80,20"></polygon>
+                <polygon points="90,50 80,50"></polygon>
+                <polygon points="80,80 70,70"></polygon>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div v-else id="loading">
-      <div class="loader">
-        <div class="justify-content-center jimu-primary-loading"></div>
+      <div v-else id="loading">
+        <div class="loader">
+          <div class="justify-content-center jimu-primary-loading"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -56,7 +58,7 @@ export default {
     this.checkIfFavorite();
   },
   components: {
-    AppHeader
+    AppHeader,
   },
   methods: {
     async fetchProduct() {
@@ -67,60 +69,64 @@ export default {
           this.product = null;
         } else {
           this.product = data;
-          this.checkIfFavorite();
         }
       } catch (error) {
         console.error('Error fetching product:', error);
       }
     },
     async checkIfFavorite() {
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (user) {
-        try {
-          const response = await fetch(`http://54.226.151.19:8080/index.php?path=check-favorite&userid=${user.id}&productid=${this.id}`);
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const data = await response.json();
-          this.isFavorite = data.isFavorite;
-        } catch (error) {
-          console.error('Error checking favorite:', error);
+      try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+          this.isFavorite = false;
+          return;
         }
+        const response = await fetch(`http://54.234.76.112:8080/index.php?path=favorites&userid=${user.id}`);
+        const data = await response.json();
+        this.isFavorite = data.some(favorite => favorite.id === this.id);
+      } catch (error) {
+        console.error('Error checking favorite:', error);
       }
     },
-    async toggleFavorite(event) {
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (!user) {
-        alert('Tienes que iniciar sesión para poder hacer esto');
-        event.target.checked = false; // Desmarcar el checkbox
-        return;
-      }
-
+    async toggleFavorite() {
       try {
-        const response = await fetch('http://54.226.151.19:8080/index.php?path=toggle-favorite', {
-          method: 'POST',
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+          alert('You need to log in to add favorites');
+          this.isFavorite = false;
+          return;
+        }
+
+        const method = this.isFavorite ? 'DELETE' : 'POST';
+        const url = `http://54.234.76.112:8080/index.php?path=favorites${method === 'DELETE' ? `&userid=${user.id}&productid=${this.id}` : ''}`;
+
+        const response = await fetch(url, {
+          method,
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            userid: user.id,
-            productid: this.id
-          })
+          body: method === 'POST' ? JSON.stringify({ userid: user.id, productid: this.id }) : null
         });
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        if (data.success) {
-          this.isFavorite = !this.isFavorite;
-        } else {
-          alert('Error al añadir a favoritos');
-          event.target.checked = !event.target.checked;  // Revertir el cambio si hay un error
+
+        const text = await response.text();
+        console.log('Response text:', text);
+
+        try {
+          const data = JSON.parse(text);
+          if (data.status === 'Favorite added') {
+            this.isFavorite = true;
+          } else if (data.status === 'Favorite deleted') {
+            this.isFavorite = false;
+          } else {
+            console.error('Error toggling favorite:', data.status);
+          }
+        } catch (e) {
+          console.error('Error parsing JSON:', e);
+          console.error('Response text:', text);
         }
       } catch (error) {
         console.error('Error toggling favorite:', error);
-        alert('Error al añadir a favoritos');
-        event.target.checked = !event.target.checked;  // Revertir el cambio si hay un error
+        this.isFavorite = !this.isFavorite; // Revert the change if there's an error
       }
     }
   }
