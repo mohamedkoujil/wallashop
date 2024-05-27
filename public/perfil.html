@@ -437,7 +437,7 @@
         usrLogedPfp.appendChild(pfp);
       }
 
-      let products = fetch('http://54.90.65.129:8080/index.php?path=products-for-sale&userid='+user.id)
+      let products = fetch('http://54.226.151.19:8080/index.php?path=products-for-sale&userid='+user.id)
         .then(response => response.json())
         .then(data => data.forEach(product => {
                 let productCard = document.createElement('div');

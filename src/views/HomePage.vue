@@ -3,7 +3,7 @@
     <!--Listado de categorias-->
     <div class="categories">
       <h3>Categories</h3>
-      <button @click="filterCategory('all')">All</button>
+      <button v-if="this.categories" @click="filterCategory('all')">All</button>
       <button v-for="category in categories" :key="category.id" @click="filterCategory(category.category)">{{ category.category }}</button>
     </div>
 
@@ -41,7 +41,7 @@ export default {
   methods: {
     async fetchProducts() {
       try {
-        const response = await fetch('http://54.90.65.129:8080/index.php?path=products');
+        const response = await fetch('http://54.226.151.19:8080/index.php?path=products');
         const data = await response.json();
         console.log('Products:', data)
         this.allProducts = data;
@@ -52,7 +52,7 @@ export default {
     },
     async fetchCategories() {
       try {
-        const response = await fetch('http://54.90.65.129:8080/index.php?path=categories');
+        const response = await fetch('http://54.226.151.19:8080/index.php?path=categories');
         const data = await response.json();
         console.log('Categories:', data)
         this.categories = data;
