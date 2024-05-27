@@ -1,4 +1,5 @@
 <template>
+  <AppHeader @search="handleSearch"></AppHeader>
   <div>
     <!--Listado de categorias-->
     <div class="categories">
@@ -21,9 +22,12 @@
 
 <script>
 import ProductCard from '../components/productCard.vue';
+import AppHeader from '../components/AppHeader.vue';
+
 export default {
   components: {
-    ProductCard
+    ProductCard,
+    AppHeader
   },
   data() {
     return {
@@ -68,6 +72,10 @@ export default {
       } else {
         this.products = this.allProducts.filter(product => product.category === category);
       }
+    },
+    handleSearch(search) {
+      console.log('Search:', search);
+      this.products = this.allProducts.filter(product => product.productname.toLowerCase().includes(search.toLowerCase()));
     },
     addProduct() {
       this.$router.push('/add-product');
