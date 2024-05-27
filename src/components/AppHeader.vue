@@ -7,7 +7,7 @@
       <div class="header-search">
         <input type="text" id="search-input" placeholder="Busca productos...">
       </div>
-      <div v-if="user" class="header-user" @click="toggleMenu">
+      <div v-if="user" class="header-user" @click="toggleMenu" @mouseleave="toggleMenuMouseover">
         <p>{{ user.personname }}</p>
         <img :src="user.profilepicture" alt="Foto de perfil" class="pfp">
         <div class="dropdown-menu" v-if="menuOpen">
@@ -19,8 +19,8 @@
         </div>
       </div>
       <div v-else class="header-buttons">
-        <button id="register-btn" class="btn" @click="navigateTo('/register')">Registrarse</button>
-        <button id="login-btn" class="btn" @click="navigateTo('/login')">Iniciar Sesión</button>
+        <button id="register-btn" class="btn" @click="navigateTo('/register.html')">Registrarse</button>
+        <button id="login-btn" class="btn" @click="navigateTo('/login.html')">Iniciar Sesión</button>
       </div>
     </div>
   </header>
@@ -37,10 +37,15 @@ export default {
   },
   methods: {
     navigateTo(path) {
-      this.$router.push(path);
+      window.location.href = path;
     },
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
+    },
+    toggleMenuMouseover() {
+      if(this.menuOpen) {
+        this.menuOpen = false;
+      }
     },
     logout() {
       localStorage.removeItem('user');
@@ -104,6 +109,8 @@ export default {
 .header-user {
   display: flex;
   align-items: center;
+  justify-content: space-around;
+  width: 120px;
   cursor: pointer;
   background-color: #0E2945;
   color: white;
@@ -126,10 +133,11 @@ export default {
 
 .dropdown-menu {
   position: absolute;
-  right: 0;
-  top: 100%;
+  right: 0%;
+  top: 87%;
+  width: 100%;
   background-color: #0E2945;
-  border-radius: 4px;
+  border-radius:  0 0 10px 10px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   overflow: hidden;
@@ -145,14 +153,15 @@ export default {
   padding: 10px;
 }
 
+.dropdown-menu li:hover {
+  background-color: #8292A4;
+}
+
 .dropdown-menu a {
   color: white;
   text-decoration: none;
 }
 
-.dropdown-menu a:hover {
-  background-color: #8292A4;
-}
 
 .btn {
   background-color: #0E2945;
