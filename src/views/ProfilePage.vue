@@ -1,83 +1,54 @@
 <template>
-  <section id="productos" class="section">
-    <div class="container">
-      <h2>Gestiona tus productos</h2>
-      <p>Aquí podrás subir productos, y visualizar los que ya tienes.</p>
-      <div class="productos-lista">
-        <router-link :to="'/product/' + product.id" v-for="product in products" :key="product.id">
-          <product-card :product="product"></product-card>
-        </router-link>
-      </div>
+  <div v-if="user">
+    <h1>{{ user.personname }}</h1>
+    <img :src="user.profilepicture" alt="Profile Picture">
+    <div v-if="products.length">
+      <ProductCard v-for="product in products" :key="product.id" :product="product" />
     </div>
-  </section>
-
-  <section id="compras" class="section">
-    <div class="container">
-      <h2>Gestiona tus Compras</h2>
-      <p>Aquí podrás ver tus productos comprados y las compras en curso, finalizadas.</p>
-      <div class="compras-lista">
-        <router-link :to="'/product/' + purchase.id" v-for="purchase in purchases" :key="purchase.id">
-          <product-card :product="purchase"></product-card>
-        </router-link>
-      </div>
-
-    </div>
-  </section>
-
-  <section id="favoritos" class="section">
-    <div class="container">
-      <h2>Favoritos</h2>
-      <div class="favorites-lista">
-        <router-link :to="'/product/' + favorite.id" v-for="favorite in favorites" :key="favorite.id">
-          <product-card :product="favorite"></product-card>
-        </router-link>
-      </div>
-    </div>
-  </section>
-
+  </div>
+  <div v-else>
+    <p>Loading...</p>
+  </div>
 </template>
 
 <script>
-import ProductCard from './components/ProductCard.vue';
+import ProductCard from '../components/productCard.vue';
 
 export default {
-  name: 'ProfilePage',
   components: {
     ProductCard,
   },
   data() {
     return {
-      user: JSON.parse(localStorage.getItem('user')) || null,
+      user: null,
       products: [],
-      purchases: [],
-      favorites: [],
     };
   },
-  methods: {
-    fetchProfile() {
-      this.products = fetch('http://54.90.65.129:8080/index.php?path=products-for-sale&userid=' + user.id)
-        .then(response => response.json())
-
-      this.purchases = fetch('http://54.90.65.129:8080/index.php?path=purchase-history&userid=1')
-        .then(response => response.json())
-
-
-      this.favorites = fetch('http://54.90.65.129:8080/index.php?path=favorites&&userid=1')
-        .then(response => response.json())
-
-    },
+  created() {
+    try {
+      this.user = JSON.parse(localStorage.getItem('user'));
+      console.log(this.user); // Depuración
+      this.fetchProducts();
+    } catch (e) {
+      console.error("Error loading user data", e);
+    }
   },
-  mounted() {
-    this.fetchProfile();
+  methods: {
+    fetchProducts() {
+      if (!this.user) {
+        console.error("User is not defined");
+        return;
+      }
+      fetch(`http://54.90.65.129:8080/index.php?path=products-for-sale&userid=${this.user.id}`)
+        .then(response => response.json())
+        .then(data => {
+          this.products = data;
+        });
+    },
   },
 };
 </script>
 
 <style scoped>
-.profile-page {
-  padding: 20px;
-  max-width: 800px;
-  margin: auto;
-  background-color: #f4f4f4;
-}
+/* Tus estilos aquí */
 </style>

@@ -1,21 +1,21 @@
 <template>
     <div class="product-card">
-        <img class="product-img" :src="product.images" alt="Product image">
-        <h2 class="product-name">{{ product.productname }}</h2>
-        <p class="product-category">{{ product.category }}</p>
-        <p class="product-price">Precio: {{ product.price }}€</p>
+      <h2>{{ product.productname }}</h2>
+      <p>{{ product.description }}</p>
     </div>
-</template>
-
-<script>
-export default {
-    name: 'ProductCard',
+  </template>
+  
+  <script>
+  export default {
     props: {
-        product: Object
+      product: {
+        type: Object,
+        required: true
+      }
     }
-}
-</script>
-
+  };
+  </script>
+  
 <style scoped>
 .product-card {
     border: 1px solid #0E2945; /* Azul oscuro */
