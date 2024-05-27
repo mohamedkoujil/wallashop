@@ -7,25 +7,20 @@
       <div class="header-search">
         <input type="text" id="search-input" placeholder="Busca productos...">
       </div>
-      <div id="usrLogedPfp" v-if="user" @click="navigateTo('/profile')">
+      <div v-if="user" class="header-user" @click="toggleMenu">
         <p>{{ user.personname }}</p>
         <img :src="user.profilepicture" alt="Foto de perfil" class="pfp">
-      </div>
-      <div class="header-buttons">
-        <button v-if="!user" id="register-btn" class="btn" @click="navigateTo('/register.html')">Registrarse</button>
-        <button v-if="!user" id="login-btn" class="btn" @click="navigateTo('/login.html')">Iniciar Sesión</button>
-        <div class="bar-wrapper" id="bar-wrapper" @click="toggleSidebar">
-          <div class="bar"></div>
-          <div class="bar"></div>
-          <div class="bar"></div>
-        </div>
-        <div class="sidebar-menu" :style="{ display: sidebarVisible ? 'block' : 'none' }" id="sidebar-menu">
+        <div class="dropdown-menu" v-if="menuOpen">
           <ul>
             <li><router-link to="/profile">Ver Perfil</router-link></li>
             <li><router-link to="/edit-profile">Editar Perfil</router-link></li>
             <li><a href="#" @click="logout">Cerrar Sesión</a></li>
           </ul>
         </div>
+      </div>
+      <div v-else class="header-buttons">
+        <button id="register-btn" class="btn" @click="navigateTo('/register')">Registrarse</button>
+        <button id="login-btn" class="btn" @click="navigateTo('/login')">Iniciar Sesión</button>
       </div>
     </div>
   </header>
@@ -37,20 +32,25 @@ export default {
   data() {
     return {
       user: JSON.parse(localStorage.getItem('user')) || null,
-      sidebarVisible: false,
+      menuOpen: false
     };
   },
   methods: {
     navigateTo(path) {
-      window.location.href = path;
+      this.$router.push(path);
     },
-    toggleSidebar() {
-      this.sidebarVisible = !this.sidebarVisible;
+    toggleMenu() {
+      this.menuOpen = !this.menuOpen;
     },
     logout() {
       localStorage.removeItem('user');
-      localStorage.removeItem('isLoggedIn');
+      this.user = null;
       this.$router.push('/');
+    }
+  },
+  watch: {
+    $route() {
+      this.user = JSON.parse(localStorage.getItem('user')) || null;
     }
   }
 }
@@ -101,6 +101,59 @@ export default {
   position: relative;
 }
 
+.header-user {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: #0E2945;
+  color: white;
+  padding: 5px;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.header-user:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.header-user img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: #0E2945;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-menu li {
+  padding: 10px;
+}
+
+.dropdown-menu a {
+  color: white;
+  text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+  background-color: #8292A4;
+}
+
 .btn {
   background-color: #0E2945;
   color: white;
@@ -113,96 +166,5 @@ export default {
 
 .btn:hover {
   background-color: #8292A4;
-}
-
-.bar-wrapper {
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-.bar {
-  width: 25px;
-  height: 3px;
-  background-color: #0E2945;
-  margin: 4px 0;
-  transition: 0.4s;
-}
-
-.sidebar-menu {
-  display: none;
-  position: absolute;
-  top: 50px;
-  right: 0;
-  width: 200px;
-  background-color: #0E2945;
-  border-radius: 4px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  z-index: 1;
-}
-
-.sidebar-menu ul {
-  padding: 10px;
-  list-style: none;
-}
-
-.sidebar-menu li {
-  font-size: 14px;
-  text-transform: capitalize;
-  margin: 10px 0;
-}
-
-.sidebar-menu a {
-  color: #fff;
-  text-decoration: none;
-  padding: 10px;
-  display: block;
-  transition: background-color 0.3s ease;
-}
-
-.sidebar-menu a:hover {
-  background-color: #8292A4;
-}
-
-.sidebar-menu.menu-open {
-  display: block;
-}
-
-#logout-btn:hover {
-  background-color: #ff4c4c;
-  color: white;
-}
-
-#usrLogedPfp {
-  display: none;
-  justify-content: space-around;
-  align-items: center;
-  border-radius: 10px;
-  padding: 5px;
-  background-color: #0E2945;
-  color: white;
-  cursor: pointer;
-  margin: 0 2em 0 -4em;
-  width: 10em;
-  transition: transform 0.3s ease;
-}
-
-#usrLogedPfp:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-#usrLogedPfp:active {
-  transform: translateY(0);
-}
-
-#usrLogedPfp img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
 }
 </style>

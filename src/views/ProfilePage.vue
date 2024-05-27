@@ -20,7 +20,6 @@
           <product-card :product="purchase"></product-card>
         </router-link>
       </div>
-
     </div>
   </section>
 
@@ -40,6 +39,7 @@
 import ProductCard from '../components/productCard.vue';
 
 export default {
+  name: 'ProfilePage',
   components: {
     ProductCard,
   },
@@ -52,17 +52,19 @@ export default {
     };
   },
   methods: {
-    fetchProfile() {
-      this.products = fetch('http://54.226.151.19:8080/index.php?path=products-for-sale&userid=' + this.user.id)
-        .then(response => response.json())
+    async fetchProfile() {
+      try {
+        const productsResponse = await fetch('http://54.226.151.19:8080/index.php?path=products-for-sale&userid=' + this.user.id);
+        this.products = await productsResponse.json();
 
-      this.purchases = fetch('http://54.226.151.19:8080/index.php?path=purchase-history&userid='+ this.user.id)
-        .then(response => response.json())
+        const purchasesResponse = await fetch('http://54.226.151.19:8080/index.php?path=purchase-history&userid=' + this.user.id);
+        this.purchases = await purchasesResponse.json();
 
-
-      this.favorites = fetch('http://54.226.151.19:8080/index.php?path=favorites&&userid='+ this.user.id)
-        .then(response => response.json())
-
+        const favoritesResponse = await fetch('http://54.226.151.19:8080/index.php?path=favorites&userid=' + this.user.id);
+        this.favorites = await favoritesResponse.json();
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+      }
     },
   },
   mounted() {
@@ -72,10 +74,51 @@ export default {
 </script>
 
 <style scoped>
-.profile-page {
+.section {
+  margin-bottom: 40px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  max-width: 800px;
-  margin: auto;
-  background-color: #f4f4f4;
+}
+
+.productos-lista, .compras-lista, .favorites-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.product-card {
+  background-color: #FFF;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 250px; /* Ajusta el ancho según sea necesario */
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.product-card h3 {
+  margin-top: 10px;
+  color: #333;
+}
+
+.product-card p {
+  color: #777;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 </style>

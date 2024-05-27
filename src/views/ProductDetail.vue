@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="product-detail">
     <h1>Detalle del Producto</h1>
@@ -13,7 +11,7 @@
         <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
         <p class="product-owner"><strong>Propietario:</strong> {{ product.ownername }} - {{ product.owneremail }}</p>
         <div class="heart-container" title="Like">
-          <input type="checkbox" class="checkbox" id="Give-It-An-Id">
+          <input type="checkbox" class="checkbox" id="Give-It-An-Id" @change="toggleFavorite" :checked="isFavorite">
           <div class="svg-container">
             <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
               <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
@@ -46,31 +44,77 @@ export default {
   props: ['id'],
   data() {
     return {
-      product: null
+      product: null,
+      isFavorite: false,
     };
   },
   created() {
     this.fetchProduct();
+    this.checkIfFavorite();
   },
   methods: {
     async fetchProduct() {
       try {
-        const response = await fetch(`http://54.90.65.129:8080/index.php?path=product&id=${this.id}`);
+        const response = await fetch(`http://54.226.151.19:8080/index.php?path=product&id=${this.id}`);
         const data = await response.json();
         if (data.status === 'Product not found') {
           this.product = null;
         } else {
-          console.log('Product:', data);
-          setTimeout(() => {
-            this.product = data;
-            if(this.product == null){
-              document.querySelector('.loader').innerHTML = '<h1>Producto no encontrado</h1>';
-            }
-          }, 750);
-          
+          this.product = data;
+          this.checkIfFavorite();
         }
       } catch (error) {
         console.error('Error fetching product:', error);
+      }
+    },
+    async checkIfFavorite() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        try {
+          const response = await fetch(`http://54.226.151.19:8080/index.php?path=check-favorite&userid=${user.id}&productid=${this.id}`);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          this.isFavorite = data.isFavorite;
+        } catch (error) {
+          console.error('Error checking favorite:', error);
+        }
+      }
+    },
+    async toggleFavorite(event) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) {
+        alert('Tienes que iniciar sesión para poder hacer esto');
+        event.target.checked = false; // Desmarcar el checkbox
+        return;
+      }
+
+      try {
+        const response = await fetch('http://54.226.151.19:8080/index.php?path=toggle-favorite', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userid: user.id,
+            productid: this.id
+          })
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        if (data.success) {
+          this.isFavorite = !this.isFavorite;
+        } else {
+          alert('Error al añadir a favoritos');
+          event.target.checked = !event.target.checked;  // Revertir el cambio si hay un error
+        }
+      } catch (error) {
+        console.error('Error toggling favorite:', error);
+        alert('Error al añadir a favoritos');
+        event.target.checked = !event.target.checked;  // Revertir el cambio si hay un error
       }
     }
   }
@@ -78,13 +122,6 @@ export default {
 </script>
 
 <style scoped>
-body {
-  font-family: 'Merriweather', serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .product-detail {
   padding: 20px;
   text-align: center;
@@ -209,6 +246,7 @@ h1, h2 {
     height: 40px;
   }
 }
+
 .heart-container {
   --heart-color: rgb(240, 8, 0);
   position: relative;
@@ -236,8 +274,6 @@ h1, h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  
-
 }
 
 .heart-container .svg-outline,
@@ -262,40 +298,34 @@ h1, h2 {
 }
 
 .heart-container .checkbox:checked~.svg-container .svg-filled {
-  display: block
+  display: block;
 }
 
 .heart-container .checkbox:checked~.svg-container .svg-celebrate {
-  display: block
+  display: block;
 }
 
 @keyframes keyframes-svg-filled {
   0% {
     transform: scale(0);
   }
-
   25% {
-   
-/* Continuing the keyframes-svg-filled animation */
-transform: scale(1.2);
-}
-
-50% {
-  transform: scale(1);
-  filter: brightness(1.5);
-}
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1);
+    filter: brightness(1.5);
+  }
 }
 
 @keyframes keyframes-svg-celebrate {
   0% {
     transform: scale(0);
   }
-
   50% {
     opacity: 1;
     filter: brightness(1.5);
   }
-
   100% {
     transform: scale(1.4);
     opacity: 0;
