@@ -1,7 +1,7 @@
 <template>
   <div class="product-card">
-    <img :src="product.image" alt="Imagen del producto" class="product-image">
-    <h3>{{ product.name }}</h3>
+    <img :src="product.images" alt="Imagen del producto" class="product-image">
+    <h3>{{ product.productname }}</h3>
     <p>{{ product.category }}</p>
     <p>Precio: {{ product.price }}€</p>
   </div>

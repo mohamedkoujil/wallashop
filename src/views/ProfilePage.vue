@@ -54,14 +54,42 @@ export default {
   methods: {
     async fetchProfile() {
       try {
-        const productsResponse = await fetch('http://54.226.151.19:8080/index.php?path=products-for-sale&userid=' + this.user.id);
-        this.products = await productsResponse.json();
+        const [productsResponse, purchasesResponse, favoritesResponse] = await Promise.all([
+          fetch(`http://54.226.151.19:8080/index.php?path=products-for-sale&userid=${this.user.id}`),
+          fetch(`http://54.226.151.19:8080/index.php?path=purchase-history&userid=${this.user.id}`),
+          fetch(`http://54.226.151.19:8080/index.php?path=favorites&userid=${this.user.id}`)
+        ]);
 
-        const purchasesResponse = await fetch('http://54.226.151.19:8080/index.php?path=purchase-history&userid=' + this.user.id);
-        this.purchases = await purchasesResponse.json();
+        // Verificar respuestas y convertir a JSON
+        if (!productsResponse.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        if (!purchasesResponse.ok) {
+          throw new Error('Failed to fetch purchases');
+        }
+        if (!favoritesResponse.ok) {
+          throw new Error('Failed to fetch favorites');
+        }
 
-        const favoritesResponse = await fetch('http://54.226.151.19:8080/index.php?path=favorites&userid=' + this.user.id);
-        this.favorites = await favoritesResponse.json();
+        // Obtener textos de las respuestas
+        const productsText = await productsResponse.text();
+        const purchasesText = await purchasesResponse.text();
+        const favoritesText = await favoritesResponse.text();
+
+        // Log para depuración antes de la conversión a JSON
+        console.log('Products response:', productsText);
+        console.log('Purchases response:', purchasesText);
+        console.log('Favorites response:', favoritesText);
+
+        // Parsear respuestas si no están vacías
+        this.products = productsText ? JSON.parse(productsText) : [];
+        this.purchases = purchasesText ? JSON.parse(purchasesText) : [];
+        this.favorites = favoritesText ? JSON.parse(favoritesText) : [];
+
+        // Log para depuración después de la conversión a JSON
+        console.log('Products:', this.products);
+        console.log('Purchases:', this.purchases);
+        console.log('Favorites:', this.favorites);
       } catch (error) {
         console.error('Error fetching profile data:', error);
       }
