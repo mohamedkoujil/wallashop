@@ -55,7 +55,7 @@ export default {
   methods: {
     async fetchProduct() {
       try {
-        const response = await fetch(`http://54.226.151.19:8080/index.php?path=product&id=${this.id}`);
+        const response = await fetch(`http://54.234.76.112:8080/index.php?path=product&id=${this.id}`);
         const data = await response.json();
         if (data.status === 'Product not found') {
           this.product = null;
