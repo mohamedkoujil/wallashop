@@ -1,4 +1,5 @@
 <template>
+    <AppHeader @search="handleSearch"></AppHeader>
     <div class="product-form-container">
         <form @submit.prevent="addProduct" class="product-form">
             <h1>Agregar Producto</h1>
@@ -35,6 +36,8 @@
 </template>
 
 <script>
+import AppHeader from '../components/AppHeader.vue';
+
 export default {
     data() {
         return {
@@ -46,6 +49,9 @@ export default {
             images: '',
             categories: []
         };
+    },
+    components: {
+        AppHeader
     },
     created() {
         const user = JSON.parse(localStorage.getItem('user'));

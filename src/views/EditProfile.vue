@@ -1,4 +1,5 @@
 <template>
+  <AppHeader @search="handleSearch"></AppHeader>
   <div class="edit-profile">
     <h1>Edit Profile</h1>
     <form @submit.prevent="updateProfile">
@@ -28,6 +29,8 @@
 </template>
 
 <script>
+import AppHeader from '../components/AppHeader.vue';
+
 export default {
   name: 'EditProfile',
   data() {
@@ -40,6 +43,9 @@ export default {
         nivell: 0
       }
     };
+  },
+  components: {
+    AppHeader
   },
   methods: {
     updateProfile() {

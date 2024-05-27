@@ -1,4 +1,5 @@
 <template>
+  <AppHeader @search="handleSearch"></AppHeader>
   <div class="product-detail">
     <h1>Detalle del Producto</h1>
     <div class="product-content" v-if="product">
@@ -40,6 +41,8 @@
 </template>
 
 <script>
+import AppHeader from '../components/AppHeader.vue';
+
 export default {
   props: ['id'],
   data() {
@@ -51,6 +54,9 @@ export default {
   created() {
     this.fetchProduct();
     this.checkIfFavorite();
+  },
+  components: {
+    AppHeader
   },
   methods: {
     async fetchProduct() {

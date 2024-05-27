@@ -1,4 +1,5 @@
 <template>
+  <AppHeader @search="handleSearch"></AppHeader>
   <section id="productos" class="section">
     <div class="container">
       <h2>Gestiona tus productos</h2>
@@ -37,11 +38,13 @@
 
 <script>
 import ProductCard from '../components/productCard.vue';
+import AppHeader from '../components/AppHeader.vue';
 
 export default {
   name: 'ProfilePage',
   components: {
     ProductCard,
+    AppHeader,
   },
   data() {
     return {
