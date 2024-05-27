@@ -34,6 +34,8 @@
       </div>
     </div>
   </section>
+
+  <button id="add-product" @click="navigateToAddReview">Añadir Valoración</button>
 </template>
 
 <script>
@@ -97,6 +99,9 @@ export default {
         console.error('Error fetching profile data:', error);
       }
     },
+    navigateToAddReview() {
+      this.$router.push({ name: 'add-review' });
+    }
   },
   mounted() {
     this.fetchProfile();
@@ -151,5 +156,12 @@ export default {
 .product-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#add-product {
+  
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
