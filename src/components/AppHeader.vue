@@ -61,7 +61,7 @@ export default {
     async fetchBalance() {
       if (!this.user) return;
       try {
-        const response = await fetch(`http://54.167.0.31:8080/index.php?path=balance&userid=${this.user.id}`);
+        const response = await fetch(`http://107.21.164.204:8080/index.php?path=balance&userid=${this.user.id}`);
         const data = await response.json();
         if (data.status === 'Balance found') {
           this.balance = data.balance;

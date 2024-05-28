@@ -71,7 +71,7 @@ export default {
   methods: {
     async fetchProduct() {
       try {
-        const response = await fetch(`http://54.167.0.31:8080/index.php?path=product&id=${this.id}`);
+        const response = await fetch(`http://107.21.164.204:8080/index.php?path=product&id=${this.id}`);
         const data = await response.json();
         if (data.status === 'Product not found') {
           this.product = null;
@@ -89,7 +89,7 @@ export default {
           this.isFavorite = false;
           return;
         }
-        const response = await fetch(`http://54.167.0.31:8080/index.php?path=favorites&userid=${user.id}`);
+        const response = await fetch(`http://107.21.164.204:8080/index.php?path=favorites&userid=${user.id}`);
         const data = await response.json();
         this.isFavorite = data.some(favorite => favorite.id === this.id);
       } catch (error) {
@@ -104,7 +104,7 @@ export default {
           return;
         }
         const method = this.isFavorite ? 'DELETE' : 'POST';
-        const url = `http://54.167.0.31:8080/index.php?path=favorites${method === 'DELETE' ? `&userid=${user.id}&productid=${this.id}` : ''}`;
+        const url = `http://107.21.164.204:8080/index.php?path=favorites${method === 'DELETE' ? `&userid=${user.id}&productid=${this.id}` : ''}`;
 
         console.log('URL:', url); // Log de URL para depuración
         console.log('Method:', method); // Log de método para depuración
@@ -147,7 +147,7 @@ export default {
         }
 
         // Verificar saldo del usuario
-        const balanceResponse = await fetch(`http://54.167.0.31:8080/index.php?path=balance&userid=${user.id}`);
+        const balanceResponse = await fetch(`http://107.21.164.204:8080/index.php?path=balance&userid=${user.id}`);
         const balanceData = await balanceResponse.json();
         const userBalance = balanceData.balance;
 
@@ -156,7 +156,7 @@ export default {
           return;
         }
 
-        const response = await fetch('http://54.167.0.31:8080/index.php?path=purchase', {
+        const response = await fetch('http://107.21.164.204:8080/index.php?path=purchase', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

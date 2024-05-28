@@ -452,7 +452,7 @@
                 document.querySelector('.productos-lista').appendChild(productCard);
             }));
 
-        let purchases = fetch('http://54.167.0.31:8080/index.php?path=purchase-history&userid=1')
+        let purchases = fetch('http://107.21.164.204:8080/index.php?path=purchase-history&userid=1')
         .then(response => response.json())
         .then(data => data.forEach(purchase => {
                 let purchaseCard = document.createElement('div');
@@ -467,7 +467,7 @@
                 document.querySelector('.compras-lista').appendChild(purchaseCard);
             }));
 
-        let favorites = fetch('http://54.167.0.31:8080/index.php?path=favorites&&userid=1')
+        let favorites = fetch('http://107.21.164.204:8080/index.php?path=favorites&&userid=1')
         .then(response => response.json())
         .then(data => data.forEach(favorite => {
                 let favoriteCard = document.createElement('div');
