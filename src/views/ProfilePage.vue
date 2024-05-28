@@ -35,7 +35,6 @@
     </div>
   </section>
 
-  <button id="add-product" @click="navigateToAddReview">Añadir Valoración</button>
 </template>
 
 <script>
