@@ -106,6 +106,9 @@ export default {
         const method = this.isFavorite ? 'DELETE' : 'POST';
         const url = `http://54.167.0.31:8080/index.php?path=favorites${method === 'DELETE' ? `&userid=${user.id}&productid=${this.id}` : ''}`;
 
+        console.log('URL:', url); // Log de URL para depuración
+        console.log('Method:', method); // Log de método para depuración
+
         const response = await fetch(url, {
           method,
           headers: {
@@ -114,7 +117,9 @@ export default {
           body: method === 'POST' ? JSON.stringify({ userid: user.id, productid: this.id }) : null
         });
 
+        // Para depuración: verificar la respuesta como texto
         const text = await response.text();
+        console.log('Response text:', text); // Log para depuración
 
         try {
           const data = JSON.parse(text);
@@ -140,6 +145,17 @@ export default {
           alert('You need to log in to buy products');
           return;
         }
+
+        // Verificar saldo del usuario
+        const balanceResponse = await fetch(`http://54.167.0.31:8080/index.php?path=balance&userid=${user.id}`);
+        const balanceData = await balanceResponse.json();
+        const userBalance = balanceData.balance;
+
+        if (userBalance < this.product.price) {
+          alert('Insufficient balance. Please add funds to your account.');
+          return;
+        }
+
         const response = await fetch('http://54.167.0.31:8080/index.php?path=purchase', {
           method: 'POST',
           headers: {
@@ -147,6 +163,7 @@ export default {
           },
           body: JSON.stringify({ userid: user.id, productid: this.id, price: this.product.price })
         });
+
         const data = await response.json();
         if (data.status === 'Purchase successful') {
           alert('Product purchased successfully');
@@ -408,7 +425,7 @@ h1, h2 {
   height: 2.2em;
   width: 2.2em;
   border-radius: 0.7em;
-  box-shadow: 0.1em 0.1em 0.6em 0.2em #0E2945;
+  box-shadow: 0.1em 0.1em 0.6em 0.2em #7a8cf3;
   right: 0.3em;
   transition: all 0.3s;
 }
