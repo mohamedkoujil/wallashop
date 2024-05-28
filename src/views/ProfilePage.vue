@@ -58,9 +58,9 @@ export default {
     async fetchProfile() {
       try {
         const [productsResponse, purchasesResponse, favoritesResponse] = await Promise.all([
-          fetch(`http://54.234.76.112:8080/index.php?path=products-for-sale&userid=${this.user.id}`),
-          fetch(`http://54.234.76.112:8080/index.php?path=purchase-history&userid=${this.user.id}`),
-          fetch(`http://54.234.76.112:8080/index.php?path=favorites&userid=${this.user.id}`)
+          fetch(`http://54.167.0.31:8080/index.php?path=products-for-sale&userid=${this.user.id}`),
+          fetch(`http://54.167.0.31:8080/index.php?path=purchase-history&userid=${this.user.id}`),
+          fetch(`http://54.167.0.31:8080/index.php?path=favorites&userid=${this.user.id}`)
         ]);
 
         // Verificar respuestas y convertir a JSON

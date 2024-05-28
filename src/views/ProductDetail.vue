@@ -63,7 +63,7 @@ export default {
   methods: {
     async fetchProduct() {
       try {
-        const response = await fetch(`http://54.234.76.112:8080/index.php?path=product&id=${this.id}`);
+        const response = await fetch(`http://54.167.0.31:8080/index.php?path=product&id=${this.id}`);
         const data = await response.json();
         if (data.status === 'Product not found') {
           this.product = null;
@@ -81,7 +81,7 @@ export default {
           this.isFavorite = false;
           return;
         }
-        const response = await fetch(`http://54.234.76.112:8080/index.php?path=favorites&userid=${user.id}`);
+        const response = await fetch(`http://54.167.0.31:8080/index.php?path=favorites&userid=${user.id}`);
         const data = await response.json();
         this.isFavorite = data.some(favorite => favorite.id === this.id);
       } catch (error) {
@@ -98,7 +98,7 @@ export default {
         }
 
         const method = this.isFavorite ? 'DELETE' : 'POST';
-        const url = `http://54.234.76.112:8080/index.php?path=favorites${method === 'DELETE' ? `&userid=${user.id}&productid=${this.id}` : ''}`;
+        const url = `http://54.167.0.31:8080/index.php?path=favorites${method === 'DELETE' ? `&userid=${user.id}&productid=${this.id}` : ''}`;
 
         const response = await fetch(url, {
           method,
