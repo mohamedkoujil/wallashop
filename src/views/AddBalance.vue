@@ -87,7 +87,7 @@ export default {
       }
 
       try {
-        const response = await fetch('http://localhost:8080/index.php?path=add-balance', {
+        const response = await fetch('http://54.89.60.239:8080/index.php?path=add-balance', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -105,6 +105,7 @@ export default {
 
         if (data.status === 'Balance added') {
           alert('Saldo añadido con éxito.');
+          this.$router.push('/');
         } else {
           alert('Error al añadir saldo.');
         }

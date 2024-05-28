@@ -16,18 +16,31 @@
           <div class="iconButton">
             <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path>
+              <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                fill="currentColor"></path>
             </svg>
           </div>
         </button>
+        <div class="buyProcess" v-if="buyProcess">
+          <p v-if="user.id == product.ownerid">No puedes comprar tu propio producto</p>
+          <div v-else>
+            <p>¿Estás seguro de que deseas comprar este producto?</p>
+            <button @click="buyProduct">Sí</button>
+            <button @click="buyProcess = false">No</button>
+          </div>
+        </div>
         <div class="heart-container" title="Like" @click="toggleFavorite">
           <input type="checkbox" class="checkbox" id="Give-It-An-Id" v-model="isFavorite">
           <div class="svg-container">
             <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
+              <path
+                d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z">
+              </path>
             </svg>
             <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path>
+              <path
+                d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z">
+              </path>
             </svg>
             <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
               <polygon points="10,10 20,20"></polygon>
@@ -58,7 +71,9 @@ export default {
     return {
       product: null,
       isFavorite: false,
-      searchTerm: ''
+      searchTerm: '',
+      buyProcess: false,
+      user: JSON.parse(localStorage.getItem('user')) || null
     };
   },
   created() {
@@ -71,7 +86,7 @@ export default {
   methods: {
     async fetchProduct() {
       try {
-        const response = await fetch(`http://107.21.164.204:8080/index.php?path=product&id=${this.id}`);
+        const response = await fetch(`http://54.89.60.239:8080/index.php?path=product&id=${this.id}`);
         const data = await response.json();
         if (data.status === 'Product not found') {
           this.product = null;
@@ -139,42 +154,48 @@ export default {
       }
     },
     async buyProduct() {
-      try {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (!user) {
-          alert('You need to log in to buy products');
-          return;
+      if (!this.buyProcess) {
+        this.buyProcess = true;
+      } else {
+        console.log('Buying product:', this.product);
+        try {
+          const user = JSON.parse(localStorage.getItem('user'));
+          if (!user) {
+            alert('You need to log in to buy products');
+            return;
+          }
+
+          // Verificar saldo del usuario
+          const balanceResponse = await fetch(`http://54.89.60.239:8080/index.php?path=get-balance&userid=${user.id}`);
+          const balanceData = await balanceResponse.json();
+          const userBalance = balanceData.balance;
+
+          if (userBalance < this.product.price) {
+            alert('Insufficient balance. Please add funds to your account.');
+            return;
+          }
+
+          const response = await fetch('http://54.89.60.239:8080/index.php?path=purchase', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userid: user.id, productid: this.id, price: this.product.price })
+          });
+
+          const data = await response.json();
+          if (data.status === 'Purchase successful') {
+            alert('Product purchased successfully');
+          } else if (data.status === 'Insufficient balance') {
+            alert('Insufficient balance. Please add funds to your account.');
+          } else {
+            alert('Error during purchase');
+          }
+        } catch (error) {
+          console.error('Error buying product:', error);
         }
-
-        // Verificar saldo del usuario
-        const balanceResponse = await fetch(`http://107.21.164.204:8080/index.php?path=balance&userid=${user.id}`);
-        const balanceData = await balanceResponse.json();
-        const userBalance = balanceData.balance;
-
-        if (userBalance < this.product.price) {
-          alert('Insufficient balance. Please add funds to your account.');
-          return;
-        }
-
-        const response = await fetch('http://107.21.164.204:8080/index.php?path=purchase', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ userid: user.id, productid: this.id, price: this.product.price })
-        });
-
-        const data = await response.json();
-        if (data.status === 'Purchase successful') {
-          alert('Product purchased successfully');
-        } else if (data.status === 'Insufficient balance') {
-          alert('Insufficient balance. Please add funds to your account.');
-        } else {
-          alert('Error during purchase');
-        }
-      } catch (error) {
-        console.error('Error buying product:', error);
       }
+
     },
     handleSearch(term) {
       this.searchTerm = term;
@@ -184,12 +205,50 @@ export default {
 </script>
 
 <style scoped>
+.buyProcess {
+  position: absolute;
+  top: 150%;
+  left: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  background-color: #0E2945;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  transition: top 0.3s;
+}
+
+.buyProcess button {
+  background-color: #fff;
+  color: #0E2945;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: 0.3s;
+  margin: 1em;
+}
+
+.buyProcess button:hover {
+  transform: translateY(-2px);
+}
+
+.buyProcess button:active {
+  transform: translateY(2px);
+}
+
 .product-detail {
   padding: 20px;
   text-align: center;
 }
 
-h1, h2 {
+h1,
+h2 {
   font-weight: 700;
   color: #0E2945;
 }
@@ -222,12 +281,20 @@ h1, h2 {
   gap: 10px;
 }
 
-.product-category, .product-description, .product-price, .product-location, .product-owner {
+.product-category,
+.product-description,
+.product-price,
+.product-location,
+.product-owner {
   font-weight: 400;
   font-size: 16px;
 }
 
-.product-category strong, .product-description strong, .product-price strong, .product-location strong, .product-owner strong {
+.product-category strong,
+.product-description strong,
+.product-price strong,
+.product-location strong,
+.product-owner strong {
   color: #0E2945;
 }
 
@@ -284,11 +351,15 @@ h1, h2 {
 }
 
 @-webkit-keyframes loading-keys-app-loading {
-  0%, 80%, 100% {
+
+  0%,
+  80%,
+  100% {
     opacity: .75;
     box-shadow: 0 0 #076fe5;
     height: 32px;
   }
+
   40% {
     opacity: 1;
     box-shadow: 0 -8px #076fe5;
@@ -297,11 +368,15 @@ h1, h2 {
 }
 
 @keyframes loading-keys-app-loading {
-  0%, 80%, 100% {
+
+  0%,
+  80%,
+  100% {
     opacity: .75;
     box-shadow: 0 0 #076fe5;
     height: 32px;
   }
+
   40% {
     opacity: 1;
     box-shadow: 0 -8px #076fe5;
@@ -371,9 +446,11 @@ h1, h2 {
   0% {
     transform: scale(0);
   }
+
   25% {
     transform: scale(1.2);
   }
+
   50% {
     transform: scale(1);
     filter: brightness(1.5);
@@ -384,10 +461,12 @@ h1, h2 {
   0% {
     transform: scale(0);
   }
+
   50% {
     opacity: 1;
     filter: brightness(1.5);
   }
+
   100% {
     transform: scale(1.4);
     opacity: 0;

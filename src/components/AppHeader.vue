@@ -61,11 +61,9 @@ export default {
     async fetchBalance() {
       if (!this.user) return;
       try {
-        const response = await fetch(`http://107.21.164.204:8080/index.php?path=balance&userid=${this.user.id}`);
+        const response = await fetch('http://54.89.60.239:8080/index.php?path=get-balance&userid='+this.user.id);
         const data = await response.json();
-        if (data.status === 'Balance found') {
-          this.balance = data.balance;
-        }
+        this.balance = data.balance;
       } catch (error) {
         console.error('Error fetching balance:', error);
       }
@@ -83,6 +81,7 @@ export default {
     if (this.user) {
       this.fetchBalance();
     }
+    console.log('User:', this.user);
   }
 }
 </script>
