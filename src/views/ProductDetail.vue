@@ -1,42 +1,49 @@
 <template>
-  <div>
-    <AppHeader @search="handleSearch"></AppHeader>
-    <div class="product-detail">
-      <h1>Detalle del Producto</h1>
-      <div class="product-content" v-if="product">
-        <img :src="product.images" alt="Product image" class="product-image">
-        <div class="product-info">
-          <h2>{{ product.productname }}</h2>
-          <p class="product-category"><strong>Categoría:</strong> {{ product.category }}</p>
-          <p class="product-description"><strong>Descripción:</strong> {{ product.description }}</p>
-          <p class="product-price"><strong>Precio:</strong> {{ product.price }} €</p>
-          <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
-          <p class="product-owner"><strong>Propietario:</strong> {{ product.ownername }} - {{ product.owneremail }}</p>
-          <div class="heart-container" title="Like" @click="toggleFavorite">
-            <input type="checkbox" class="checkbox" id="Give-It-An-Id" v-model="isFavorite">
-            <div class="svg-container">
-              <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
-              </svg>
-              <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path>
-              </svg>
-              <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                <polygon points="10,10 20,20"></polygon>
-                <polygon points="10,50 20,50"></polygon>
-                <polygon points="20,80 30,70"></polygon>
-                <polygon points="90,10 80,20"></polygon>
-                <polygon points="90,50 80,50"></polygon>
-                <polygon points="80,80 70,70"></polygon>
-              </svg>
-            </div>
+  <AppHeader @search="handleSearch"></AppHeader>
+  <div class="product-detail">
+    <h1>Detalle del Producto</h1>
+    <div class="product-content" v-if="product">
+      <img :src="product.images" alt="Product image" class="product-image">
+      <div class="product-info">
+        <h2>{{ product.productname }}</h2>
+        <p class="product-category"><strong>Categoría:</strong> {{ product.category }}</p>
+        <p class="product-description"><strong>Descripción:</strong> {{ product.description }}</p>
+        <p class="product-price"><strong>Precio:</strong> {{ product.price }} €</p>
+        <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
+        <p class="product-owner"><strong>Propietario:</strong> {{ product.ownername }} - {{ product.owneremail }}</p>
+        <button class="contactButton" @click="buyProduct">
+          Comprar
+          <div class="iconButton">
+            <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path>
+            </svg>
+          </div>
+        </button>
+        <div class="heart-container" title="Like" @click="toggleFavorite">
+          <input type="checkbox" class="checkbox" id="Give-It-An-Id" v-model="isFavorite">
+          <div class="svg-container">
+            <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
+            </svg>
+            <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path>
+            </svg>
+            <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="10,10 20,20"></polygon>
+              <polygon points="10,50 20,50"></polygon>
+              <polygon points="20,80 30,70"></polygon>
+              <polygon points="90,10 80,20"></polygon>
+              <polygon points="90,50 80,50"></polygon>
+              <polygon points="80,80 70,70"></polygon>
+            </svg>
           </div>
         </div>
       </div>
-      <div v-else id="loading">
-        <div class="loader">
-          <div class="justify-content-center jimu-primary-loading"></div>
-        </div>
+    </div>
+    <div v-else id="loading">
+      <div class="loader">
+        <div class="justify-content-center jimu-primary-loading"></div>
       </div>
     </div>
   </div>
@@ -51,6 +58,7 @@ export default {
     return {
       product: null,
       isFavorite: false,
+      searchTerm: ''
     };
   },
   created() {
@@ -93,10 +101,8 @@ export default {
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) {
           alert('You need to log in to add favorites');
-          this.isFavorite = false;
           return;
         }
-
         const method = this.isFavorite ? 'DELETE' : 'POST';
         const url = `http://54.167.0.31:8080/index.php?path=favorites${method === 'DELETE' ? `&userid=${user.id}&productid=${this.id}` : ''}`;
 
@@ -109,7 +115,6 @@ export default {
         });
 
         const text = await response.text();
-        console.log('Response text:', text);
 
         try {
           const data = JSON.parse(text);
@@ -126,8 +131,36 @@ export default {
         }
       } catch (error) {
         console.error('Error toggling favorite:', error);
-        this.isFavorite = !this.isFavorite; // Revert the change if there's an error
       }
+    },
+    async buyProduct() {
+      try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+          alert('You need to log in to buy products');
+          return;
+        }
+        const response = await fetch('http://54.167.0.31:8080/index.php?path=purchase', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userid: user.id, productid: this.id, price: this.product.price })
+        });
+        const data = await response.json();
+        if (data.status === 'Purchase successful') {
+          alert('Product purchased successfully');
+        } else if (data.status === 'Insufficient balance') {
+          alert('Insufficient balance. Please add funds to your account.');
+        } else {
+          alert('Error during purchase');
+        }
+      } catch (error) {
+        console.error('Error buying product:', error);
+      }
+    },
+    handleSearch(term) {
+      this.searchTerm = term;
     }
   }
 };
@@ -343,5 +376,50 @@ h1, h2 {
     opacity: 0;
     display: none;
   }
+}
+
+.contactButton {
+  background: #0E2945;
+  color: white;
+  font-family: inherit;
+  padding: 0.45em;
+  padding-left: 1em;
+  font-size: 17px;
+  font-weight: 500;
+  border-radius: 0.9em;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 0 1.6em -0.6em #0E2945;
+  overflow: hidden;
+  position: relative;
+  height: 2.8em;
+  padding-right: 3em;
+}
+
+.iconButton {
+  margin-left: 1em;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.2em;
+  width: 2.2em;
+  border-radius: 0.7em;
+  box-shadow: 0.1em 0.1em 0.6em 0.2em #0E2945;
+  right: 0.3em;
+  transition: all 0.3s;
+}
+
+.contactButton:hover {
+  transform: translate(-0.05em, -0.05em);
+  box-shadow: 0.15em 0.15em #5566c2;
+}
+
+.contactButton:active {
+  transform: translate(0.05em, 0.05em);
+  box-shadow: 0.05em 0.05em #5566c2;
 }
 </style>

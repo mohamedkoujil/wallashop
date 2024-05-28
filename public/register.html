@@ -79,6 +79,9 @@
       <label for="password">Contraseña</label>
       <input type="password" id="password" required>
 
+      <label for="confirmPassword">Confirmar Contraseña</label>
+      <input type="password" id="confirmPassword" required>
+
       <label for="location">Ubicación</label>
       <input type="text" id="location" required>
 
@@ -91,38 +94,43 @@
 
   <script>
     document.getElementById('registerForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const personName = document.getElementById('personName').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const location = document.getElementById('location').value;
-    const profilePicture = document.getElementById('profilePicture').value;
+      event.preventDefault();
+      const personName = document.getElementById('personName').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const location = document.getElementById('location').value;
+      const profilePicture = document.getElementById('profilePicture').value;
 
-    fetch('http://54.167.0.31:8080/index.php?path=register', {
+      if (password !== confirmPassword) {
+        document.getElementById('errores').innerText = 'Las contraseñas no coinciden.';
+        return;
+      }
+
+      fetch('http://54.167.0.31:8080/index.php?path=register', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ personName, email, password, location, profilePicture })
-    })
-    .then(response => {
-        return response.json().then(data => {
-            if (!response.ok) {
-                throw new Error(data.message || 'Error en el registro');
-            }
-            return data;
-        });
-    })
-    .then(data => {
-        console.log(data.status);
-        if (data.status != 'success') {
-            document.getElementById('errores').innerText = data.message;  
-        } else {
-            window.location.href = 'login.html';
+      })
+      .then(response => response.json().then(data => {
+        if (!response.ok) {
+          throw new Error(data.message || 'Error en el registro');
         }
-    })
-});
-
+        return data;
+      }))
+      .then(data => {
+        if (data.status !== 'success') {
+          document.getElementById('errores').innerText = data.message || 'Error en el registro';
+        } else {
+          window.location.href = 'login.html';
+        }
+      })
+      .catch(error => {
+        document.getElementById('errores').innerText = error.message;
+      });
+    });
   </script>
 </body>
 </html>

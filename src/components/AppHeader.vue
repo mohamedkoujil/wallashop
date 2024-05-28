@@ -9,12 +9,13 @@
         <button id="search-submit" @click="emitSearch">Buscar</button>
       </div>
       <div v-if="user" class="header-user" @click="toggleMenu" @mouseleave="toggleMenuMouseover">
-        <p>{{ user.personname }}</p>
+        <p>{{ user.personname }} ({{ balance }}€)</p>
         <img :src="user.profilepicture" alt="Foto de perfil" class="pfp">
         <div class="dropdown-menu" v-if="menuOpen">
           <ul>
             <li><router-link to="/profile">Ver Perfil</router-link></li>
             <li><router-link to="/edit-profile">Editar Perfil</router-link></li>
+            <li><router-link to="/add-balance">Añadir saldo</router-link></li>
             <li><a href="#" @click="logout">Cerrar Sesión</a></li>
           </ul>
         </div>
@@ -33,6 +34,7 @@ export default {
   data() {
     return {
       user: JSON.parse(localStorage.getItem('user')) || null,
+      balance: 0,
       menuOpen: false
     };
   },
@@ -55,11 +57,31 @@ export default {
     },
     emitSearch() {
       this.$emit('search', document.getElementById('search-input').value);
+    },
+    async fetchBalance() {
+      if (!this.user) return;
+      try {
+        const response = await fetch(`http://54.167.0.31:8080/index.php?path=balance&userid=${this.user.id}`);
+        const data = await response.json();
+        if (data.status === 'Balance found') {
+          this.balance = data.balance;
+        }
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      }
     }
   },
   watch: {
     $route() {
       this.user = JSON.parse(localStorage.getItem('user')) || null;
+      if (this.user) {
+        this.fetchBalance();
+      }
+    }
+  },
+  mounted() {
+    if (this.user) {
+      this.fetchBalance();
     }
   }
 }
@@ -129,7 +151,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 120px;
+  width: 160px;
   cursor: pointer;
   background-color: #0E2945;
   color: white;
@@ -180,7 +202,6 @@ export default {
   color: white;
   text-decoration: none;
 }
-
 
 .btn {
   background-color: #0E2945;
