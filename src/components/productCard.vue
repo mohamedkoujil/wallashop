@@ -1,9 +1,10 @@
 <template>
   <div class="product-card">
-      <img class="product-img" :src="product.images" alt="Product image">
-      <h2 class="product-name">{{ product.productname }}</h2>
-      <p class="product-category">{{ product.category }}</p>
-      <p class="product-price">Precio: {{ product.price }}€</p>
+    <img class="product-img" :src="product.images" alt="Product image">
+    <h2 class="product-name">{{ product.productname }}</h2>
+    <p class="product-category">{{ product.category }}</p>
+    <p class="product-price">Precio: {{ product.price }}€</p>
+    <button v-if="product.status === 'sold'" @click.stop="navigateToAddReview">Añadir Valoración</button>
   </div>
 </template>
 
@@ -11,7 +12,12 @@
 export default {
   name: 'ProductCard',
   props: {
-      product: Object
+    product: Object
+  },
+  methods: {
+    navigateToAddReview() {
+      this.$router.push({ name: 'add-review', params: { id: this.product.id } });
+    }
   }
 }
 </script>
@@ -76,5 +82,19 @@ export default {
   object-fit: cover;
   border-radius: 10px;
   margin-bottom: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #0E2945;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #1a4473;
 }
 </style>
