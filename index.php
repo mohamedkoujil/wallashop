@@ -35,13 +35,6 @@ if ($method == 'GET' && $path == 'products') {
     echo json_encode($products ?: []);
 }
 
-//Listar usuarios
-elseif ($method == 'GET' && $path == 'users') {
-    $result = pg_query($conn, "SELECT * FROM person");
-    $users = pg_fetch_all($result);
-    echo json_encode($users ?: []);
-}
-
 // Listar todos los usuarios
 elseif ($method == 'GET' && $path == 'users') {
     $result = pg_query($conn, "SELECT * FROM person");
@@ -154,10 +147,50 @@ elseif ($method == 'POST' && $path == 'register') {
     } else {
         $error_message = pg_last_error($conn);
         if (strpos($error_message, 'duplicate key value violates unique constraint "unique_email"') !== false) {
-            echo json_encode(['status' => 'Error adding product: Email already exists']);
+            echo json_encode(['status' => 'Error adding user: Email already exists']);
         } else {
-            echo json_encode(['status' => 'Error adding product']);
+            echo json_encode(['status' => 'Error adding user']);
         }
+    }
+}
+
+// Actualizar usuario
+elseif ($method == 'PUT' && $path == 'update-user') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $userId = $data['id'];
+    $email = $data['email'];
+    $password = isset($data['password']) ? $data['password'] : null;
+    $location = $data['location'];
+    $profilePicture = $data['profilePicture'];
+    $nivell = $data['nivell'];
+    $personName = $data['personName'];
+
+    $query = "UPDATE person SET email = '$email', location = '$location', profilepicture = '$profilePicture', nivell = '$nivell', personname = '$personName'";
+    if ($password) {
+        $query .= ", password = '$password'";
+    }
+    $query .= " WHERE id = '$userId'";
+
+    $result = pg_query($conn, $query);
+
+    if ($result) {
+        echo json_encode(['status' => 'User updated']);
+    } else {
+        echo json_encode(['status' => 'Error updating user']);
+    }
+}
+
+// Borrar usuario
+elseif ($method == 'DELETE' && $path == 'delete-user') {
+    $userId = $_GET['id'];
+
+    $query = "DELETE FROM person WHERE id = '$userId'";
+    $result = pg_query($conn, $query);
+
+    if ($result) {
+        echo json_encode(['status' => 'User deleted']);
+    } else {
+        echo json_encode(['status' => 'Error deleting user']);
     }
 }
 
@@ -194,6 +227,23 @@ elseif ($method == 'POST' && $path == 'valoracion') {
         echo json_encode(['status' => 'Valoration added']);
     } else {
         echo json_encode(['status' => 'Error adding valoration']);
+    }
+}
+
+// Actualizar valoración de usuario
+elseif ($method == 'PUT' && $path == 'update-valoracion') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $valorationId = $data['id'];
+    $rate = $data['rate'];
+    $comment = $data['comment'];
+
+    $query = "UPDATE valoration SET rate = '$rate', comment = '$comment' WHERE id = '$valorationId'";
+    $result = pg_query($conn, $query);
+
+    if ($result) {
+        echo json_encode(['status' => 'Valoration updated']);
+    } else {
+        echo json_encode(['status' => 'Error updating valoration']);
     }
 }
 
