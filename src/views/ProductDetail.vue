@@ -165,7 +165,7 @@ export default {
             return;
           }
 
-          const response = await fetch('http://18.212.255.200:8080/index.php?path=purchase', {
+          const response = await fetch('http://18.212.255.200:8080/index.php?path=request-purchase', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

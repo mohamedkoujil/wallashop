@@ -35,6 +35,13 @@ if ($method == 'GET' && $path == 'products') {
     echo json_encode($products ?: []);
 }
 
+//Listar usuarios
+elseif ($method == 'GET' && $path == 'users') {
+    $result = pg_query($conn, "SELECT * FROM person");
+    $users = pg_fetch_all($result);
+    echo json_encode($users ?: []);
+}
+
 // Listar todos los usuarios
 elseif ($method == 'GET' && $path == 'users') {
     $result = pg_query($conn, "SELECT * FROM person");
@@ -309,7 +316,7 @@ elseif ($method == 'POST' && $path == 'add-balance') {
 }
 
 // Crear una solicitud de compra
-elseif ($method == 'POST' && $path == 'purchase') {
+elseif ($method == 'POST' && $path == 'request-purchase') {
     $data = json_decode(file_get_contents('php://input'), true);
     $userId = $data['userid'];
     $ownerId = $data['ownerid'];
