@@ -39,15 +39,21 @@ export default {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    userid: this.user.id,
+                    userid: this.request.buyerid,
                     ownerid: this.request.ownerid,
                     productid: this.request.productid,
                     price: this.product.price
                 })
             }).then(response => response.json())
-                .then(data => {
-                    console.log('Accept purchase response:', data);
-                });
+            .then(data => {
+                if (data.status === 'Purchase successful') {
+                    console.log('Purchase accepted:', data);
+                    alert('Compra aceptada');
+                    window.location.reload();
+                } else {
+                    console.error('Error accepting purchase:', data);
+                }
+            });
         },
         rejectRequest() {
             console.log('Solicitud rechazada');

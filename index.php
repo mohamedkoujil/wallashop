@@ -45,7 +45,7 @@ elseif ($method == 'GET' && $path == 'users') {
 // Obtener información de un producto específico por ID
 elseif ($method == 'GET' && $path == 'product') {
     $productId = $_GET['id'];
-    $query = "SELECT p.*, o.email AS ownerEmail, o.personname AS ownerName FROM product p JOIN person o ON p.ownerid = o.id WHERE p.id = '$productId' AND p.status = 'available'";
+    $query = "SELECT * FROM product WHERE id = '$productId'";
     $result = pg_query($conn, $query);
     $product = pg_fetch_assoc($result);
     if ($product) {
@@ -389,50 +389,45 @@ elseif ($method == 'POST' && $path == 'accept-purchase') {
     $ownerId = $data['ownerid'];
     $productId = $data['productid'];
     $price = $data['price'];
+    // Iniciar la transacción
+    pg_query($conn, "BEGIN");
 
-    // Verificar el saldo del comprador
-    $query = "SELECT balance FROM person WHERE id = '$userId'";
+    // Registrar la compra
+    $query = "INSERT INTO transaction (buyerid, ownerid, productid) VALUES ('$userId', '$ownerId', '$productId')";
     $result = pg_query($conn, $query);
-    $user = pg_fetch_assoc($result);
 
-    if ($user['balance'] < $price) {
-        echo json_encode(['status' => 'Insufficient balance']);
-    } else {
-        // Iniciar la transacción
-        pg_query($conn, "BEGIN");
+    if ($result) {
+        // Restar el precio del saldo del comprador
+        $query = "UPDATE person SET balance = balance - '$price' WHERE id = '$userId'";
+        $result = pg_query($conn, $query);
 
-        // Registrar la compra
-        $query = "INSERT INTO transaction (buyerid, ownerid, productid) VALUES ('$userId', '$ownerId', '$productId')";
+        //Aumentar el saldo del vendedor
+        $query = "UPDATE person SET balance = balance + '$price' WHERE id = '$ownerId'";
+        $result = pg_query($conn, $query);
+
+        // Marcar el producto como vendido
+        $query = "UPDATE product SET status = 'sold' WHERE id = '$productId'";
+        $result = pg_query($conn, $query);
+
+        // Eliminar la solicitud de compra
+        $query = "DELETE FROM purchaserequest WHERE buyerid = '$userId' AND productid = '$productId' AND ownerid = '$ownerId'";
         $result = pg_query($conn, $query);
 
         if ($result) {
-            // Restar el precio del saldo del comprador
-            $query = "UPDATE person SET balance = balance - '$price' WHERE id = '$userId'";
-            $result = pg_query($conn, $query);
-
-            //Aumentar el saldo del vendedor
-            $query = "UPDATE person SET balance = balance + '$price' WHERE id = '$ownerId'";
-            $result = pg_query($conn, $query);
-
-            // Marcar el producto como vendido
-            $query = "UPDATE product SET status = 'sold' WHERE id = '$productId'";
-            $result = pg_query($conn, $query);
-
-            if ($result) {
-                // Confirmar la transacción
-                pg_query($conn, "COMMIT");
-                echo json_encode(['status' => 'Purchase successful']);
-            } else {
-                // Revertir la transacción
-                pg_query($conn, "ROLLBACK");
-                echo json_encode(['status' => 'Error during purchase']);
-            }
+            // Confirmar la transacción
+            pg_query($conn, "COMMIT");
+            echo json_encode(['status' => 'Purchase successful']);
         } else {
             // Revertir la transacción
             pg_query($conn, "ROLLBACK");
             echo json_encode(['status' => 'Error during purchase']);
         }
+    } else {
+        // Revertir la transacción
+        pg_query($conn, "ROLLBACK");
+        echo json_encode(['status' => 'Error during purchase']);
     }
+
 }
 
 // Rechazar una solicitud de compra
