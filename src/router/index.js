@@ -8,6 +8,7 @@ import AddReview from './../views/AddReview.vue';
 import AddBalance from '@/views/AddBalance.vue';
 import AdminDashboard from '@/views/AdminDashboard.vue';
 import UserManagement from '@/components/UserManagement.vue';
+import ClaimsPage from './../views/ClaimsPage'
 
 const routes = [
   { path: '/', name: 'home', component: HomePage },
@@ -17,8 +18,12 @@ const routes = [
   { path: '/add-product', name: 'add-product', component: addProductPage },
   { path: '/add-review', name: 'add-review', component: AddReview },
   { path: '/add-balance', component: AddBalance },
+<<<<<<< HEAD
   { path: '/admin', name: 'admin', component: AdminDashboard },
   { path: '/admin/user-management', name: 'user-management', component: UserManagement },
+=======
+  { path: '/Claims-Page', component: ClaimsPage },
+>>>>>>> 78ae282cb164b8fd5823fd03b18909fadb28570b
 ];
 
 const router = createRouter({

@@ -16,6 +16,7 @@
             <li><router-link to="/profile">Ver Perfil</router-link></li>
             <li><router-link to="/edit-profile">Editar Perfil</router-link></li>
             <li><router-link to="/add-balance">Añadir saldo</router-link></li>
+            <li><router-link to="/Claims-Page">Reclamaciones</router-link></li>
             <li v-if="isAdmin"><router-link to="/admin">Admin Dashboard</router-link></li>
             <li><a href="#" @click="logout">Cerrar Sesión</a></li>
           </ul>

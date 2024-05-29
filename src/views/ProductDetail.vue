@@ -119,7 +119,7 @@ export default {
           return;
         }
         const method = this.isFavorite ? 'DELETE' : 'POST';
-        const url = `http://107.21.164.204:8080/index.php?path=add-favorites${method === 'DELETE' ? `&userid=${user.id}&productid=${this.id}` : ''}`;
+        const url = `http://18.212.255.200:8080/index.php?path=add-favorites${method === 'DELETE' ? `&userid=${user.id}&productid=${this.id}` : ''}`;
 
         console.log('URL:', url); // Log de URL para depuración
         console.log('Method:', method); // Log de método para depuración
@@ -165,34 +165,31 @@ export default {
             return;
           }
 
-          // Verificar saldo del usuario
-          const balanceResponse = await fetch(`http://18.212.255.200:8080/index.php?path=get-balance&userid=${user.id}`);
-          const balanceData = await balanceResponse.json();
-          const userBalance = balanceData.balance;
-
-          if (userBalance < this.product.price) {
-            alert('Insufficient balance. Please add funds to your account.');
-            return;
-          }
-
           const response = await fetch('http://18.212.255.200:8080/index.php?path=purchase', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ userid: user.id, productid: this.id, price: this.product.price })
+            body: JSON.stringify(
+              { 
+              userid: user.id, 
+              ownerid: this.product.ownerid,
+              productid: this.product.id, 
+              price: this.product.price 
+            })
           });
 
           const data = await response.json();
           if (data.status === 'Purchase successful') {
             alert('Product purchased successfully');
+            this.$router.push('/');
           } else if (data.status === 'Insufficient balance') {
             alert('Insufficient balance. Please add funds to your account.');
           } else {
             alert('Error during purchase');
           }
         } catch (error) {
-          console.error('Error buying product:', error);
+          console.log('Error buying product:', error);
         }
       }
 
