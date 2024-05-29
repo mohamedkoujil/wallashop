@@ -12,6 +12,18 @@
     </div>
   </section>
 
+  <section id="ventas" class="section">
+    <div class="container">
+      <h2>Gestiona tus Ventas</h2>
+      <p>Aquí podrás ver tus productos vendidos y las ventas en curso, finalizadas.</p>
+      <div class="productos-lista">
+        <router-link :to="'/product/' + sale.id" v-for="sale in soldProducts" :key="sale.id">
+          <product-card :product="sale"></product-card>
+        </router-link>
+      </div>
+    </div>
+  </section>
+
   <section id="compras" class="section">
     <div class="container">
       <h2>Gestiona tus Compras</h2>
@@ -51,6 +63,7 @@ export default {
     return {
       user: JSON.parse(localStorage.getItem('user')) || null,
       products: [],
+      soldProducts: [],
       purchases: [],
       favorites: [],
     };
@@ -58,8 +71,9 @@ export default {
   methods: {
     async fetchProfile() {
       try {
-        const [productsResponse, purchasesResponse, favoritesResponse] = await Promise.all([
+        const [productsResponse, salesResponse, purchasesResponse, favoritesResponse] = await Promise.all([
           fetch(`http://18.212.255.200:8080/index.php?path=products-for-sale&userid=${this.user.id}`),
+          fetch(`http://18.212.255.200:8080/index.php?path=sales-history&userid=${this.user.id}`),
           fetch(`http://18.212.255.200:8080/index.php?path=purchase-history&userid=${this.user.id}`),
           fetch(`http://18.212.255.200:8080/index.php?path=get-favorites&userid=${this.user.id}`)
         ]);
@@ -67,6 +81,9 @@ export default {
         // Verificar respuestas y convertir a JSON
         if (!productsResponse.ok) {
           throw new Error('Failed to fetch products');
+        }
+        if (!salesResponse.ok) {
+          throw new Error('Failed to fetch sales');
         }
         if (!purchasesResponse.ok) {
           throw new Error('Failed to fetch purchases');
@@ -77,21 +94,25 @@ export default {
 
         // Obtener textos de las respuestas
         const productsText = await productsResponse.text();
+        const salesText = await salesResponse.text();
         const purchasesText = await purchasesResponse.text();
         const favoritesText = await favoritesResponse.text();
 
         // Log para depuración antes de la conversión a JSON
         console.log('Products response:', productsText);
+        console.log('Sales response:', salesText);
         console.log('Purchases response:', purchasesText);
         console.log('Favorites response:', favoritesText);
 
         // Parsear respuestas si no están vacías
         this.products = productsText ? JSON.parse(productsText) : [];
+        this.soldProducts = salesText ? JSON.parse(salesText) : [];
         this.purchases = purchasesText ? JSON.parse(purchasesText) : [];
         this.favorites = favoritesText ? JSON.parse(favoritesText) : [];
 
         // Log para depuración después de la conversión a JSON
         console.log('Products:', this.products);
+        console.log('Sales:', this.soldProducts);
         console.log('Purchases:', this.purchases);
         console.log('Favorites:', this.favorites);
       } catch (error) {
