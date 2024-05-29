@@ -37,7 +37,7 @@ if ($method == 'GET' && $path == 'products') {
 
 // Listar todos los usuarios
 elseif ($method == 'GET' && $path == 'users') {
-    $result = pg_query($conn, "SELECT * FROM person");
+    $result = pg_query($conn, "SELECT * FROM person WHERE status = 'active'");
     $users = pg_fetch_all($result);
     echo json_encode($users ?: []);
 }
@@ -180,11 +180,11 @@ elseif ($method == 'PUT' && $path == 'update-user') {
     }
 }
 
-// Borrar usuario
-elseif ($method == 'DELETE' && $path == 'delete-user') {
+// Borrar usuario(poner status inactive)
+elseif ($method == 'PUT' && $path == 'user') {
     $userId = $_GET['id'];
 
-    $query = "DELETE FROM person WHERE id = '$userId'";
+    $query = "UPDATE person SET status = 'inactive' WHERE id = '$userId'";
     $result = pg_query($conn, $query);
 
     if ($result) {
