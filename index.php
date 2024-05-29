@@ -35,6 +35,13 @@ if ($method == 'GET' && $path == 'products') {
     echo json_encode($products ?: []);
 }
 
+// Listar todos los usuarios
+elseif ($method == 'GET' && $path == 'users') {
+    $result = pg_query($conn, "SELECT * FROM person");
+    $users = pg_fetch_all($result);
+    echo json_encode($users ?: []);
+}
+
 // Obtener información de un producto específico por ID
 elseif ($method == 'GET' && $path == 'product') {
     $productId = $_GET['id'];
