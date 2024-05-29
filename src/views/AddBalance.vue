@@ -87,7 +87,7 @@ export default {
       }
 
       try {
-        const response = await fetch('http://54.89.60.239:8080/index.php?path=add-balance', {
+        const response = await fetch('http://18.212.255.200:8080/index.php?path=add-balance', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

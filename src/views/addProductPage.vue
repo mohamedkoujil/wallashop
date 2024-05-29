@@ -63,7 +63,7 @@ export default {
     methods: {
         async getCategories() {
             try {
-                const response = await fetch('http://54.89.60.239:8080/index.php?path=categories');
+                const response = await fetch('http://18.212.255.200:8080/index.php?path=categories');
                 const data = await response.json();
                 this.categories = data;
             } catch (error) {
@@ -79,7 +79,7 @@ export default {
             }
             const ownerId = user.id;
             try {
-                const response = await fetch('http://54.89.60.239:8080/index.php?path=product', {
+                const response = await fetch('http://18.212.255.200:8080/index.php?path=product', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
