@@ -1,226 +1,78 @@
 <template>
-  <header class="header">
-    <div class="header-top">
-      <div class="header-logo">
-        <router-link to="/"><img src="/logotipo-sinfondo.png" alt="WallaShop" class="logo"></router-link>
+  <div>
+    <AppHeader />
+    <div class="admin-dashboard">
+      <h1>Panel de Administración</h1>
+      <p>Bienvenido al panel de administración. Aquí puedes gestionar el contenido de la plataforma.</p>
+      <div class="button-group">
+        <button @click="view = 'products'" :class="{ active: view === 'products' }">Ver Productos</button>
+        <button @click="view = 'reviews'" :class="{ active: view === 'reviews' }">Ver Valoraciones</button>
+        <button @click="view = 'users'" :class="{ active: view === 'users' }">Gestionar Usuarios</button>
       </div>
-      <div class="header-search">
-        <input type="text" id="search-input" placeholder="Busca productos...">
-        <button id="search-submit" @click="emitSearch">Buscar</button>
+      <div v-if="view === 'products'">
+        <h2>Productos</h2>
+        <ProductList />
       </div>
-      <div v-if="user" class="header-user" @click="toggleMenu" @mouseleave="toggleMenuMouseover">
-        <p>{{ user.personname }} - {{ balance }}€</p>
-        <img :src="user.profilepicture" alt="Foto de perfil" class="pfp">
-        <div class="dropdown-menu" v-if="menuOpen">
-          <ul>
-            <li><router-link to="/profile">Ver Perfil</router-link></li>
-            <li><router-link to="/edit-profile">Editar Perfil</router-link></li>
-            <li><router-link to="/add-balance">Añadir saldo</router-link></li>
-            <li v-if="isAdmin"><router-link to="/admin">Admin Dashboard</router-link></li>
-            <li><a href="#" @click="logout">Cerrar Sesión</a></li>
-          </ul>
-        </div>
+      <div v-else-if="view === 'reviews'">
+        <h2>Valoraciones</h2>
+        <ReviewList />
       </div>
-      <div v-else class="header-buttons">
-        <button id="register-btn" class="btn" @click="navigateTo('/register.html')">Registrarse</button>
-        <button id="login-btn" class="btn" @click="navigateTo('/login.html')">Iniciar Sesión</button>
+      <div v-else-if="view === 'users'">
+        <h2>Usuarios</h2>
+        <UserManagement />
       </div>
     </div>
-  </header>
+  </div>
 </template>
 
 <script>
+import AppHeader from '../components/AppHeader.vue';
+import ProductList from '../components/ProductList.vue';
+import ReviewList from '../components/ReviewList.vue';
+import UserManagement from '../components/UserManagement.vue';
+
 export default {
-  name: 'AppHeader',
+  components: {
+    AppHeader,
+    ProductList,
+    ReviewList,
+    UserManagement
+  },
   data() {
     return {
-      user: JSON.parse(localStorage.getItem('user')) || null,
-      balance: 0,
-      menuOpen: false
+      view: '' // No mostrar nada por defecto
     };
-  },
-  methods: {
-    navigateTo(path) {
-      window.location.href = path;
-    },
-    isAdmin() {
-      return this.user && this.user.nivell === 'admin';
-    },
-    toggleMenu() {
-      this.menuOpen = !this.menuOpen;
-    },
-    toggleMenuMouseover() {
-      if (this.menuOpen) {
-        this.menuOpen = false;
-      }
-    },
-    logout() {
-      localStorage.removeItem('user');
-      this.user = null;
-      this.$router.push('/');
-    },
-    emitSearch() {
-      this.$emit('search', document.getElementById('search-input').value);
-    },
-    async fetchBalance() {
-      if (!this.user) return;
-      try {
-        const response = await fetch(`http://18.212.255.200:8080/index.php?path=get-balance&userid=${this.user.id}`);
-        const data = await response.json();
-        if (data.success) {
-          this.balance = data.balance;
-        } else {
-          console.error('Error fetching balance:', data.message);
-        }
-      } catch (error) {
-        console.error('Error fetching balance:', error);
-      }
-    }
-  },
-  mounted() {
-    if (this.user) {
-      this.isAdmin();
-      this.fetchBalance();
-    }
-  },
-  watch: {
-    $route() {
-      this.user = JSON.parse(localStorage.getItem('user')) || null;
-      if (this.user) {
-        this.fetchBalance();
-      }
-    }
   }
 };
 </script>
 
 <style scoped>
-.header {
-  background-color: #FFF;
-  height: 8em;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.admin-dashboard {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.header-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.button-group {
+  margin-bottom: 20px;
 }
 
-.header-logo {
-  flex: 0 0 auto;
-}
-
-.header-logo img {
-  max-width: 150px;
-  height: auto;
-}
-
-.header-search {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.header-search input[type="text"] {
-  width: 80%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-#search-submit {
+button {
   background-color: #0E2945;
   color: white;
+  padding: 10px 20px;
   border: none;
-  padding: 10px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  transition: 0.3s;
+  margin: 0 10px;
 }
 
-#search-submit:hover {
-  transform: translateY(-5px);
-}
-
-.header-buttons {
-  flex: 0 0 auto;
-  display: flex;
-  gap: 10px;
-  position: relative;
-}
-
-.header-user {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: auto; /* Ajusta el ancho automáticamente */
-  cursor: pointer;
-  background-color: #0E2945;
-  color: white;
-  padding: 5px;
-  border-radius: 10px;
-  transition: transform 0.3s ease;
-}
-
-.header-user:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.header-user img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-left: 10px; /* Ajustado para mantener distancia del texto */
-}
-
-.dropdown-menu {
-  position: absolute;
-  right: 0%;
-  top: 87%;
-  width: 100%;
-  background-color: #0E2945;
-  border-radius: 0 0 10px 10px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  overflow: hidden;
-}
-
-.dropdown-menu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.dropdown-menu li {
-  padding: 10px;
-}
-
-.dropdown-menu li:hover {
+button:hover {
   background-color: #8292A4;
 }
 
-.dropdown-menu a {
-  color: white;
-  text-decoration: none;
-}
-
-.btn {
-  background-color: #0E2945;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-  background-color: #8292A4;
+button.active {
+  background-color: #5566c2;
 }
 </style>

@@ -77,19 +77,15 @@ export default {
   },
   methods: {
     fetchUsers() {
-      fetch('http://18.212.255.200:8080/index.php?path=get-users')
+      fetch('http://18.212.255.200:8080/index.php?path=users')
         .then(response => response.json())
         .then(data => {
-          if (data.success) {
-            this.users = data.users;
-          } else {
-            console.error('Error fetching users:', data.message);
-          }
+          this.users = data;
         })
         .catch(error => console.error('Error fetching users:', error));
     },
     createUser() {
-      fetch('http://18.212.255.200:8080/index.php?path=create-user', {
+      fetch('http://18.212.255.200:8080/index.php?path=register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -98,7 +94,7 @@ export default {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.success) {
+        if (data.status === 'success') {
           this.fetchUsers();
           this.showCreateForm = false;
           this.newUser = { email: '', password: '', personname: '' };
@@ -122,7 +118,7 @@ export default {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.success) {
+        if (data.status === 'success') {
           this.fetchUsers();
           this.showEditForm = false;
         } else {
@@ -137,7 +133,7 @@ export default {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.success) {
+        if (data.status === 'success') {
           this.fetchUsers();
         } else {
           alert('Error al borrar usuario');
