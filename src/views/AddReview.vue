@@ -1,4 +1,7 @@
 <template>
+  <div>
+    <AppHeader/>
+  
   <div class="add-review">
     <h1>Agregar Valoración</h1>
     <form @submit.prevent="submitReview">
@@ -11,9 +14,12 @@
       <button type="submit">Enviar Valoración</button>
     </form>
   </div>
+</div>
 </template>
 
 <script>
+import AppHeader from '../components/AppHeader.vue';
+
 export default {
   props: {
     id: {
@@ -26,6 +32,9 @@ export default {
       rating: null,
       comment: ''
     };
+  },
+  components: {
+    AppHeader,
   },
   methods: {
     async submitReview() {
@@ -66,8 +75,14 @@ export default {
 
 <style scoped>
 .add-review {
-  padding: 250px;
+  padding: 20px;
+  margin: 130px;
   text-align: center;
+  margin-top: 200px;
+margin-bottom: 200px;
+border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
 }
 
 h1 {
