@@ -329,7 +329,7 @@ elseif ($method == 'POST' && $path == 'request-purchase') {
 
     // Si no existe la solicitud, se crea
     if (!$purchaseRequest) {
-        $query = "INSERT INTO purchaserequest (buyerid, ownerid, productid) VALUES ('$userId', '$ownerId', '$productId')";
+        $query = "INSERT INTO purchaserequest (ownerid, buyerid, productid) VALUES ('$ownerId', '$userId', '$productId')";
         $result = pg_query($conn, $query);
 
         if ($result) {

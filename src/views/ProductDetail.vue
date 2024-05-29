@@ -12,7 +12,7 @@
         <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
         <p class="product-owner"><strong>Propietario:</strong> {{ product.ownername }} - {{ product.owneremail }}</p>
         <button class="contactButton" @click="buyProduct">
-          Comprar
+          Solicitar Compra
           <div class="iconButton">
             <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M0 0h24v24H0z" fill="none"></path>
@@ -179,7 +179,7 @@ export default {
           });
 
           const data = await response.json();
-          if (data.status === 'Purchase request created') {
+          if (data.status === 'Purchase request sent') {
             alert('Purchase request created');
             this.$router.push('/');
           } else if (data.status == 'Purchase request already sent') {
