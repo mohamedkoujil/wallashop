@@ -9,7 +9,7 @@
         <button id="search-submit" @click="emitSearch">Buscar</button>
       </div>
       <div v-if="user" class="header-user" @click="toggleMenu" @mouseleave="toggleMenuMouseover">
-        <p>{{ user.personname }}</p>
+        <p>{{ user.personname }} - {{ balance }}€</p>
         <img :src="user.profilepicture" alt="Foto de perfil" class="pfp">
         <div class="dropdown-menu" v-if="menuOpen">
           <ul>
@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       user: JSON.parse(localStorage.getItem('user')) || null,
+      balance: 0,
       menuOpen: false
     };
   },
@@ -43,7 +44,7 @@ export default {
       window.location.href = path;
     },
     isAdmin() {
-      return this.user.nivell == 'admin';
+      return this.user && this.user.nivell === 'admin';
     },
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
@@ -60,15 +61,34 @@ export default {
     },
     emitSearch() {
       this.$emit('search', document.getElementById('search-input').value);
+    },
+    async fetchBalance() {
+      if (!this.user) return;
+      try {
+        const response = await fetch(`http://18.212.255.200:8080/index.php?path=get-balance&userid=${this.user.id}`);
+        const data = await response.json();
+        if (data.success) {
+          this.balance = data.balance;
+        } else {
+          console.error('Error fetching balance:', data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      }
     }
   },
-  mounted(){
-    this.isAdmin();
-
+  mounted() {
+    if (this.user) {
+      this.isAdmin();
+      this.fetchBalance();
+    }
   },
   watch: {
     $route() {
       this.user = JSON.parse(localStorage.getItem('user')) || null;
+      if (this.user) {
+        this.fetchBalance();
+      }
     }
   }
 };
@@ -138,7 +158,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 120px;
+  width: auto; /* Ajusta el ancho automáticamente */
   cursor: pointer;
   background-color: #0E2945;
   color: white;
@@ -156,7 +176,7 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-left: 10px; /* Ajustado para mantener distancia del texto */
 }
 
 .dropdown-menu {
