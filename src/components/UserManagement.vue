@@ -142,7 +142,7 @@ export default {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.status === 'success') {
+        if (data.status == 'User deleted') {
           this.fetchUsers();
         } else {
           alert('Error al borrar usuario');
