@@ -77,7 +77,21 @@ export default {
       }
     },
     updateProfile() {
-      // Add logic to handle profile update
+      fetch('http://http://54.227.162.233:8080/index.php?path=users', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(this.profile)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          this.$router.push('/profile');
+        } else {
+          alert('Error updating profile');
+        }
+      })
       console.log("Profile updated:", this.profile);
     }
   }

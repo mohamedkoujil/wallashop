@@ -23,7 +23,7 @@
       <section v-show="currentSection === 'ventas'" id="ventas" class="section">
         <div class="container">
           <h2>Gestiona tus Ventas</h2>
-          <p>Aquí podrás ver tus productos vendidos y las ventas en curso, finalizadas.</p>
+          <p>Aquí podrás ver tus productos vendidos.</p>
           <div class="productos-lista">
             <router-link :to="'/product/' + sale.id" v-for="sale in soldProducts" :key="sale.id">
               <product-card :product="sale"></product-card>
@@ -34,7 +34,7 @@
       <section v-show="currentSection === 'compras'" id="compras" class="section">
         <div class="container">
           <h2>Gestiona tus Compras</h2>
-          <p>Aquí podrás ver tus productos comprados y las compras en curso, finalizadas.</p>
+          <p>Aquí podrás ver tus productos comprados.</p>
           <div class="compras-lista">
             <router-link :to="'/product/' + purchase.id" v-for="purchase in purchases" :key="purchase.id">
               <product-card :product="purchase"></product-card>
@@ -45,6 +45,7 @@
       <section v-show="currentSection === 'favoritos'" id="favoritos" class="section">
         <div class="container">
           <h2>Favoritos</h2>
+          <p>Aquí podrás ver tus productos favoritos.</p>
           <div class="favorites-lista">
             <router-link :to="'/product/' + favorite.id" v-for="favorite in favorites" :key="favorite.id">
               <product-card :product="favorite"></product-card>
@@ -55,6 +56,7 @@
       <section v-show="currentSection === 'purchaseRequests'" id="purchaseRequests" class="section">
         <div class="container">
           <h2>Solicitudes de Compra</h2>
+          <p>Aquí podrás ver las solicitudes de compra de tus productos o tus solicitudes de compra.</p>
           <div class="purchase-requests-list">
             <router-link :to="'/product/' + purchaseRequest.id" v-for="purchaseRequest in purchaseRequests" :key="purchaseRequest.id">
               <product-card :product="purchaseRequest"></product-card>
@@ -92,19 +94,51 @@ export default {
       this.currentSection = section;
     },
     async fetchProducts() {
-
+      console.log(this.user.id  )
+      fetch('http://54.227.162.233:8080/index.php?path=products-for-sale&userid='+this.user.id)
+        .then(response => response.json())
+        .then(data => {
+          this.products = data;
+          console.log('Products:', data);
+        })
+        
     },
     async fetchSales() {
-      // Código para obtener las ventas
+      fetch ('http://54.227.162.233:8080/index.php?path=sales-history&userid='+this.user.id)
+        .then(response => response.json())
+        .then(data => {
+          this.soldProducts = data;
+          console.log('Sales:', data);
+        });
     },
     async fetchPurchases() {
-      // Código para obtener las compras
+      fetch('http://54.227.162.233:8080/index.php?path=purchase-history&userid='+this.user.id)
+        .then(response => response.json())
+        .then(data => {
+          this.purchases = data;
+          console.log('Purchases:', data);
+        });
     },
     async fetchFavorites() {
-      // Código para obtener los favoritos
+      fetch('http://54.227.162.233:8080/index.php?path=get-favorites&userid=' + this.user.id)
+        .then(response => response.json())
+        .then(data => {
+          this.favorites = data;
+          console.log('Favorites:', data);
+        });
     },
     async fetchPurchaseRequests() {
       // Código para obtener las solicitudes de compra
+    },
+    deleteProduct(id) {
+      fetch('http://54.227.162.233:8080/index.php?path=product&id='+id, {
+        method: 'DELETE',
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Product deleted:', data);
+          this.fetchProducts();
+        });
     },
   },
   mounted() {

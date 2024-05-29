@@ -24,7 +24,7 @@ export default {
   methods: {
     async fetchReviews() {
       try {
-        const response = await fetch('http://18.212.255.200:8080/index.php?path=valorations');
+        const response = await fetch('http://54.227.162.233:8080/index.php?path=valorations');
         const data = await response.json();
         this.reviews = data;
       } catch (error) {

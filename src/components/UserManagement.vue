@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     fetchUsers() {
-      fetch('http://18.212.255.200:8080/index.php?path=users')
+      fetch('http://54.227.162.233:8080/index.php?path=users')
         .then(response => {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -94,7 +94,7 @@ export default {
         .catch(error => console.error('Error fetching users:', error));
     },
     createUser() {
-      fetch('http://18.212.255.200:8080/index.php?path=register', {
+      fetch('http://54.227.162.233:8080/index.php?path=register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -118,7 +118,7 @@ export default {
       this.showEditForm = true;
     },
     updateUser() {
-      fetch(`http://18.212.255.200:8080/index.php?path=update-user&id=${this.selectedUser.id}`, {
+      fetch(`http://54.227.162.233:8080/index.php?path=update-user&id=${this.selectedUser.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -137,7 +137,7 @@ export default {
       .catch(error => console.error('Error updating user:', error));
     },
     deleteUser(userId) {
-      fetch(`http://18.212.255.200:8080/index.php?path=delete-user&id=${userId}`, {
+      fetch(`http://54.227.162.233:8080/index.php?path=delete-user&id=${userId}`, {
         method: 'DELETE'
       })
       .then(response => response.json())

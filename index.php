@@ -30,7 +30,7 @@ $path = isset($_GET['path']) ? $_GET['path'] : '';
 
 // Listar todos los productos activos
 if ($method == 'GET' && $path == 'products') {
-    $result = pg_query($conn, "SELECT * FROM product WHERE status = 'active'");
+    $result = pg_query($conn, "SELECT * FROM product WHERE status = 'available'");
     $products = pg_fetch_all($result);
     echo json_encode($products ?: []);
 }
@@ -45,7 +45,7 @@ elseif ($method == 'GET' && $path == 'users') {
 // Obtener información de un producto específico por ID
 elseif ($method == 'GET' && $path == 'product') {
     $productId = $_GET['id'];
-    $query = "SELECT p.*, o.email AS ownerEmail, o.personname AS ownerName FROM product p JOIN person o ON p.ownerid = o.id WHERE p.id = '$productId' AND p.status = 'active'";
+    $query = "SELECT p.*, o.email AS ownerEmail, o.personname AS ownerName FROM product p JOIN person o ON p.ownerid = o.id WHERE p.id = '$productId' AND p.status = 'available'";
     $result = pg_query($conn, $query);
     $product = pg_fetch_assoc($result);
     if ($product) {
@@ -58,7 +58,7 @@ elseif ($method == 'GET' && $path == 'product') {
 // Obtener productos filtrados por categoría
 elseif ($method == 'GET' && $path == 'products' && isset($_GET['category'])) {
     $category = $_GET['category'];
-    $query = "SELECT * FROM product WHERE category = '$category' AND status = 'active'";
+    $query = "SELECT * FROM product WHERE category = '$category' AND status = 'available'";
     $result = pg_query($conn, $query);
     $products = pg_fetch_all($result);
     echo json_encode($products ?: []);
@@ -66,7 +66,7 @@ elseif ($method == 'GET' && $path == 'products' && isset($_GET['category'])) {
 
 // Listar todas las categorías de productos activos
 elseif ($method == 'GET' && $path == 'categories') {
-    $query = "SELECT DISTINCT category FROM product WHERE status = 'active'";
+    $query = "SELECT DISTINCT category FROM product WHERE status = 'available'";
     $result = pg_query($conn, $query);
     $categories = pg_fetch_all($result);
     echo json_encode($categories ?: []);
@@ -83,7 +83,7 @@ elseif ($method == 'POST' && $path == 'product') {
     $productName = $data['productName'];
     $category = $data['category'];
 
-    $query = "INSERT INTO product (description, location, price, images, ownerid, productname, category, status) VALUES ('$description', '$location', '$price', '$images', '$ownerId', '$productName', '$category', 'active')";
+    $query = "INSERT INTO product (description, location, price, images, ownerid, productname, category, status) VALUES ('$description', '$location', '$price', '$images', '$ownerId', '$productName', '$category', 'available')";
     $result = pg_query($conn, $query);
 
     if ($result) {
@@ -114,17 +114,17 @@ elseif ($method == 'PUT' && $path == 'product') {
     }
 }
 
-// Marcar un producto como inactivo en lugar de borrarlo
+// Borrar un producto
 elseif ($method == 'DELETE' && $path == 'product') {
     $productId = $_GET['id'];
 
-    $query = "UPDATE product SET status = 'inactive' WHERE id = '$productId'";
+    $query = "DELETE FROM product WHERE id = '$productId'";
     $result = pg_query($conn, $query);
 
     if ($result) {
-        echo json_encode(['status' => 'Product marked as inactive']);
+        echo json_encode(['status' => 'Product deleted']);
     } else {
-        echo json_encode(['status' => 'Error marking product as inactive']);
+        echo json_encode(['status' => 'Error deleting product']);
     }
 }
 
@@ -247,57 +247,47 @@ elseif ($method == 'PUT' && $path == 'update-valoracion') {
     }
 }
 
-// Marcar valoración de usuario como inactiva
+// Borrar valoraci      n de usuario
 elseif ($method == 'DELETE' && $path == 'valoracion') {
     $valorationId = $_GET['id'];
 
-    $query = "UPDATE valoration SET status = 'inactive' WHERE id = '$valorationId'";
+    $query = "DELETE FROM valoration WHERE id='$valorationId'";
     $result = pg_query($conn, $query);
 
     if ($result) {
-        echo json_encode(['status' => 'Valoration marked as inactive']);
+        echo json_encode(['status' => 'Valoration deleted']);
     } else {
-        echo json_encode(['status' => 'Error marking valoration as inactive']);
+        echo json_encode(['status' => 'Error deleting valoration']);
     }
 }
 
 // Listar productos favoritos de un usuario
 elseif ($method == 'GET' && $path == 'get-favorites') {
     $userId = $_GET['userid'];
-    $query = "SELECT p.* FROM favorite f JOIN product p ON f.productid = p.id WHERE f.userid = '$userId' AND p.status = 'active'";
+    $query = "SELECT p.* FROM favorite f JOIN product p ON f.productid = p.id WHERE f.userid = '$userId' AND p.status = 'available'";
     $result = pg_query($conn, $query);
     $favorites = pg_fetch_all($result);
     echo json_encode($favorites ?: []);
 }
 
-// Añadir producto a favoritos
-elseif ($method == 'POST' && $path == 'add-favorites') {
+//toggle favorite
+elseif ($method == 'POST' && $path == 'toggle-favorite') {
     $data = json_decode(file_get_contents('php://input'), true);
     $userId = $data['userid'];
     $productId = $data['productid'];
 
-    $query = "INSERT INTO favorite (userid, productid) VALUES ('$userId', '$productId')";
+    $query = "SELECT * FROM favorite WHERE userid = '$userId' AND productid = '$productId'";
     $result = pg_query($conn, $query);
+    $favorite = pg_fetch_assoc($result);
 
-    if ($result) {
+    if ($favorite) {
+        $query = "DELETE FROM favorite WHERE userid = '$userId' AND productid = '$productId'";
+        $result = pg_query($conn, $query);
+        echo json_encode(['status' => 'Favorite removed']);
+    } else {
+        $query = "INSERT INTO favorite (userid, productid) VALUES ('$userId', '$productId')";
+        $result = pg_query($conn, $query);
         echo json_encode(['status' => 'Favorite added']);
-    } else {
-        echo json_encode(['status' => 'Error adding favorite']);
-    }
-}
-
-// Marcar producto de favoritos como inactivo
-elseif ($method == 'DELETE' && $path == 'favorites') {
-    $userId = $_GET['userid'];
-    $productId = $_GET['productid'];
-
-    $query = "UPDATE favorite SET status = 'inactive' WHERE userid = '$userId' AND productid = '$productId'";
-    $result = pg_query($conn, $query);
-
-    if ($result) {
-        echo json_encode(['status' => 'Favorite marked as inactive']);
-    } else {
-        echo json_encode(['status' => 'Error marking favorite as inactive']);
     }
 }
 
@@ -322,7 +312,7 @@ elseif ($method == 'GET' && $path == 'sales-history') {
 // Listar productos a la venta de un usuario
 elseif ($method == 'GET' && $path == 'products-for-sale') {
     $userId = $_GET['userid'];
-    $query = "SELECT * FROM product WHERE ownerid = '$userId' AND status = 'active'";
+    $query = "SELECT * FROM product WHERE ownerid = '$userId' AND status = 'available'";
     $result = pg_query($conn, $query);
     $productsForSale = pg_fetch_all($result);
     echo json_encode($productsForSale ?: []);

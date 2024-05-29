@@ -180,7 +180,7 @@ elseif ($method == 'POST' && $path == 'valoracion') {
         echo json_encode(['status' => 'Error adding valoration']);
     }
 }
-/ Borrar valoraci      n de usuario
+// Borrar valoraci      n de usuario
 elseif ($method == 'DELETE' && $path == 'valoracion') {
     $valorationId = $_GET['id'];
 

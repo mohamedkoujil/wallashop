@@ -48,7 +48,14 @@ export default {
       window.location.href = path;
     },
     isAdmin() {
-      return this.user.nivell == 'admin';
+      if(this.user) {
+        if(this.user.nivell === 'admin') {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return false;
     },
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
@@ -69,7 +76,7 @@ export default {
     async fetchBalance() {
       if (!this.user) return;
       try {
-        const response = await fetch('http://18.212.255.200:8080/index.php?path=get-balance&userid='+this.user.id);
+        const response = await fetch('http://54.227.162.233:8080/index.php?path=get-balance&userid='+this.user.id);
         const data = await response.json();
         this.balance = data.balance;
       } catch (error) {

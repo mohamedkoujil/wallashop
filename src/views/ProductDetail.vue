@@ -86,7 +86,7 @@ export default {
   methods: {
     async fetchProduct() {
       try {
-        const response = await fetch(`http://18.212.255.200:8080/index.php?path=product&id=${this.id}`);
+        const response = await fetch(`http://54.227.162.233:8080/index.php?path=product&id=${this.id}`);
         const data = await response.json();
         if (data.status === 'Product not found') {
           this.product = null;
@@ -104,7 +104,7 @@ export default {
           this.isFavorite = false;
           return;
         }
-        const response = await fetch(`http://18.212.255.200:8080/index.php?path=get-favorites&userid=${user.id}`);
+        const response = await fetch(`http://54.227.162.233:8080/index.php?path=get-favorites&userid=${user.id}`);
         const data = await response.json();
         this.isFavorite = data.some(favorite => favorite.id === this.id);
       } catch (error) {
@@ -118,36 +118,22 @@ export default {
           alert('You need to log in to add favorites');
           return;
         }
-        const method = this.isFavorite ? 'DELETE' : 'POST';
-        const url = `http://18.212.255.200:8080/index.php?path=add-favorites${method === 'DELETE' ? `&userid=${user.id}&productid=${this.id}` : ''}`;
-
-        console.log('URL:', url); // Log de URL para depuración
-        console.log('Method:', method); // Log de método para depuración
-
-        const response = await fetch(url, {
-          method,
+        let response = await fetch('http://54.227.162.233:8080/index.php?path=toggle-favorite', {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: method === 'POST' ? JSON.stringify({ userid: user.id, productid: this.id }) : null
+          body: JSON.stringify({
+            userid: user.id,
+            productid: this.id
+          })
         });
-
-        // Para depuración: verificar la respuesta como texto
-        const text = await response.text();
-        console.log('Response text:', text); // Log para depuración
-
-        try {
-          const data = JSON.parse(text);
-          if (data.status === 'Favorite added') {
-            this.isFavorite = true;
-          } else if (data.status === 'Favorite deleted') {
-            this.isFavorite = false;
-          } else {
-            console.error('Error toggling favorite:', data.status);
-          }
-        } catch (e) {
-          console.error('Error parsing JSON:', e);
-          console.error('Response text:', text);
+        const data = await response.json();
+        console.log('Favorite response:', data);
+        if (data.status === 'Favorite added') {
+          this.isFavorite = true;
+        } else if (data.status === 'Favorite removed') {
+          this.isFavorite = false;
         }
       } catch (error) {
         console.error('Error toggling favorite:', error);
@@ -165,7 +151,7 @@ export default {
             return;
           }
 
-          const response = await fetch('http://18.212.255.200:8080/index.php?path=request-purchase', {
+          const response = await fetch('http://54.227.162.233:8080/index.php?path=request-purchase', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
