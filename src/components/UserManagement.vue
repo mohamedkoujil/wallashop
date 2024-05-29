@@ -1,7 +1,7 @@
 <template>
   <div class="user-management">
     <h1>Gestión de Usuarios</h1>
-    <button @click="showCreateForm = true">Crear Usuario</button>
+    <button @click="showCreateForm = true" class="button primary">Crear Usuario</button>
 
     <div v-if="showCreateForm" class="form-container">
       <h2>Crear Usuario</h2>
@@ -15,8 +15,8 @@
         <label for="personname">Nombre:</label>
         <input type="text" v-model="newUser.personname" required>
         
-        <button type="submit">Crear</button>
-        <button @click="showCreateForm = false">Cancelar</button>
+        <button type="submit" class="button primary">Crear</button>
+        <button @click="showCreateForm = false" class="button secondary">Cancelar</button>
       </form>
     </div>
 
@@ -33,8 +33,8 @@
           <td>{{ user.email }}</td>
           <td>{{ user.personname }}</td>
           <td>
-            <button @click="editUser(user)">Editar</button>
-            <button @click="deleteUser(user.id)">Borrar</button>
+            <button @click="editUser(user)" class="button secondary">Editar</button>
+            <button @click="deleteUser(user.id)" class="button danger">Borrar</button>
           </td>
         </tr>
       </tbody>
@@ -55,8 +55,8 @@
         <label for="personname">Nombre:</label>
         <input type="text" v-model="selectedUser.personname" required>
         
-        <button type="submit">Actualizar</button>
-        <button @click="showEditForm = false">Cancelar</button>
+        <button type="submit" class="button primary">Actualizar</button>
+        <button @click="showEditForm = false" class="button secondary">Cancelar</button>
       </form>
     </div>
   </div>
@@ -160,26 +160,81 @@ export default {
 <style scoped>
 .user-management {
   padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 .form-container {
   margin-top: 20px;
   padding: 20px;
+  background-color: #ffffff;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 table, th, td {
   border: 1px solid #ddd;
 }
+
 th, td {
-  padding: 8px;
+  padding: 10px;
   text-align: left;
 }
+
 button {
   margin-right: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button.primary {
+  background-color: #0E2945;
+  color: white;
+}
+
+.button.primary:hover {
+  background-color: #08223b;
+}
+
+.button.secondary {
+  background-color: #ccc;
+  color: black;
+}
+
+.button.secondary:hover {
+  background-color: #aaa;
+}
+
+.button.danger {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.button.danger:hover {
+  background-color: #cc0000;
 }
 </style>
