@@ -380,7 +380,6 @@ elseif ($method == 'POST' && $path == 'request-purchase') {
     } else {
         echo json_encode(['status' => 'Purchase request already sent']);
     }
-
 }
 
 // Aceptar una solicitud de compra
@@ -411,6 +410,10 @@ elseif ($method == 'POST' && $path == 'accept-purchase') {
             $query = "UPDATE person SET balance = balance - '$price' WHERE id = '$userId'";
             $result = pg_query($conn, $query);
 
+            //Aumentar el saldo del vendedor
+            $query = "UPDATE person SET balance = balance + '$price' WHERE id = '$ownerId'";
+            $result = pg_query($conn, $query);
+
             // Marcar el producto como vendido
             $query = "UPDATE product SET status = 'sold' WHERE id = '$productId'";
             $result = pg_query($conn, $query);
@@ -430,6 +433,39 @@ elseif ($method == 'POST' && $path == 'accept-purchase') {
             echo json_encode(['status' => 'Error during purchase']);
         }
     }
+}
+
+// Rechazar una solicitud de compra
+elseif ($method == 'DELETE' && $path == 'reject-purchase') {
+    $userId = $_GET['userid'];
+    $productId = $_GET['productid'];
+
+    $query = "DELETE FROM purchaserequest WHERE buyerid = '$userId' AND productid = '$productId'";
+    $result = pg_query($conn, $query);
+
+    if ($result) {
+        echo json_encode(['status' => 'Purchase request rejected']);
+    } else {
+        echo json_encode(['status' => 'Error rejecting purchase request']);
+    }
+}
+
+// Obtener todas las solicitudes de compra de un usuario
+elseif ($method == 'GET' && $path == 'get-purchase-requests') {
+    $userId = $_GET['userid'];
+    $query = "SELECT * FROM purchaserequest WHERE buyerid = '$userId'";
+    $result = pg_query($conn, $query);
+    $purchaseRequests = pg_fetch_all($result);
+    echo json_encode($purchaseRequests ?: []);
+}
+
+// Obtener todas las solicitudes de venta de un usuario
+elseif ($method == 'GET' && $path == 'get-sale-requests') {
+    $userId = $_GET['userid'];
+    $query = "SELECT * FROM purchaserequest WHERE ownerid = '$userId'";
+    $result = pg_query($conn, $query);
+    $saleRequests = pg_fetch_all($result);
+    echo json_encode($saleRequests ?: []);
 }
 
 pg_close($conn);

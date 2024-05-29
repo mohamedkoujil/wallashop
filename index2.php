@@ -64,7 +64,7 @@ elseif ($method == 'GET' && $path == 'categories') {
     $categories = pg_fetch_all($result);
     echo json_encode($categories ?: []);
 }
-// A      adir un producto
+// Añadir un producto
 elseif ($method == 'POST' && $path == 'product') {
     $data = json_decode(file_get_contents('php://input'), true);
     $description = $data['description'];
@@ -75,7 +75,7 @@ elseif ($method == 'POST' && $path == 'product') {
     $productName = $data['productName'];
     $category = $data['category'];
 
-    $query = "INSERT INTO product (Description, Location, Price, Images, OwnerId, ProductName, Category) VALUES ('$description', '$location', '$price', '$images', '$ownerId', '$productName', '$cat>
+    $query = "INSERT INTO product (description, location, price, images, ownerid, productname, category) VALUES ('$description', '$location', '$price', '$images', '$ownerId', '$productName', '$category')";
     $result = pg_query($conn, $query);
 
     if ($result) {
@@ -84,6 +84,7 @@ elseif ($method == 'POST' && $path == 'product') {
         echo json_encode(['status' => 'Error adding product']);
     }
 }
+
 
 // Actualizar un producto
 elseif ($method == 'PUT' && $path == 'product') {
@@ -96,7 +97,7 @@ elseif ($method == 'PUT' && $path == 'product') {
     $productName = $data['productName'];
     $category = $data['category'];
 
-    $query = "UPDATE product SET Description = '$description', Location = '$location', Price = '$price', Images = '$images', ProductName = '$productName', Category = '$category' WHERE id = '$produ>
+    $query = "UPDATE product SET Description = '$description', Location = '$location', Price = '$price', Images = '$images', ProductName = '$productName', Category = '$category' WHERE id = '$productId'">
     $result = pg_query($conn, $query);
 
     if ($result) {
@@ -324,12 +325,36 @@ elseif ($method == 'POST' && $path == 'purchase') {
 
             //Producto como sold
             $query = "update product set status = 'sold' where id = '$productId'";
-            $result = pg_query($conn, $query);          
+            $result = pg_query($conn, $query);
+            
+            // Borrar solicitud de compra
+            $query = "DELETE FROM purchaserequest WHERE productid = '$productId'";
+            $result = pg_query($conn, $query);
+
             echo json_encode(['status' => 'Purchase successful']);
         } else {
             echo json_encode(['status' => 'Error during purchase']);
         }
     }
 }
+//Listar solicitudes de compra de un usuario
+elseif ($method == 'GET' && $path == 'get-purchase-requests') {
+    $userId = $_GET['userid'];
+    $query = "SELECT * FROM purchaserequest WHERE buyerid = '$userId'";
+    $result = pg_query($conn, $query);
+    $requests = pg_fetch_all($result);
+    echo json_encode($requests ?: []);
+}
+
+//Listar solicitudes de venta de un usuario
+elseif ($method == 'GET' && $path == 'get-sales-requests') {
+    $userId = $_GET['userid'];
+    $query = "SELECT * FROM purchaserequest WHERE ownerid = '$userId'";
+    $result = pg_query($conn, $query);
+    $requests = pg_fetch_all($result);
+    echo json_encode($requests ?: []);
+}
+
+
 pg_close($conn);
 ?>

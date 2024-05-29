@@ -7,7 +7,7 @@
         <button @click="toggleSection('ventas')" :class="{ active: currentSection === 'ventas' }">Ventas</button>
         <button @click="toggleSection('compras')" :class="{ active: currentSection === 'compras' }">Compras</button>
         <button @click="toggleSection('favoritos')" :class="{ active: currentSection === 'favoritos' }">Favoritos</button>
-        <button @click="toggleSection('purchaseRequests')" :class="{ active: currentSection === 'purchaseRequests' }">Solicitudes de Compra</button>
+        <button @click="toggleSection('purchaseRequests')" :class="{ active: currentSection === 'purchaseRequests' }">Solicitudes</button>
       </div>
       <section v-show="currentSection === 'productos'" id="productos" class="section">
         <div class="container">
@@ -55,12 +55,16 @@
       </section>
       <section v-show="currentSection === 'purchaseRequests'" id="purchaseRequests" class="section">
         <div class="container">
-          <h2>Solicitudes de Compra</h2>
+          <h2>Solicitudes</h2>
           <p>Aquí podrás ver las solicitudes de compra de tus productos o tus solicitudes de compra.</p>
+          <h3>Tus solicitudes de compra</h3>
           <div class="purchase-requests-list">
-            <router-link :to="'/product/' + purchaseRequest.id" v-for="purchaseRequest in purchaseRequests" :key="purchaseRequest.id">
-              <product-card :product="purchaseRequest"></product-card>
-            </router-link>
+            <requestCard v-for="purchaseRequest in purchaseRequests" :key="purchaseRequest.id" :request="purchaseRequest" ></requestCard >
+          </div>
+
+          <h3>Solicitudes de venta</h3>
+          <div class="purchase-requests-list">
+            <requestCard v-for="saleRequest in saleRequests " :key="saleRequest.id" :request="saleRequest" :sale="true" ></requestCard >
           </div>
         </div>
       </section>
@@ -71,12 +75,14 @@
 <script>
 import ProductCard from '../components/productCard.vue';
 import AppHeader from '../components/AppHeader.vue';
+import requestCard from '../components/requestComponent.vue';
 
 export default {
   name: 'ProfilePage',
   components: {
     ProductCard,
     AppHeader,
+    requestCard
   },
   data() {
     return {
@@ -87,51 +93,63 @@ export default {
       purchases: [],
       favorites: [],
       purchaseRequests: [],
+      saleRequests: [],
     };
   },
   methods: {
     toggleSection(section) {
       this.currentSection = section;
     },
-    async fetchProducts() {
-      console.log(this.user.id  )
-      fetch('http://54.227.162.233:8080/index.php?path=products-for-sale&userid='+this.user.id)
-        .then(response => response.json())
-        .then(data => {
-          this.products = data;
-          console.log('Products:', data);
-        })
-        
+    async fetchData(url, callback) {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        callback(data);
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
     },
-    async fetchSales() {
-      fetch ('http://54.227.162.233:8080/index.php?path=sales-history&userid='+this.user.id)
-        .then(response => response.json())
-        .then(data => {
-          this.soldProducts = data;
-          console.log('Sales:', data);
-        });
+    fetchProducts() {
+      this.fetchData(`http://54.227.162.233:8080/index.php?path=products-for-sale&userid=${this.user.id}`, data => {
+        this.products = data;
+        console.log('Products:', data);
+      });
     },
-    async fetchPurchases() {
-      fetch('http://54.227.162.233:8080/index.php?path=purchase-history&userid='+this.user.id)
-        .then(response => response.json())
-        .then(data => {
-          this.purchases = data;
-          console.log('Purchases:', data);
-        });
+    fetchSales() {
+      this.fetchData(`http://54.227.162.233:8080/index.php?path=sales-history&userid=${this.user.id}`, data => {
+        this.soldProducts = data;
+        console.log('Sales:', data);
+      });
     },
-    async fetchFavorites() {
-      fetch('http://54.227.162.233:8080/index.php?path=get-favorites&userid=' + this.user.id)
-        .then(response => response.json())
-        .then(data => {
-          this.favorites = data;
-          console.log('Favorites:', data);
-        });
+    fetchPurchases() {
+      this.fetchData(`http://54.227.162.233:8080/index.php?path=purchase-history&userid=${this.user.id}`, data => {
+        this.purchases = data;
+        console.log('Purchases:', data);
+      });
     },
-    async fetchPurchaseRequests() {
-      // Código para obtener las solicitudes de compra
+    fetchFavorites() {
+      this.fetchData(`http://54.227.162.233:8080/index.php?path=get-favorites&userid=${this.user.id}`, data => {
+        this.favorites = data;
+        console.log('Favorites:', data);
+      });
+    },
+    fetchPurchaseRequests() {
+      this.fetchData(`http://54.227.162.233:8080/index.php?path=get-purchase-requests&userid=${this.user.id}`, data => {
+        this.purchaseRequests = data;
+        console.log('Purchase Requests:', data);
+      });
+    },
+    fetchSaleRequests() {
+      this.fetchData(`http://54.227.162.233:8080/index.php?path=get-sale-requests&userid=${this.user.id}`, data => {
+        this.saleRequests = data;
+        console.log('Sale Requests:', data);
+      });
     },
     deleteProduct(id) {
-      fetch('http://54.227.162.233:8080/index.php?path=product&id='+id, {
+      fetch(`http://54.227.162.233:8080/index.php?path=product&id=${id}`, {
         method: 'DELETE',
       })
         .then(response => response.json())
@@ -146,6 +164,8 @@ export default {
     this.fetchSales();
     this.fetchPurchases();
     this.fetchFavorites();
+    this.fetchPurchaseRequests();
+    this.fetchSaleRequests();
   },
 };
 </script>
@@ -173,5 +193,10 @@ export default {
 
 .section-buttons button.active {
   background-color: #5566c2;
+}
+
+.purchase-requests-list {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>

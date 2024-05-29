@@ -78,7 +78,7 @@ export default {
 
 .product-card img {
   width: 100%;
-  height: 150px;
+  height: 16em;
   object-fit: cover;
   border-radius: 10px;
   margin-bottom: 10px;
