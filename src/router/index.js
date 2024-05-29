@@ -6,6 +6,7 @@ import EditProfile from '../views/EditProfile.vue';
 import addProductPage from './../views/addProductPage.vue'
 import AddReview from './../views/AddReview'
 import AddBalance from '@/views/AddBalance.vue';
+import ClaimsPage from './../views/ClaimsPage'
 
 const routes = [
   { path: '/', name: 'home', component: HomePage },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/add-product', name: 'add-product', component: addProductPage },
   { path: '/add-review', name: 'add-review', component: AddReview },
   { path: '/add-balance', component: AddBalance },
+  { path: '/Claims-Page', component: ClaimsPage },
 ];
 
 const router = createRouter({
