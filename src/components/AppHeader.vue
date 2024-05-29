@@ -9,7 +9,10 @@
         <button id="search-submit" @click="emitSearch">Buscar</button>
       </div>
       <div v-if="user" class="header-user" @click="toggleMenu" @mouseleave="toggleMenuMouseover">
-        <p>{{ user.personname }}</p>
+        <div class="flex column center">
+          <div>{{ user.personname }}</div>
+          <div>{{ balance }}€</div>
+        </div>
         <img :src="user.profilepicture" alt="Foto de perfil" class="pfp">
         <div class="dropdown-menu" v-if="menuOpen">
           <ul>
@@ -36,7 +39,8 @@ export default {
   data() {
     return {
       user: JSON.parse(localStorage.getItem('user')) || null,
-      menuOpen: false
+      menuOpen: false,
+      balance: 0
     };
   },
   methods: {
@@ -61,11 +65,22 @@ export default {
     },
     emitSearch() {
       this.$emit('search', document.getElementById('search-input').value);
+    },
+    async fetchBalance() {
+      if (!this.user) return;
+      try {
+        const response = await fetch('http://18.212.255.200:8080/index.php?path=get-balance&userid='+this.user.id);
+        const data = await response.json();
+        this.balance = data.balance;
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      }
     }
+
   },
   mounted(){
     this.isAdmin();
-
+    this.fetchBalance();
   },
   watch: {
     $route() {
@@ -76,6 +91,19 @@ export default {
 </script>
 
 <style scoped>
+.flex {
+  display: flex;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.center {
+  justify-content: center;
+  align-items: center;
+}
+
 .header {
   background-color: #FFF;
   height: 8em;
@@ -139,11 +167,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 120px;
+  width: 10em;
   cursor: pointer;
   background-color: #0E2945;
   color: white;
-  padding: 5px;
+  padding: 15px;
   border-radius: 10px;
   transition: transform 0.3s ease;
 }

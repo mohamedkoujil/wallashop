@@ -18,12 +18,9 @@ const routes = [
   { path: '/add-product', name: 'add-product', component: addProductPage },
   { path: '/add-review', name: 'add-review', component: AddReview },
   { path: '/add-balance', component: AddBalance },
-<<<<<<< HEAD
   { path: '/admin', name: 'admin', component: AdminDashboard },
   { path: '/admin/user-management', name: 'user-management', component: UserManagement },
-=======
   { path: '/Claims-Page', component: ClaimsPage },
->>>>>>> 78ae282cb164b8fd5823fd03b18909fadb28570b
 ];
 
 const router = createRouter({

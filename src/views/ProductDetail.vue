@@ -175,21 +175,18 @@ export default {
               userid: user.id, 
               ownerid: this.product.ownerid,
               productid: this.product.id, 
-              price: this.product.price 
             })
           });
 
           const data = await response.json();
-          if (data.status === 'Purchase successful') {
-            alert('Product purchased successfully');
+          if (data.status === 'Purchase request created') {
+            alert('Purchase request created');
             this.$router.push('/');
-          } else if (data.status === 'Insufficient balance') {
-            alert('Insufficient balance. Please add funds to your account.');
           } else {
             alert('Error during purchase');
           }
         } catch (error) {
-          console.log('Error buying product:', error);
+          console.error('Error buying product:', error);
         }
       }
 
