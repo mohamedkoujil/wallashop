@@ -308,15 +308,25 @@ elseif ($method == 'POST' && $path == 'purchase') {
     $ownerId = $data['ownerid'];
     $productId = $data['productid'];
 
-    // Insertar la solicitud de compra en la tabla purchaserequest
-    $query = "INSERT INTO purchaserequest (ownerid, buyerid, productid) VALUES ('$ownerId', '$userId', '$productId')";
+    //Comprobar si el usuario ya esta interesado en el producto
+    $query = "SELECT * FROM purchaserequest WHERE buyerid = '$userId' AND productid = '$productId'";
     $result = pg_query($conn, $query);
+    $purchaseRequest = pg_fetch_assoc($result);
 
-    if ($result) {
-        echo json_encode(['status' => 'Purchase request created']);
+    // Si no existe la solicitud, se crea
+    if (!$purchaseRequest) {
+        $query = "INSERT INTO purchaserequest (buyerid, ownerid, productid) VALUES ('$userId', '$ownerId', '$productId')";
+        $result = pg_query($conn, $query);
+
+        if ($result) {
+            echo json_encode(['status' => 'Purchase request sent']);
+        } else {
+            echo json_encode(['status' => 'Error sending purchase request']);
+        }
     } else {
-        echo json_encode(['status' => 'Error creating purchase request']);
+        echo json_encode(['status' => 'Purchase request already sent']);
     }
+
 }
 
 // Aceptar una solicitud de compra

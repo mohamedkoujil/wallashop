@@ -182,7 +182,10 @@ export default {
           if (data.status === 'Purchase request created') {
             alert('Purchase request created');
             this.$router.push('/');
-          } else {
+          } else if (data.status == 'Purchase request already sent') {
+            alert('Purchase request already sent');
+          } 
+          else {
             alert('Error during purchase');
           }
         } catch (error) {
