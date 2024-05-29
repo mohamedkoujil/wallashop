@@ -1,4 +1,6 @@
 <template>
+    <div>
+    <AppHeader/>
     <div class="reclamos">
       <h1>Reclamaciones</h1>
       <form @submit.prevent="submitForm">
@@ -14,9 +16,12 @@
       </form>
       <div v-if="status" :class="statusClass">{{ statusMessage }}</div>
     </div>
+</div>
   </template>
   
   <script>
+  import AppHeader from '../components/AppHeader.vue';
+
   export default {
     data() {
       return {
@@ -36,6 +41,10 @@
         };
       }
     },
+
+    components: {
+    AppHeader,
+  },
     methods: {
       async submitForm() {
         try {
@@ -76,6 +85,8 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #f9f9f9;
+  margin-bottom: 250px;
+  margin-top: 250px;
 }
 
 .reclamos h1 {
