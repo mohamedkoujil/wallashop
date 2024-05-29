@@ -20,7 +20,7 @@
       </form>
     </div>
 
-    <table>
+    <table v-if="users.length">
       <thead>
         <tr>
           <th>Email</th>
@@ -39,6 +39,9 @@
         </tr>
       </tbody>
     </table>
+    <div v-else>
+      <p>No hay usuarios disponibles.</p>
+    </div>
 
     <div v-if="showEditForm" class="form-container">
       <h2>Editar Usuario</h2>
@@ -78,8 +81,14 @@ export default {
   methods: {
     fetchUsers() {
       fetch('http://18.212.255.200:8080/index.php?path=users')
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then(data => {
+          console.log('Fetched users:', data); // Añadir mensaje de depuración
           this.users = data;
         })
         .catch(error => console.error('Error fetching users:', error));
