@@ -86,7 +86,7 @@ export default {
   methods: {
     async fetchProduct() {
       try {
-        const response = await fetch(`http://54.227.162.233:8080/index.php?path=product&id=${this.id}`);
+        const response = await fetch(`http://3.87.167.210:8080/index.php?path=product&id=${this.id}`);
         const data = await response.json();
         if (data.status === 'Product not found') {
           this.product = null;
@@ -104,7 +104,7 @@ export default {
           this.isFavorite = false;
           return;
         }
-        const response = await fetch(`http://54.227.162.233:8080/index.php?path=get-favorites&userid=${user.id}`);
+        const response = await fetch(`http://3.87.167.210:8080/index.php?path=get-favorites&userid=${user.id}`);
         const data = await response.json();
         this.isFavorite = data.some(favorite => favorite.id === this.id);
       } catch (error) {
@@ -118,7 +118,7 @@ export default {
           alert('You need to log in to add favorites');
           return;
         }
-        let response = await fetch('http://54.227.162.233:8080/index.php?path=toggle-favorite', {
+        let response = await fetch('http://3.87.167.210:8080/index.php?path=toggle-favorite', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -151,7 +151,7 @@ export default {
             return;
           }
 
-          const response = await fetch('http://54.227.162.233:8080/index.php?path=request-purchase', {
+          const response = await fetch('http://3.87.167.210:8080/index.php?path=request-purchase', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

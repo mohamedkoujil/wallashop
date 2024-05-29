@@ -77,7 +77,7 @@ export default {
       }
     },
     updateProfile() {
-      fetch('http://http://54.227.162.233:8080/index.php?path=users', {
+      fetch('http://http://3.87.167.210:8080/index.php?path=users', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

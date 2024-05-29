@@ -43,21 +43,24 @@
       <p>No hay usuarios disponibles.</p>
     </div>
 
-    <div v-if="showEditForm" class="form-container">
-      <h2>Editar Usuario</h2>
-      <form @submit.prevent="updateUser">
-        <label for="email">Email:</label>
-        <input type="email" v-model="selectedUser.email" required>
-        
-        <label for="password">Contraseña:</label>
-        <input type="password" v-model="selectedUser.password">
-        
-        <label for="personname">Nombre:</label>
-        <input type="text" v-model="selectedUser.personname" required>
-        
-        <button type="submit" class="button primary">Actualizar</button>
-        <button @click="showEditForm = false" class="button secondary">Cancelar</button>
-      </form>
+    <div v-if="showEditForm" class="form-container modal">
+      <div class="modal-content">
+        <span class="close" @click="showEditForm = false">&times;</span>
+        <h2>Editar Usuario</h2>
+        <form @submit.prevent="updateUser">
+          <label for="email">Email:</label>
+          <input type="email" v-model="selectedUser.email" required>
+          
+          <label for="password">Contraseña:</label>
+          <input type="password" v-model="selectedUser.password">
+          
+          <label for="personname">Nombre:</label>
+          <input type="text" v-model="selectedUser.personname" required>
+          
+          <button type="submit" class="button primary">Actualizar</button>
+          <button @click="showEditForm = false" class="button secondary">Cancelar</button>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -80,21 +83,16 @@ export default {
   },
   methods: {
     fetchUsers() {
-      fetch('http://54.227.162.233:8080/index.php?path=users')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
+      fetch('http://3.87.167.210:8080/index.php?path=users')
+        .then(response => response.json())
         .then(data => {
-          console.log('Fetched users:', data); // Añadir mensaje de depuración
+          console.log('Fetched users:', data);
           this.users = data;
         })
         .catch(error => console.error('Error fetching users:', error));
     },
     createUser() {
-      fetch('http://54.227.162.233:8080/index.php?path=register', {
+      fetch('http://3.87.167.210:8080/index.php?path=register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -118,7 +116,7 @@ export default {
       this.showEditForm = true;
     },
     updateUser() {
-      fetch(`http://54.227.162.233:8080/index.php?path=update-user&id=${this.selectedUser.id}`, {
+      fetch(`http://3.87.167.210:8080/index.php?path=update-user&id=${this.selectedUser.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -127,7 +125,7 @@ export default {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.status === 'success') {
+        if (data.status === 'User updated') {
           this.fetchUsers();
           this.showEditForm = false;
         } else {
@@ -137,12 +135,12 @@ export default {
       .catch(error => console.error('Error updating user:', error));
     },
     deleteUser(userId) {
-      fetch(`http://54.227.162.233:8080/index.php?path=delete-user&id=${userId}`, {
+      fetch(`http://3.87.167.210:8080/index.php?path=user&id=${userId}`, {
         method: 'DELETE'
       })
       .then(response => response.json())
       .then(data => {
-        if (data.status == 'User deleted') {
+        if (data.status === 'User marked as inactive') {
           this.fetchUsers();
         } else {
           alert('Error al borrar usuario');
@@ -236,5 +234,90 @@ button {
 
 .button.danger:hover {
   background-color: #cc0000;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 50%;
+  position: relative;
+}
+
+.modal-content .close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-content .close:hover,
+.modal-content .close:focus {
+  color: black;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-content form input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.modal-content form button {
+  margin: 5px 0;
+}
+
+.modal-content form .button {
+  margin: 0 5px;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modal-content form .button.primary {
+  background-color: #0E2945;
+  color: white;
+}
+
+.modal-content form .button.primary:hover {
+  background-color: #08223b;
+}
+
+.modal-content form .button.secondary {
+  background-color: #ccc;
+  color: black;
+}
+
+.modal-content form .button.secondary:hover {
+  background-color: #aaa;
 }
 </style>

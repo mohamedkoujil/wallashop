@@ -33,7 +33,7 @@ export default {
     methods: {
         acceptRequest() {
             console.log('Solicitud aceptada');
-            fetch('http://54.227.162.233:8080/index.php?path=accept-purchase', {
+            fetch('http://3.87.167.210:8080/index.php?path=accept-purchase', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ export default {
         },
         rejectRequest() {
             console.log('Solicitud rechazada');
-            fetch('http://54.227.162.233:8080/index.php?path=reject-purchase&userid=' + this.request.buyerid + '&productid=' + this.request.productid, {
+            fetch('http://3.87.167.210:8080/index.php?path=reject-purchase&userid=' + this.request.buyerid + '&productid=' + this.request.productid, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -70,7 +70,7 @@ export default {
         },
         async fetchProduct() {
             try {
-                const response = await fetch(`http://54.227.162.233:8080/index.php?path=product&id=` + this.request.productid);
+                const response = await fetch(`http://3.87.167.210:8080/index.php?path=product&id=` + this.request.productid);
                 const data = await response.json();
                 if (data.status === 'Product not found') {
                     this.product = null;
