@@ -46,7 +46,6 @@ export default {
     this.fetchProducts();
     this.fetchCategories();
     window.addEventListener('scroll', this.handleScroll);
-  this.$refs.popup.showModal();
   },
   methods: {
     async fetchProducts() {
