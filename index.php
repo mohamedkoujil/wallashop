@@ -118,7 +118,8 @@ elseif ($method == 'PUT' && $path == 'product') {
 elseif ($method == 'DELETE' && $path == 'product') {
     $productId = $_GET['id'];
 
-    $query = "DELETE FROM product WHERE id = '$productId'";
+    //Set status to deleted
+    $query = "UPDATE product SET status = 'deleted' WHERE id = '$productId'";
     $result = pg_query($conn, $query);
 
     if ($result) {
