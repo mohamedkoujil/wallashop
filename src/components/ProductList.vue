@@ -3,6 +3,7 @@
       <ul class="product-list">
         <li v-for="product in products" :key="product.id">
           <div class="product-item">
+            <img :src="product.images" alt="Product Image" width="100" height="100" />
             <div class="product-info">
               <strong>{{ product.productname }}</strong>
               <p>Precio: {{ product.price }}</p>
@@ -91,6 +92,11 @@
   .product-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .product-item img {
+    border: #08223b solid 1px;
+    border-radius: 5px;
   }
   
   .product-info {
