@@ -4,12 +4,34 @@
     <div>
       <PopUpInfo ref="popup" @accept="handleAccept" @decline="handleDecline" />
       <!--Listado de categorias-->
-      <div class="categories">
-        <h3>Categories</h3>
-        <button v-if="this.categories" @click="filterCategory('all')">All</button>
-        <button v-for="category in categories" :key="category.id" @click="filterCategory(category.category)">{{ category.category }}</button>
-      </div>
+      <div class="categories-container">
+        <div class="categories">
+          <h3>Categories</h3>
+          <button v-if="this.categories" @click="filterCategory('all')">All</button>
+          <button v-for="category in categories" :key="category.id" @click="filterCategory(category.category)">{{
+            category.category }}</button>
+        </div>
 
+
+        <div class="price-filter">
+            <h4>Ordenar por Precio</h4>
+            <button class="sort-button" @click="sortProductsAscending">Ascendente</button>
+            <button class="sort-button" @click="sortProductsDescending">Descendente</button>
+          </div>
+
+          <div class="price-range-filter">
+            <h4>Filtrar por Precio</h4>
+            <form @submit.prevent="filterByPrice" id="filter">
+              <br><label for="min_price">Precio mínimo:</label>
+              <input class="price-input" type="number" id="min_price" name="min_price"
+                placeholder="Ingrese el precio mínimo">
+              <br><label for="max_price">Precio máximo:</label>
+              <input class="price-input" type="number" id="max_price" name="max_price"
+                placeholder="Ingrese el precio máximo">
+              <button class="filter-button" type="submit">Filtrar</button>
+            </form>
+          </div>
+      </div>
       <section class="product-section">
         <div class="product-container">
           <router-link :to="'/product/' + product.id" v-for="product in products" :key="product.id">
@@ -33,7 +55,7 @@ export default {
     ProductCard,
     AppHeader,
     PopUpInfo
-},
+  },
   data() {
     return {
       allProducts: [],
@@ -78,24 +100,56 @@ export default {
         this.products = this.allProducts.filter(product => product.category === category);
       }
     },
+    async filterByPrice() {
+      const minPrice = parseFloat(document.getElementById('min_price').value);
+      const maxPrice = parseFloat(document.getElementById('max_price').value);
+
+      if (isNaN(minPrice) || isNaN(maxPrice)) {
+        console.error('Por favor ingrese valores numéricos válidos para el precio mínimo y máximo.');
+        return;
+      }
+
+      // Filtrar los productos por precio
+      this.products = this.allProducts.filter(product => {
+        const price = parseFloat(product.price);
+        return price >= minPrice && price <= maxPrice;
+      });
+
+      // Log para verificar los productos filtrados
+      console.log('Productos filtrados por precio:', this.products);
+      document.getElementById("filter").reset();
+
+    },
+
+    sortProductsAscending() {
+      this.products.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+      console.log('Productos ordenados por precio ascendente:', this.products);
+    },
+
+    sortProductsDescending() {
+      this.products.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+      console.log('Productos ordenados por precio descendente:', this.products);
+    },
+
+
     addProduct() {
-    this.$router.push('/add-product');
-},
+      this.$router.push('/add-product');
+    },
     handleSearch(search) {
       console.log('Search:', search);
       this.products = this.allProducts.filter(product => product.productname.toLowerCase().includes(search.toLowerCase()));
     },
     showPopUp() {
-  this.$refs.popup.showModal(); 
-},
+      this.$refs.popup.showModal();
+    },
 
     handleAccept() {
       console.log('Accepted');
-    
+
     },
     handleDecline() {
       console.log('Declined');
-      
+
     },
   }
 };
@@ -103,9 +157,19 @@ export default {
 </script>
 
 <style>
-.categories {
+.categories-container {
+  display: flex;
+  flex-direction: column;
+  float: left;
   position: sticky;
   margin: 0.8em 0em 0 0em;
+  width: 10%;
+  background-color: white;
+  padding-left: 10px;
+}
+
+.categories {
+
   top: 1em;
   display: flex;
   flex-direction: column;
@@ -113,13 +177,14 @@ export default {
   background-color: white;
   list-style-type: none;
   padding: 1em;
-  width: 10%;
+  margin-bottom: 1em;
   border-radius: 5px;
-  float: left
+
 }
 
-.categories h3 {
+.categories .categories h3 {
   color: rgb(0, 0, 70);
+
 }
 
 .categories button {
@@ -136,7 +201,7 @@ export default {
 
 .categories button:hover {
   transform: translateX(10px);
-  
+
 }
 
 
@@ -162,7 +227,7 @@ export default {
   border-radius: 5px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  
+
 }
 
 #add-product:hover {
@@ -173,4 +238,45 @@ export default {
 #add-product:active {
   transform: translateY(+0px);
 }
-</style>
+
+/* Estilos para los botones de ordenamiento y filtro */
+.sort-button,
+.filter-button {
+  display: inline-block;
+  width: 95%;
+  margin: 10px 0 0 0;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 1em;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0 0px 3px rgba(0, 0, 0, 0.3);
+  background-color: #0E2945;
+  color: whitesmoke;
+}
+
+.sort-button:hover,
+.filter-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para los campos de entrada de precio */
+.price-input {
+  display: inline-block;
+  width: 100px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s ease;
+}
+
+.price-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+/* Estilos para el contenedor de los botones de ordenamiento */
+.price-filter {
+  margin-bottom: 1em;
+}</style>
