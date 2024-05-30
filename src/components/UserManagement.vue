@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     fetchUsers() {
-      fetch('http://54.197.171.146:8080/index.php?path=users')
+      fetch('http://44.218.60.222:8080/index.php?path=users')
         .then(response => response.json())
         .then(data => {
           console.log('Fetched users:', data);
@@ -114,7 +114,7 @@ export default {
         .catch(error => console.error('Error fetching users:', error));
     },
     createUser() {
-      fetch('http://54.197.171.146:8080/index.php?path=register', {
+      fetch('http://44.218.60.222:8080/index.php?path=register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -139,7 +139,7 @@ export default {
     },
     updateUser() {
       console.log(this.selectedUser);
-      fetch(`http://54.197.171.146:8080/index.php?path=update-user&id=${this.selectedUser.id}`, {
+      fetch(`http://44.218.60.222:8080/index.php?path=update-user&id=${this.selectedUser.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -158,7 +158,7 @@ export default {
         .catch(error => console.error('Error updating user:', error));
     },
     deleteUser(userId) {
-      fetch(`http://54.197.171.146:8080/index.php?path=user&id=${userId}`, {
+      fetch(`http://44.218.60.222:8080/index.php?path=user&id=${userId}`, {
         method: 'DELETE'
       })
         .then(response => response.json())

@@ -44,7 +44,7 @@ export default {
         const transactionId = 1; 
 
        
-        const response = await fetch('http://54.197.171.146:8080/index.php?path=categories', {
+        const response = await fetch('http://44.218.60.222:8080/index.php?path=categories', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

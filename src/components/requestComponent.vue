@@ -35,7 +35,7 @@ export default {
     methods: {
         acceptRequest() {
             console.log('Solicitud aceptada');
-            fetch('http://54.197.171.146:8080/index.php?path=accept-purchase', {
+            fetch('http://44.218.60.222:8080/index.php?path=accept-purchase', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ export default {
         },
         rejectRequest() {
             console.log('Solicitud rechazada');
-            fetch('http://54.197.171.146:8080/index.php?path=reject-purchase&userid=' + this.request.buyerid + '&productid=' + this.request.productid, {
+            fetch('http://44.218.60.222:8080/index.php?path=reject-purchase&userid=' + this.request.buyerid + '&productid=' + this.request.productid, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -72,7 +72,7 @@ export default {
         },
         async fetchProduct() {
             try {
-                const response = await fetch(`http://54.197.171.146:8080/index.php?path=product&id=` + this.request.productid);
+                const response = await fetch(`http://44.218.60.222:8080/index.php?path=product&id=` + this.request.productid);
                 const data = await response.json();
                 if (data.status === 'Product not found') {
                     this.product = null;
@@ -87,7 +87,7 @@ export default {
         },
         async fetchOwner() {
             try {
-                const response = await fetch(`http://54.197.171.146:8080/index.php?path=user&id=` + this.request.ownerid);
+                const response = await fetch(`http://44.218.60.222:8080/index.php?path=user&id=` + this.request.ownerid);
                 const data = await response.json();
                 if (data.status === 'User not found') {
                     this.owner = null;

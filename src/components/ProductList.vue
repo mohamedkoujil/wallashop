@@ -28,7 +28,7 @@
     },
     methods: {
       fetchProducts() {
-        fetch('http://54.197.171.146:8080/index.php?path=products')
+        fetch('http://44.218.60.222:8080/index.php?path=products')
           .then(response => response.json())
           .then(data => {
             this.products = data;
@@ -42,7 +42,7 @@
       },
       deleteProduct(productId) {
         if (confirm('¿Estás seguro de que deseas borrar este producto?')) {
-          fetch(`http://54.197.171.146:8080/index.php?path=product&id=${productId}`, {
+          fetch(`http://44.218.60.222:8080/index.php?path=product&id=${productId}`, {
             method: 'DELETE'
           })
           .then(response => response.json())
