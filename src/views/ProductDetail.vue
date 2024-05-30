@@ -5,15 +5,14 @@
     <div class="product-content" v-if="product">
       <img :src="product.images" alt="Product image" class="product-image">
       <div class="product-info">
-        <h2>{{ product.productname }}</h2>
-        <p class="product-category"><strong>Categoría:</strong> {{ product.category }}</p>
-        <p class="product-description"><strong>Descripción:</strong> {{ product.description }}</p>
-        <p class="product-price"><strong>Precio:</strong> {{ product.price }} €</p>
-        <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
-        
-
-        <div class="flex" >
-          <button class="contactButton" @click="buyProduct">
+        <div class="flex">
+          <div v-if="this.owner" class="ownerInfo">
+            <img :src="owner.profilepicture" alt="Owner profile picture">
+            <p>{{ owner.personname }}</p>
+            <p>{{ owner.email }}</p>
+            <p>{{ owner.rate }} ★</p>
+        </div>
+        <button class="contactButton" @click="buyProduct">
           Solicitar Compra
           <div class="iconButton">
             <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -23,13 +22,12 @@
             </svg>
           </div>
         </button>
-
-          <div v-if="this.owner" class="ownerInfo">
-            <img :src="owner.profilepicture" alt="Owner profile picture">
-            <p>{{ owner.personname }}</p>
-            <p>{{ owner.email }}</p>
-          </div>
         </div>
+        <h2>{{ product.productname }}</h2>
+        <p class="product-category"><strong>Categoría:</strong> {{ product.category }}</p>
+        <p class="product-description"><strong>Descripción:</strong> {{ product.description }}</p>
+        <p class="product-price"><strong>Precio:</strong> {{ product.price }} €</p>
+        <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
         
         <div class="buyProcess" v-if="buyProcess">
           <p v-if="user.id == product.ownerid">No puedes comprar tu propio producto</p>
@@ -216,7 +214,7 @@ export default {
 .flex {
   display: flex;
   width: 100%;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .ownerInfo {
@@ -517,27 +515,12 @@ h2 {
 .contactButton {
   background: #0E2945;
   color: white;
-  font-family: inherit;
-  padding: 0.45em;
-  padding-left: 1em;
-  font-size: 17px;
-  font-weight: 500;
-  border-radius: 0.9em;
+  padding: 10px 20px;
   border: none;
+  border-radius: 10px;
   cursor: pointer;
-  letter-spacing: 0.05em;
-  display: flex;
-  align-items: center;
-  box-shadow: inset 0 0 1.6em -0.6em #0E2945;
-  overflow: hidden;
-  position: relative;
-  height: 2.8em;
-  padding-right: 3em;
-  transition: all 0.3s;
-  width: 25%;
-  height: 4em;
-  width: 50%;
-  justify-content: center;
+  transition: 0.3s;
+  margin-right: 6em;
 }
 
 .contactButton:hover {
