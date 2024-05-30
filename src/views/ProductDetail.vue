@@ -33,7 +33,7 @@
           <p v-if="user.id == product.ownerid">No puedes comprar tu propio producto</p>
           <div v-else>
             <p>¿Estás seguro de que deseas comprar este producto?</p>
-            <button @click="buyProduct">Sí</button>
+            <button @click="confirmBuyProduct">Sí</button>
             <button @click="buyProcess = false">No</button>
           </div>
         </div>
@@ -158,7 +158,12 @@ export default {
         try {
           const user = JSON.parse(localStorage.getItem('user'));
           if (!user) {
-            alert('You need to log in to buy products');
+            alert('Tienes que estar logueado para comprar productos');
+            return;
+          }
+
+          if (user.balance < this.product.price) {
+            alert('Balance insuficiente');
             return;
           }
 
@@ -177,16 +182,16 @@ export default {
 
           const data = await response.json();
           if (data.status === 'Purchase request sent') {
-            alert('Purchase request created');
+            alert('Solicitud de compra creada');
             this.$router.push('/');
           } else if (data.status == 'Purchase request already sent') {
-            alert('Purchase request already sent');
+            alert('Solicitud de compra ya enviada');
           }
           else {
-            alert('Error during purchase');
+            alert('Error durante la compra');
           }
         } catch (error) {
-          console.error('Error buying product:', error);
+          console.error('Error comprando:', error);
         }
       }
 
@@ -204,6 +209,46 @@ export default {
         .catch(error => {
           console.error('Error fetching owner:', error);
         });
+    },
+    async confirmBuyProduct() {
+      try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+          alert('Tienes que estar logueado para comprar productos');
+          return;
+        }
+
+        if (user.balance < this.product.price) {
+          alert('Balance insuficiente');
+          return;
+        }
+
+        const response = await fetch('http://44.218.60.222:8080/index.php?path=request-purchase', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {
+              userid: user.id,
+              ownerid: this.product.ownerid,
+              productid: this.product.id,
+            })
+        });
+
+        const data = await response.json();
+        if (data.status === 'Purchase request sent') {
+          alert('Compra realizada con éxito');
+          this.$router.push('/');
+        } else if (data.status == 'Purchase request already sent') {
+          alert('Solicitud de compra ya enviada');
+        }
+        else {
+          alert('Error durante la compra');
+        }
+      } catch (error) {
+        console.error('Error buying product:', error);
+      }
     }
 
   }
