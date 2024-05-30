@@ -235,11 +235,17 @@ elseif ($method == 'GET' && $path == 'user') {
 // Añadir valoración a usuario
 elseif ($method == 'POST' && $path == 'valoracion') {
     $data = json_decode(file_get_contents('php://input'), true);
-    $userId = $data['userId'];
+    $userId = $data['userid'];
     $rate = $data['rate'];
     $comment = $data['comment'];
-    $transactionId = $data['transactionId'];
-    $ownerId = $data['ownerId'];
+    $ownerId = $data['ownerid'];
+    $productId = $data['productid'];
+
+    // Obtener el id de la transacción
+    $query = "SELECT id FROM transaction WHERE buyerid = '$userId' AND ownerid = '$ownerId' AND productid = '$productId'";
+    $result = pg_query($conn, $query);
+    $transaction = pg_fetch_assoc($result);
+    $transactionId = $transaction['id'];
 
     $query = "INSERT INTO valoration (userid, rate, comment, transactionid, ownerid) VALUES ('$userId', '$rate', '$comment', '$transactionId', '$ownerId')";
     $result = pg_query($conn, $query);
