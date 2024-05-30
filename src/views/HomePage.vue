@@ -17,7 +17,7 @@
           </router-link>
         </div>
       </section>
-      <button id="add-product" @click="showPopUp">Añadir producto</button>
+      <button id="add-product" @click="addProduct">Añadir producto</button>
     </div>
 
   </div>
@@ -79,6 +79,9 @@ export default {
         this.products = this.allProducts.filter(product => product.category === category);
       }
     },
+    addProduct() {
+    this.$router.push('/add-product');
+},
     handleSearch(search) {
       console.log('Search:', search);
       this.products = this.allProducts.filter(product => product.productname.toLowerCase().includes(search.toLowerCase()));
@@ -97,6 +100,7 @@ export default {
     },
   }
 };
+
 </script>
 
 <style>

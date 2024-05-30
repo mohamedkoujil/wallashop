@@ -35,7 +35,7 @@
 
 
                 <p>
-                    dedicados a impulsar la innovación y la mejora continua en el ámbito del comercio electrónico. Nuestra
+                    Nos dedicaos a impulsar la innovación y la mejora continua en el ámbito del comercio electrónico. Nuestra
                     pasión radica en crear soluciones tecnológicas que no solo simplifiquen, sino que también enriquezcan
                     las experiencias de compra y venta en línea. Con un enfoque centrado en el usuario y un compromiso con
                     la excelencia, trabajamos incansablemente para desarrollar plataformas como WallaShop, que no solo
@@ -64,7 +64,6 @@
     </div>
 </template>
   
- 
 <script>
 export default {
     name: 'PopUpInfo',
@@ -72,6 +71,19 @@ export default {
         return {
             isVisible: false,
         };
+    },
+    mounted() {
+        // Mostrar el modal solo si no está visible
+        if (!this.isVisible) {
+            this.showModal();
+        }
+        
+        // Configurar el intervalo solo si el modal no está visible
+        if (!this.isVisible) {
+            setInterval(() => {
+                this.showModal();
+            }, 30 * 60 * 1000);
+        }
     },
     methods: {
         showModal() {
@@ -106,9 +118,6 @@ a {
 .modal-container {
     max-height: 400px;
     max-width: 500px;
-    margin-left: 800px;
-    margin-top: 200px;
-    margin-right: auto;
     background-color: #fff;
     border-radius: 16px;
     overflow: hidden;
@@ -117,8 +126,11 @@ a {
     box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.25);
     z-index: 1000;
     position: fixed;
-
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
+
 
 @media (max-width: 600px) {
     .modal-container {
