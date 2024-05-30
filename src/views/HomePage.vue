@@ -165,10 +165,10 @@ export default {
   flex-direction: column;
   float: left;
   width: 10%;
+  margin-left: 0 0 0 1em;
 }
 
 .categories {
-  top: 1em;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -177,12 +177,10 @@ export default {
   padding: 1em;
   margin-bottom: 1em;
   border-radius: 5px;
-
 }
 
 .categories .categories h3 {
   color: rgb(0, 0, 70);
-
 }
 
 .categories button {
@@ -212,7 +210,7 @@ export default {
 }
 
 .product-section {
-  margin-top: -3em;
+  margin-top: -1em;
 }
 
 #add-product {
