@@ -1,28 +1,26 @@
 <template>
   <div>
-    <AppHeader/>
-  
-  <div class="add-review">
-    <h1>Agregar Valoración</h1>
-    <form @submit.prevent="submitReview">
-      <label for="rating">Calificación:</label>
-      <input type="number" id="rating" v-model="rating" min="1" max="5" step="0.01" required>
-      <label for="comment">Nombre del producto:</label>
-      <textarea id="comment" v-model="comment" rows="1" required></textarea>
-      <label for="comment">Comentario:</label>
-      <textarea id="comment" v-model="comment" rows="4" required></textarea>
-      <button type="submit">Enviar Valoración</button>
-    </form>
+    <AppHeader />
+    <div class="add-review">
+      <h1>Agregar Valoración</h1>
+      <form @submit.prevent="submitReview">
+        <label for="rating">Puntuación</label>
+        <input type="number" id="rating" v-model="rating" min="1" max="5" required>
+        <label for="comment">Comentario</label>
+        <textarea id="comment" v-model="comment" required></textarea>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
 import AppHeader from '../components/AppHeader.vue';
 
 export default {
+  name: 'AddReview',
   props: {
-    id: {
+    productid: {
       type: Number,
       required: true
     }
@@ -30,45 +28,57 @@ export default {
   data() {
     return {
       rating: null,
-      comment: ''
+      comment: '',
+      product: null
     };
   },
   components: {
-    AppHeader,
+    AppHeader
   },
   methods: {
     async submitReview() {
       try {
-        const userId = 1; 
-        const ownerId = 2; 
-        const transactionId = 1; 
-
-       
-        const response = await fetch('http://44.218.60.222:8080/index.php?path=categories', {
+        await fetch('http://44.218.60.222:8080/index.php?path=valoracion' , {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            userId,
-            ownerId,
+            userid: JSON.parse(localStorage.getItem('user')).id,
             rate: this.rating,
             comment: this.comment,
-            transactionId,
-            productId: this.id
+            ownerid: this.product.ownerid,
+            productid: this.productid
           })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+          this.$router.push({ name: 'product-detail', params: { id: this.productid } });
         });
-
-        if (!response.ok) {
-          throw new Error('Error al enviar la valoración');
-        }
-
         
       } catch (error) {
-        console.error('Error al enviar la valoración:', error);
-        
+        console.error('Error submitting review:', error);
       }
-    }
+    },
+    async fetchProduct() {
+      try {
+        const response = await fetch(`http://44.218.60.222:8080/index.php?path=product&id=${this.productid}`);
+        const data = await response.json();
+        if (data.status === 'Product not found') {
+          this.product = null;
+        } else {
+          this.product = data;
+          console.log('Product:', data);
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+      }
+    },
+  },
+  mounted() {
+    console.log(this.productid);
+    this.fetchProduct();
   }
 }
 </script>
@@ -79,8 +89,8 @@ export default {
   margin: 130px;
   text-align: center;
   margin-top: 200px;
-margin-bottom: 200px;
-border: 1px solid #ccc;
+  margin-bottom: 200px;
+  border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #f9f9f9;
 }
@@ -88,13 +98,13 @@ border: 1px solid #ccc;
 h1 {
   font-weight: 700;
   color: #0E2945;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 .add-review form {
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
 }
 
 .add-review label {
@@ -105,10 +115,10 @@ h1 {
 .add-review textarea,
 .add-review input[type="number"] {
   margin-bottom: 10px;
-  width: 80%; 
-  padding: 10px; 
-  border: 1px solid #ccc; 
-  border-radius: 5px; 
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .add-review button {

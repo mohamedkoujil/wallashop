@@ -16,7 +16,7 @@ const routes = [
   { path: '/profile', name: 'profile', component: ProfilePage },
   { path: '/edit-profile', name: 'edit-profile', component: EditProfile },
   { path: '/add-product', name: 'add-product', component: addProductPage },
-  { path: '/add-review', name: 'add-review', component: AddReview },
+  { path: '/add-review/:productid', name: 'add-review', component: AddReview, props: true },
   { path: '/add-balance', component: AddBalance },
   { path: '/admin', name: 'admin', component: AdminDashboard },
   { path: '/admin/user-management', name: 'user-management', component: UserManagement },

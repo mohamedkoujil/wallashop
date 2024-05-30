@@ -3,7 +3,7 @@
 
         <img :src="product ? product.images : 'https://via.placeholder.com/150'" alt="Product image">
         <h3>{{ product ? product.productname : 'Producto no encontrado' }} - {{ product ? product.price + '€' : 'Precio no disponible' }} </h3>
-        <p>{{ owner ? owner.email : 'Usuario no encontrado' }}</p>
+        <p>{{ buyer ? buyer.email : 'Comprador no encontrado' }}</p>
 
         <div v-if="sale" class="buttons">
             <button @click="acceptRequest">Aceptar</button>
@@ -29,7 +29,7 @@ export default {
         return {
             product: null,
             user : JSON.parse(localStorage.getItem('user')) || null,
-            owner: null
+            buyer: null
         }
     },
     methods: {
@@ -85,24 +85,24 @@ export default {
             console.log('Product:', this.product);
 
         },
-        async fetchOwner() {
+        async fetchBuyer() {
             try {
-                const response = await fetch(`http://44.218.60.222:8080/index.php?path=user&id=` + this.request.ownerid);
+                const response = await fetch(`http://44.218.60.222:8080/index.php?path=user&id=` + this.request.buyerid);
                 const data = await response.json();
                 if (data.status === 'User not found') {
-                    this.owner = null;
+                    this.buyer = null;
                 } else {
-                    this.owner = data;
+                    this.buyer = data;
                 }
             } catch (error) {
-                console.error('Error fetching owner:', error);
+                console.error('Error fetching buyer:', error);
             }
-            console.log('Owner:', this.owner);
+            console.log('buyer:', this.buyer);
         }
     },
     mounted() {
         this.fetchProduct();
-        this.fetchOwner();
+        this.fetchBuyer();
     }
 }
 </script>

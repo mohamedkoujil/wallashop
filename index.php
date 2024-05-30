@@ -288,6 +288,32 @@ elseif ($method == 'DELETE' && $path == 'valoracion') {
     }
 }
 
+// Listar valoraciones de un usuario
+elseif ($method == 'GET' && $path == 'user-valorations') {
+    $userId = $_GET['userid'];
+    $query = "SELECT * FROM valoration WHERE ownerid = '$userId' or userid = '$userId'";
+    $result = pg_query($conn, $query);
+    $valorations = pg_fetch_all($result);
+    echo json_encode($valorations ?: []);
+}
+
+// Listar todas las valoraciones  
+elseif ($method == 'GET' && $path == 'all-valorations') {
+    $result = pg_query($conn, "SELECT * FROM valoration");
+    $valorations = pg_fetch_all($result);
+    echo json_encode($valorations ?: []);
+}
+
+//Obtener info de quien ha valorado
+elseif ($method == 'GET' && $path == 'get-info-valorations') {
+    $userId = $_GET['userid'];
+    //Obtener info de quien ha valorado
+    $query = "SELECT * FROM person WHERE id IN (SELECT ownerid FROM valoration WHERE ownerid = '$userId') OR id IN (SELECT userid FROM valoration WHERE userid = '$userId')";
+    $result = pg_query($conn, $query);
+    $user = pg_fetch_assoc($result);
+    echo json_encode($user);
+}
+
 // Listar productos favoritos de un usuario
 elseif ($method == 'GET' && $path == 'get-favorites') {
     $userId = $_GET['userid'];

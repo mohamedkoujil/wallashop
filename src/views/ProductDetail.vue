@@ -2,65 +2,81 @@
   <AppHeader @search="handleSearch"></AppHeader>
   <div class="product-detail">
     <h1>Detalle del Producto</h1>
-    <div class="product-content" v-if="product">
-      <img :src="product.images" alt="Product image" class="product-image">
-      <div class="product-info">
-        <div class="flex">
-          <div v-if="this.owner" class="ownerInfo">
-            <img :src="owner.profilepicture" alt="Owner profile picture">
-            <p>{{ owner.personname }}</p>
-            <p>{{ owner.email }}</p>
-            <p>{{ owner.rate }} ★</p>
+    <div class="container" v-if="product">
+      <div class="product-content">
+        <div class="img-button">
+          <img :src="product.images" alt="Product image" class="product-image">
+          <button class="contactButton" @click="buyProduct">
+            Solicitar Compra
+            <div class="iconButton">
+              <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                  fill="currentColor"></path>
+              </svg>
+            </div>
+          </button>
         </div>
-        <button class="contactButton" @click="buyProduct">
-          Solicitar Compra
-          <div class="iconButton">
-            <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
-                fill="currentColor"></path>
-            </svg>
+        <div class="product-info">
+          <div class="flex">
+            <div v-if="this.owner" class="ownerInfo">
+              <img :src="owner.profilepicture" alt="Owner profile picture">
+              <p>{{ owner.personname }}</p>
+              <p>{{ owner.email }}</p>
+              <p>{{ owner.rate }} ★</p>
+            </div>
           </div>
-        </button>
-        </div>
-        <h2>{{ product.productname }}</h2>
-        <p class="product-category"><strong>Categoría:</strong> {{ product.category }}</p>
-        <p class="product-description"><strong>Descripción:</strong> {{ product.description }}</p>
-        <p class="product-price"><strong>Precio:</strong> {{ product.price }} €</p>
-        <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
-        
-        <div class="buyProcess" v-if="buyProcess">
-          <p v-if="user.id == product.ownerid">No puedes comprar tu propio producto</p>
-          <div v-else>
-            <p>¿Estás seguro de que deseas comprar este producto?</p>
-            <button @click="confirmBuyProduct">Sí</button>
-            <button @click="buyProcess = false">No</button>
-          </div>
-        </div>
+          <h2>{{ product.productname }}</h2>
+          <p class="product-category"><strong>Categoría:</strong> {{ product.category }}</p>
+          <p class="product-description"><strong>Descripción:</strong> {{ product.description }}</p>
+          <p class="product-price"><strong>Precio:</strong> {{ product.price }} €</p>
+          <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
 
-        <div class="heart-container" title="Like" @click="toggleFavorite">
-          <input type="checkbox" class="checkbox" id="Give-It-An-Id" v-model="isFavorite">
-          <div class="svg-container">
-            <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z">
-              </path>
-            </svg>
-            <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z">
-              </path>
-            </svg>
-            <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-              <polygon points="10,10 20,20"></polygon>
-              <polygon points="10,50 20,50"></polygon>
-              <polygon points="20,80 30,70"></polygon>
-              <polygon points="90,10 80,20"></polygon>
-              <polygon points="90,50 80,50"></polygon>
-              <polygon points="80,80 70,70"></polygon>
-            </svg>
+          <div class="buyProcess" v-if="buyProcess">
+            <p v-if="user.id == product.ownerid">No puedes comprar tu propio producto</p>
+            <div v-else>
+              <p>¿Estás seguro de que deseas comprar este producto?</p>
+              <button @click="confirmBuyProduct">Sí</button>
+              <button @click="buyProcess = false">No</button>
+            </div>
+          </div>
+
+          <div class="heart-container" title="Like" @click="toggleFavorite">
+            <input type="checkbox" class="checkbox" id="Give-It-An-Id" v-model="isFavorite">
+            <div class="svg-container">
+              <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z">
+                </path>
+              </svg>
+              <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z">
+                </path>
+              </svg>
+              <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="10,10 20,20"></polygon>
+                <polygon points="10,50 20,50"></polygon>
+                <polygon points="20,80 30,70"></polygon>
+                <polygon points="90,10 80,20"></polygon>
+                <polygon points="90,50 80,50"></polygon>
+                <polygon points="80,80 70,70"></polygon>
+              </svg>
+            </div>
           </div>
         </div>
+      </div>
+      <div class="valorations">
+        <h2>Valoraciones del vendedor</h2>
+        <div v-if="infoValorations" class="valorations-comments">
+          <div class="combinedData" v-for="(combinedData, index) in infoValorations" :key="index">
+            <p>{{ combinedData.comment }}</p>
+            <p>{{ combinedData.rate }} ★</p>
+            <p>{{ combinedData.email }}</p>
+            <p>{{ combinedData.personname }}</p>
+          </div>
+        </div>
+        <p v-else>No hay valoraciones</p>
       </div>
     </div>
     <div v-else id="loading">
@@ -83,7 +99,9 @@ export default {
       searchTerm: '',
       buyProcess: false,
       user: JSON.parse(localStorage.getItem('user')) || null,
-      owner: null
+      owner: null,
+      valoraciones: null,
+      infoValorations: null
     };
   },
   created() {
@@ -94,19 +112,18 @@ export default {
     AppHeader,
   },
   methods: {
-    async fetchProduct() {
-      try {
-        const response = await fetch(`http://44.218.60.222:8080/index.php?path=product&id=${this.id}`);
-        const data = await response.json();
-        if (data.status === 'Product not found') {
-          this.product = null;
-        } else {
+    fetchProduct() {
+      fetch(`http://44.218.60.222:8080/index.php?path=product&id=${this.id}`)
+        .then(response => response.json())
+        .then(data => {
           this.product = data;
+          console.log('Product:', this.product);
           this.fetchOwner();
-        }
-      } catch (error) {
-        console.error('Error fetching product:', error);
-      }
+          this.ownerValorations();
+        })
+        .catch(error => {
+          console.error('Error fetching product:', error);
+        });
     },
     async checkIfFavorite() {
       try {
@@ -163,6 +180,7 @@ export default {
           }
 
           if (user.balance < this.product.price) {
+            console.log('Balance insuficiente:' + user.balance + ' < ' + this.product.price);
             alert('Balance insuficiente');
             return;
           }
@@ -249,6 +267,49 @@ export default {
       } catch (error) {
         console.error('Error buying product:', error);
       }
+    },
+    async ownerValorations() {
+      try {
+        const response = await fetch('http://44.218.60.222:8080/index.php?path=user-valorations&userid=' + this.product.ownerid);
+        const valoracionesData = await response.json();
+        console.log('Valoraciones:', valoracionesData);
+
+        const infoValorations = [];
+        for (const valoration of valoracionesData) {
+          const response = await fetch('http://44.218.60.222:8080/index.php?path=get-info-valorations&userid=' + valoration.userid);
+          const userData = await response.json();
+          console.log('Info valorations:', userData);
+
+          const combinedData = {
+            comment: valoration.comment,
+            rate: valoration.rate,
+            email: userData.email,
+            personname: userData.personname,
+            profilepicture: userData.profilepicture
+          };
+          console.log('Combined data:', combinedData);
+          infoValorations.push(combinedData);
+        }
+
+        this.infoValorations = infoValorations;
+      } catch (error) {
+        console.error('Error fetching info valorations:', error);
+      }
+    },
+
+    async fetchEmailValorations() {
+      try {
+        const infoValorations = [];
+        for (const valoration of this.valoraciones) {
+          const response = await fetch('http://44.218.60.222:8080/index.php?path=get-info-valorations&userid=' + valoration.userid);
+          const data = await response.json();
+          console.log('Info valorations:', data);
+          infoValorations.push(data);
+        }
+        this.infoValorations = infoValorations;
+      } catch (error) {
+        console.error('Error fetching info valorations:', error);
+      }
     }
 
   }
@@ -256,10 +317,65 @@ export default {
 </script>
 
 <style scoped>
-.flex {
+
+.img-button {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.img-button img {
+}
+
+.combinedData {
+  display: flex;
+  gap: 10px;
+  font-weight: 400;
+  font-size: 16px;
+  color: #0E2945;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  border-bottom: 1px solid #0E2945;
+}
+
+.combinedData p {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+
+.valorations-comments {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  justify-content: space-between;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: auto;
+}
+
+.valorations {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: #0E2945 0 4px 8px;
+  color: #0E2945;
+  margin: 10px;
+  width: 75%;
+  padding: 20px;
+}
+
+.valorations h2 {
+  font-weight: 700;
+  color: #0E2945;
 }
 
 .ownerInfo {
@@ -272,6 +388,7 @@ export default {
   gap: 10px;
   margin-right: -1em;
   transition: 0.3s;
+  margin-right: 1em;
 }
 
 .ownerInfo:hover {
@@ -287,7 +404,7 @@ export default {
 
 .buyProcess {
   position: absolute;
-  top: 150%;
+  top: 10%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
@@ -298,7 +415,7 @@ export default {
   color: white;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: #0E2945 0 4px 8px;
   z-index: 100;
   transition: top 0.3s;
 }
@@ -339,11 +456,11 @@ h2 {
   flex-direction: row;
   align-items: flex-start;
   gap: 20px;
-  max-width: 1200px;
+  width: 75%;
   margin: 40px auto;
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: #0E2945 0 4px 8px;
   padding: 20px;
   position: relative;
 }

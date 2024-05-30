@@ -47,7 +47,7 @@
                 <product-card :product="purchase"></product-card>
               </router-link>
               <button @click="addValoration(purchase)">Añadir valoración</button>
-              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -171,8 +171,9 @@ export default {
     },
     //redirect to the add valoration page with the parameter of the product
     addValoration(product) {
-      this.$router.push({ name: 'AddValoration', params: { product } });
-    },
+      this.$router.push({ name: 'add-review', params: { productid: product.id } });
+    }
+
   },
   mounted() {
     this.fetchProducts();
