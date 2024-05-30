@@ -161,17 +161,10 @@ export default {
   display: flex;
   flex-direction: column;
   float: left;
-  position: sticky;
-  margin: 0.8em 0em 0 0em;
   width: 10%;
-  background-color: white;
-  padding-left: 10px;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .categories {
-
   top: 1em;
   display: flex;
   flex-direction: column;
@@ -235,7 +228,7 @@ export default {
 }
 
 #add-product:hover {
-  transform: translateY(-2px);
+  transform: translateX(10px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -247,7 +240,7 @@ export default {
 .sort-button,
 .filter-button {
   display: inline-block;
-  width: 95%;
+  width: 90%;
   margin: 10px 0 0 0;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -257,13 +250,11 @@ export default {
   box-shadow: 0 0px 3px rgba(0, 0, 0, 0.3);
   background-color: #0E2945;
   color: aliceblue;
-  margin-bottom: 8px;
 }
 
 .sort-button:hover,
 .filter-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateX(10px);
 }
 
 /* Estilos para los campos de entrada de precio */
@@ -278,10 +269,39 @@ export default {
 
 .price-input:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #0E2945;
 }
 
 /* Estilos para el contenedor de los botones de ordenamiento */
 .price-filter {
   margin-bottom: 1em;
-}</style>
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  background-color: white;
+  padding: 1em;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+}
+
+/* Estilos para el contenedor de los campos de entrada de precio */
+.price-range-filter {
+  margin-bottom: 1em;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  background-color: white;
+  padding: 1em;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+}
+
+.price-range-filter form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+</style>
