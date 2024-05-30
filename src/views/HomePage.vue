@@ -166,6 +166,8 @@ export default {
   width: 10%;
   background-color: white;
   padding-left: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .categories {
@@ -197,6 +199,8 @@ export default {
   border-radius: 5px;
   border: none;
   box-shadow: 0 0px 3px rgba(0, 0, 0, 0.3);
+  background-color: #0E2945;
+  color: aliceblue;
 }
 
 .categories button:hover {
@@ -252,7 +256,8 @@ export default {
   border: none;
   box-shadow: 0 0px 3px rgba(0, 0, 0, 0.3);
   background-color: #0E2945;
-  color: whitesmoke;
+  color: aliceblue;
+  margin-bottom: 8px;
 }
 
 .sort-button:hover,
