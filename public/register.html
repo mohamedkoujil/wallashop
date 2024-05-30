@@ -63,6 +63,10 @@
     .register-container button:hover {
       background-color: #8292A4;
     }
+
+    #errores {
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -114,22 +118,20 @@
         },
         body: JSON.stringify({ personName, email, password, location, profilePicture })
       })
-      .then(response => response.json().then(data => {
-        if (!response.ok) {
-          throw new Error(data.message || 'Error en el registro');
-        }
-        return data;
-      }))
+      .then(response => response.json())
       .then(data => {
-        if (data.status !== 'success') {
-          document.getElementById('errores').innerText = data.message || 'Error en el registro';
+        console.log(data);
+        if (data.status) {
+          document.getElementById('errores').innerText = data.status;
         } else {
           window.location.href = 'login.html';
         }
       })
       .catch(error => {
-        document.getElementById('errores').innerText = error.message;
+        console.error('Error:', error);
+        document.getElementById('errores').innerText = 'Error en la solicitud de registro.';
       });
+
     });
   </script>
 </body>

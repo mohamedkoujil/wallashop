@@ -136,24 +136,31 @@ elseif ($method == 'POST' && $path == 'register') {
     $password = $data['password'];
     $location = $data['location'];
     $profilePicture = $data['profilePicture'];
-    $nivell = isset($data['nivell']) ? $data['nivell'] : 'user';
+    $role = isset($data['role']) ? $data['role'] : 'user';
     $personName = $data['personName'];
 
-    $query = "INSERT INTO person (email, password, location, profilepicture, role, personname, status) VALUES ('$email', '$password', '$location', '$profilePicture', '$nivell', '$personName', 'active')";
+    // Asegúrate de que el correo electrónico sea único
+    $checkQuery = "SELECT * FROM person WHERE email = '$email'";
+    $checkResult = pg_query($conn, $checkQuery);
 
-    $result = pg_query($conn, $query);
-
-    if ($result) {
-        echo json_encode(['status' => 'success']);
+    if (pg_num_rows($checkResult) > 0) {
+        // Email ya existe
+        echo json_encode(['status' => 'Error adding user: Email already exists']);
     } else {
-        $error_message = pg_last_error($conn);
-        if (strpos($error_message, 'duplicate key value violates unique constraint "unique_email"') !== false) {
-            echo json_encode(['status' => 'Error adding user: Email already exists']);
+        // Inserta nuevo usuario
+        $query = "INSERT INTO person (email, password, location, profilepicture, role, personname, status) VALUES ('$email', '$password', '$location', '$profilePicture', '$role', '$personName', 'active')";
+
+        $result = pg_query($conn, $query);
+
+        if ($result) {
+            echo json_encode(['status' => 'success']);
         } else {
-            echo json_encode(['status' => 'Error adding user']);
+            $error_message = pg_last_error($conn);
+            echo json_encode(['status' => 'Error adding user', 'error' => $error_message]);
         }
     }
 }
+
 
 // Actualizar usuario
 elseif ($method == 'PUT' && $path == 'update-user') {
