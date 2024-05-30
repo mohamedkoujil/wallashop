@@ -104,7 +104,7 @@ export default {
           this.isFavorite = false;
           return;
         }
-        const response = await fetch(`http://3.87.167.210:8080/index.php?path=get-favorites&userid=${user.id}`);
+        const response = await fetch(`http://54.197.171.146:8080/index.php?path=get-favorites&userid=${user.id}`);
         const data = await response.json();
         this.isFavorite = data.some(favorite => favorite.id === this.id);
       } catch (error) {
@@ -118,7 +118,7 @@ export default {
           alert('You need to log in to add favorites');
           return;
         }
-        let response = await fetch('http://3.87.167.210:8080/index.php?path=toggle-favorite', {
+        let response = await fetch('http://54.197.171.146:8080/index.php?path=toggle-favorite', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -151,7 +151,7 @@ export default {
             return;
           }
 
-          const response = await fetch('http://3.87.167.210:8080/index.php?path=request-purchase', {
+          const response = await fetch('http://54.197.171.146:8080/index.php?path=request-purchase', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -191,7 +191,8 @@ export default {
 .buyProcess {
   position: absolute;
   top: 150%;
-  left: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -226,8 +227,8 @@ export default {
 }
 
 .product-detail {
-  padding: 20px;
-  text-align: center;
+  padding: 40px;
+  text-align: left;
 }
 
 h1,
@@ -238,15 +239,16 @@ h2 {
 
 .product-content {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
   gap: 20px;
-  max-width: 800px;
-  margin: 20px auto;
+  max-width: 1200px;
+  margin: 40px auto;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  position: relative;
 }
 
 .product-image {
@@ -369,8 +371,9 @@ h2 {
 
 .heart-container {
   --heart-color: rgb(240, 8, 0);
-  position: relative;
-  left: 95%;
+  position: absolute;
+  right: 10px;
+  top: 10px;
   width: 30px;
   height: 30px;
   transition: .3s;
