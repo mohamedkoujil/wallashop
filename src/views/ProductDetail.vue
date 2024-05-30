@@ -154,7 +154,8 @@ export default {
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) {
           alert('You need to log in to add favorites');
-          return;
+          //Dejar el corazon como estaba
+          document.getElementById('Give-It-An-Id').checked = false;
         }
         let response = await fetch('http://44.218.60.222:8080/index.php?path=toggle-favorite', {
           method: 'POST',
@@ -178,6 +179,11 @@ export default {
       }
     },
     async buyProduct() {
+      // Check if the user is logged in
+      if (!this.user) {
+        alert('You need to be logged in to buy products');
+        return;
+      }
       if (!this.buyProcess) {
         this.buyProcess = true;
       } else {
