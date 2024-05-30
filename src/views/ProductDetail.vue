@@ -70,10 +70,17 @@
         <h2>Valoraciones del vendedor</h2>
         <div v-if="infoValorations" class="valorations-comments">
           <div class="combinedData" v-for="(combinedData, index) in infoValorations" :key="index">
-            <p>{{ combinedData.comment }}</p>
-            <p>{{ combinedData.rate }} ★</p>
-            <p>{{ combinedData.email }}</p>
-            <p>{{ combinedData.personname }}</p>
+            <img :src="combinedData.profilepicture" alt="Profile picture">
+            <div class="flex column ">
+              <div class="flex flex-start border-bottom-light">
+                <p>{{ combinedData.rate }} ★</p>
+                <p>{{ combinedData.email }}</p>
+                <p>{{ combinedData.personname }}</p>
+              </div>
+              <div class="flex flex-start">
+                <p>{{ combinedData.comment }}</p>
+                </div>
+            </div>
           </div>
         </div>
         <p v-else>No hay valoraciones</p>
@@ -694,16 +701,43 @@ h2 {
 .combinedData {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 20px;
   font-weight: 400;
   font-size: 16px;
   color: #0E2945;
   padding: 10px 0;
-  border-bottom: 1px solid #0E2945;
+  border: 1px solid #0E2945;
+  border-radius: 10px;
+  margin: 10px 0;
+  box-shadow: #0e294567 0 1px 8px;
 }
 
 .combinedData p {
   margin: 0;
+}
+
+.combinedData img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.flex {
+  display: flex;
+  gap: 10px;
+}
+
+.flex-start {
+  justify-content: flex-start;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.border-bottom-light {
+  border-bottom: 1px solid #ccc;
 }
 
 
