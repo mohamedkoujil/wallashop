@@ -711,6 +711,7 @@ h2 {
   border-radius: 10px;
   margin: 10px 0;
   box-shadow: #0e294567 0 1px 8px;
+  padding: 1em;
 }
 
 .combinedData p {
@@ -741,4 +742,4 @@ h2 {
 }
 
 
-</style >
+</style>
