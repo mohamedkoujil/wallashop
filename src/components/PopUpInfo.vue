@@ -9,7 +9,7 @@
                             d="M14 9V4H5v16h6.056c.328.417.724.785 1.18 1.085l1.39.915H3.993A.993.993 0 0 1 3 21.008V2.992C3 2.455 3.449 2 4.002 2h10.995L21 8v1h-7zm-2 2h9v5.949c0 .99-.501 1.916-1.336 2.465L16.5 21.498l-3.164-2.084A2.953 2.953 0 0 1 12 16.95V11zm2 5.949c0 .316.162.614.436.795l2.064 1.36 2.064-1.36a.954.954 0 0 0 .436-.795V13h-5v3.949z"
                             fill="currentColor"></path>
                     </svg>
-                    Quiénes Somos
+                    Términos y Servicios
                 </span>
                 <button class="icon-button" @click="closeModal">
                     <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -22,7 +22,7 @@
             </header>
             <section class="modal-container-body rtf">
 
-
+                <h2> Quiénes Somos</h2>
                 <p>
                     WallaShop se centra en mejorar la experiencia de compra y venta de los miembros de la comunidad local.
                     Con esta iniciativa, nuestro objetivo es optimizar el proceso de intercambio de productos y servicios
@@ -32,10 +32,9 @@
                     una experiencia de comercio electrónico excepcional.
                 </p>
 
-
-
                 <p>
-                    Nos dedicaos a impulsar la innovación y la mejora continua en el ámbito del comercio electrónico. Nuestra
+                    Nos dedicamos a impulsar la innovación y la mejora continua en el ámbito del comercio electrónico.
+                    Nuestra
                     pasión radica en crear soluciones tecnológicas que no solo simplifiquen, sino que también enriquezcan
                     las experiencias de compra y venta en línea. Con un enfoque centrado en el usuario y un compromiso con
                     la excelencia, trabajamos incansablemente para desarrollar plataformas como WallaShop, que no solo
@@ -44,7 +43,6 @@
                 </p>
 
                 <p>
-
                     En nuestro enfoque, no solo nos esforzamos por desarrollar una plataforma eficiente y escalable para la
                     gestión de ventas online, sino que también nos comprometemos fervientemente a promover la reutilización
                     de productos como un valor central de nuestra misión. Creemos firmemente en la importancia de crear un
@@ -52,8 +50,50 @@
                     y celebrada. A través de nuestro proyecto, buscamos no solo facilitar el intercambio de bienes, sino
                     también fomentar una cultura de consumo consciente y sostenible, donde cada producto tenga la
                     oportunidad de encontrar un nuevo hogar y extender su ciclo de vida útil.
-
                 </p>
+
+                <h2>Términos de WallaShop</h2>
+
+                <p>
+                    Al utilizar WallaShop, aceptas los siguientes términos y condiciones. El incumplimiento de estos
+                    términos
+                    puede resultar en la suspensión o terminación de tu cuenta.
+                </p>
+
+                <p>
+                    1. Responsabilidad del usuario: Eres responsable de mantener la confidencialidad de tu cuenta y
+                    contraseña,
+                    así como de todas las actividades que ocurran bajo tu cuenta.
+                </p>
+
+                <p>
+                    2. Contenido del usuario: Al publicar contenido en WallaShop, otorgas a WallaShop una licencia mundial,
+                    no exclusiva, transferible, sublicenciable y libre de regalías para usar, reproducir, modificar,
+                    adaptar,
+                    publicar, distribuir y mostrar dicho contenido.
+                </p>
+
+                <p>
+                    3. Conducta del usuario: No puedes utilizar WallaShop de ninguna manera que pueda dañar, deshabilitar,
+                    sobrecargar o perjudicar el sitio web o interferir con el uso y disfrute de otro usuario del sitio.
+                </p>
+
+                <h2>Política de Privacidad</h2>
+
+                <p>
+                    En WallaShop, nos comprometemos a proteger tu privacidad y seguridad en línea. Nuestra política de
+                    privacidad
+                    describe cómo recopilamos, utilizamos y protegemos la información que proporcionas cuando utilizas
+                    nuestros
+                    servicios.
+                </p>
+
+                <p>
+                    Para obtener más información sobre cómo manejamos tus datos personales, consulta nuestra Política de
+                    Privacidad
+                    completa en nuestro sitio web.
+                </p>
+
 
             </section>
             <footer class="modal-container-footer">
@@ -73,17 +113,15 @@ export default {
         };
     },
     mounted() {
-        // Mostrar el modal solo si no está visible
-        if (!this.isVisible) {
+        // Verificar si se ha mostrado el popup anteriormente
+        if (!localStorage.getItem('popupShown')) {
             this.showModal();
         }
-        
-        // Configurar el intervalo solo si el modal no está visible
-        if (!this.isVisible) {
-            setInterval(() => {
-                this.showModal();
-            }, 30 * 60 * 1000);
-        }
+
+        // Configurar el intervalo para mostrar el popup cada 30 minutos
+        setInterval(() => {
+            this.showModal();
+        }, 30 * 60 * 1000);
     },
     methods: {
         showModal() {
@@ -98,6 +136,8 @@ export default {
         },
         accept() {
             this.closeModal();
+            // Guardar en localStorage que se ha aceptado el popup para que no vuelva a aparecer
+            localStorage.setItem('popupShown', 'true');
             this.$emit('accept');
         },
     },
