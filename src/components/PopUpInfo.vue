@@ -199,7 +199,7 @@ a {
 .modal-container-title svg {
     width: 32px;
     height: 32px;
-    color: #750550;
+    color: #0E2945;
 }
 
 .modal-container-body {
