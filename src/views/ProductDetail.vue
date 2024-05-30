@@ -10,8 +10,10 @@
         <p class="product-description"><strong>Descripción:</strong> {{ product.description }}</p>
         <p class="product-price"><strong>Precio:</strong> {{ product.price }} €</p>
         <p class="product-location"><strong>Ubicación:</strong> {{ product.location }}</p>
-        <p class="product-owner"><strong>Propietario:</strong> {{ product.ownername }} - {{ product.owneremail }}</p>
-        <button class="contactButton" @click="buyProduct">
+        
+
+        <div class="flex" >
+          <button class="contactButton" @click="buyProduct">
           Solicitar Compra
           <div class="iconButton">
             <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -21,6 +23,14 @@
             </svg>
           </div>
         </button>
+
+          <div v-if="this.owner" class="ownerInfo">
+            <img :src="owner.profilepicture" alt="Owner profile picture">
+            <p>{{ owner.personname }}</p>
+            <p>{{ owner.email }}</p>
+          </div>
+        </div>
+        
         <div class="buyProcess" v-if="buyProcess">
           <p v-if="user.id == product.ownerid">No puedes comprar tu propio producto</p>
           <div v-else>
@@ -29,6 +39,7 @@
             <button @click="buyProcess = false">No</button>
           </div>
         </div>
+
         <div class="heart-container" title="Like" @click="toggleFavorite">
           <input type="checkbox" class="checkbox" id="Give-It-An-Id" v-model="isFavorite">
           <div class="svg-container">
@@ -73,7 +84,8 @@ export default {
       isFavorite: false,
       searchTerm: '',
       buyProcess: false,
-      user: JSON.parse(localStorage.getItem('user')) || null
+      user: JSON.parse(localStorage.getItem('user')) || null,
+      owner: null
     };
   },
   created() {
@@ -92,6 +104,7 @@ export default {
           this.product = null;
         } else {
           this.product = data;
+          this.fetchOwner();
         }
       } catch (error) {
         console.error('Error fetching product:', error);
@@ -157,11 +170,11 @@ export default {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify(
-              { 
-              userid: user.id, 
-              ownerid: this.product.ownerid,
-              productid: this.product.id, 
-            })
+              {
+                userid: user.id,
+                ownerid: this.product.ownerid,
+                productid: this.product.id,
+              })
           });
 
           const data = await response.json();
@@ -170,7 +183,7 @@ export default {
             this.$router.push('/');
           } else if (data.status == 'Purchase request already sent') {
             alert('Purchase request already sent');
-          } 
+          }
           else {
             alert('Error during purchase');
           }
@@ -182,12 +195,53 @@ export default {
     },
     handleSearch(term) {
       this.searchTerm = term;
+    },
+    fetchOwner() {
+      fetch(`http://54.197.171.146:8080/index.php?path=user&id=${this.product.ownerid}`)
+        .then(response => response.json())
+        .then(data => {
+          this.owner = data;
+          console.log('Owner:', this.owner);
+        })
+        .catch(error => {
+          console.error('Error fetching owner:', error);
+        });
     }
+
   }
 };
 </script>
 
 <style scoped>
+.flex {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.ownerInfo {
+  display: flex;
+  background-color: #0E2945;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  align-items: center;
+  gap: 10px;
+  margin-right: -1em;
+  transition: 0.3s;
+}
+
+.ownerInfo:hover {
+  cursor: pointer;
+  transform: translateY(-2px);
+}
+
+.ownerInfo img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
 .buyProcess {
   position: absolute;
   top: 150%;
@@ -479,29 +533,18 @@ h2 {
   position: relative;
   height: 2.8em;
   padding-right: 3em;
-}
-
-.iconButton {
-  margin-left: 1em;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 2.2em;
-  width: 2.2em;
-  border-radius: 0.7em;
-  box-shadow: 0.1em 0.1em 0.6em 0.2em #7a8cf3;
-  right: 0.3em;
   transition: all 0.3s;
+  width: 25%;
+  height: 4em;
+  width: 50%;
+  justify-content: center;
 }
 
 .contactButton:hover {
-  transform: translate(-0.05em, -0.05em);
-  box-shadow: 0.15em 0.15em #5566c2;
+  transform: translateY(-2px);
 }
 
 .contactButton:active {
-  transform: translate(0.05em, 0.05em);
-  box-shadow: 0.05em 0.05em #5566c2;
+  transform: translateY()
 }
 </style>
