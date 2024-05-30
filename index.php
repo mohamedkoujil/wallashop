@@ -175,7 +175,7 @@ elseif ($method == 'PUT' && $path == 'update-user') {
     $result = pg_query($conn, $query);
 
     if ($result) {
-        echo json_encode(['status' => 'User updated']);
+        echo json_encode(['status' => 'User updated', 'user' => $data]);
     } else {
         echo json_encode(['status' => 'Error updating user']);
     }

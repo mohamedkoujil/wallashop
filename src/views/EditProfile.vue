@@ -5,12 +5,15 @@
       <h1>Edit Profile</h1>
       <form @submit.prevent="updateProfile">
         <div class="form-group">
+          <label for="personname">Person Name:</label>
+          <input type="text" v-model="profile.personname" id="personname" required />
+
           <label for="email">Email:</label>
           <input type="email" v-model="profile.email" id="email" required />
         </div>
         <div class="form-group">
           <label for="password">Password:</label>
-          <input type="password" v-model="profile.password" id="password" required />
+          <input type="password" v-model="profile.password" id="password" />
         </div>
         <div class="form-group">
           <label for="location">Location:</label>
@@ -21,8 +24,8 @@
           <input type="text" v-model="profile.profilePicture" id="profilePicture" required />
         </div>
         <div class="form-group" v-if="isAdmin">
-          <label for="nivell">Level:</label>
-          <select v-model="profile.nivell" id="nivell" required>
+          <label for="role">Role:</label>
+          <select v-model="profile.role" id="role" required>
             <option value="admin">Admin</option>
             <option value="user">User</option>
           </select>
@@ -45,7 +48,8 @@ export default {
         password: '',
         location: '',
         profilePicture: '',
-        nivell: 'user'
+        role: JSON.parse(localStorage.getItem('user')).role,
+        personname: ''
       },
       isAdmin: false,
     };
@@ -60,7 +64,7 @@ export default {
   methods: {
     checkAdmin() {
       const user = JSON.parse(localStorage.getItem('user'));
-      if (user && user.nivell === 'admin') {
+      if (user && user.role === 'admin') {
         this.isAdmin = true;
       }
     },
@@ -69,30 +73,47 @@ export default {
       if (user) {
         this.profile = {
           email: user.email,
-          password: user.password,
+          password: '',
           location: user.location,
           profilePicture: user.profilepicture,
-          nivell: user.nivell
+          role: user.role,
+          personname: user.personname
         };
       }
     },
     updateProfile() {
-      fetch('http://http://54.197.171.146:8080/index.php?path=update-user', {
+      const profileData = {
+        id: JSON.parse(localStorage.getItem('user')).id,
+        email: this.profile.email,
+        location: this.profile.location,
+        profilepicture: this.profile.profilePicture,
+        personname: this.profile.personname
+      };
+
+      if (this.profile.password) {
+        profileData.password = this.profile.password;
+      }
+
+      fetch('http://54.197.171.146:8080/index.php?path=update-user', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(this.profile)
+        body: JSON.stringify(profileData)
       })
       .then(response => response.json())
       .then(data => {
-        if (data.status === 'success') {
+        if (data.status === 'User updated') {
           this.$router.push('/profile');
+          //volver a cargar el user al localstorage
+          localStorage.setItem('user', JSON.stringify(data.user));
         } else {
           alert('Error updating profile');
         }
       })
-      console.log("Profile updated:", this.profile);
+      .catch(error => {
+        console.error('Error updating profile:', error);
+      });
     }
   }
 };
