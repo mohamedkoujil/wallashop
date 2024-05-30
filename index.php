@@ -138,7 +138,7 @@ elseif ($method == 'POST' && $path == 'register') {
     $nivell = isset($data['nivell']) ? $data['nivell'] : 'user';
     $personName = $data['personName'];
 
-    $query = "INSERT INTO person (email, password, location, profilepicture, nivell, personname, status) VALUES ('$email', '$password', '$location', '$profilePicture', '$nivell', '$personName', 'active')";
+    $query = "INSERT INTO person (email, password, location, profilepicture, role, personname, status) VALUES ('$email', '$password', '$location', '$profilePicture', '$nivell', '$personName', 'active')";
 
     $result = pg_query($conn, $query);
 
@@ -161,11 +161,11 @@ elseif ($method == 'PUT' && $path == 'update-user') {
     $email = $data['email'];
     $password = isset($data['password']) ? $data['password'] : null;
     $location = $data['location'];
-    $profilePicture = $data['profilePicture'];
-    $nivell = $data['nivell'];
-    $personName = $data['personName'];
+    $profilePicture = $data['profilepicture'];
+    $nivell = $data['role'];
+    $personName = $data['personname'];
 
-    $query = "UPDATE person SET email = '$email', location = '$location', profilepicture = '$profilePicture', nivell = '$nivell', personname = '$personName'";
+    $query = "UPDATE person SET email = '$email', location = '$location', profilepicture = '$profilePicture', role = '$nivell', personname = '$personName'";
     if ($password) {
         $query .= ", password = '$password'";
     }
@@ -205,7 +205,7 @@ elseif ($method == 'POST' && $path == 'login') {
     $user = pg_fetch_assoc($result);
 
     if ($user) {
-        echo json_encode(['status' => 'Login successful', 'isLoggedIn' => true, 'user' => $user, 'isAdmin' => $user['nivell'] === 'admin']);
+        echo json_encode(['status' => 'Login successful', 'isLoggedIn' => true, 'user' => $user, 'isAdmin' => $user['role'] === 'admin']);
     } else {
         echo json_encode(['status' => 'Invalid credentials', 'isLoggedIn' => false]);
     }

@@ -8,13 +8,22 @@
       <form @submit.prevent="createUser">
         <label for="email">Email:</label>
         <input type="email" v-model="newUser.email" required>
-        
+
         <label for="password">Contraseña:</label>
         <input type="password" v-model="newUser.password" required>
-        
+
         <label for="personname">Nombre:</label>
         <input type="text" v-model="newUser.personname" required>
-        
+
+        <label for="profilepicture">Foto de perfil:</label>
+        <input type="text" v-model="newUser.profilepicture" required>
+
+        <label for="role">Rol:</label>
+        <select v-model="newUser.role" required>
+          <option value="admin">Administrador</option>
+          <option value="user">Usuario</option>
+        </select>
+
         <button type="submit" class="button primary">Crear</button>
         <button @click="showCreateForm = false" class="button secondary">Cancelar</button>
       </form>
@@ -25,6 +34,7 @@
         <tr>
           <th>Email</th>
           <th>Nombre</th>
+          <th>Rol</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -32,6 +42,7 @@
         <tr v-for="user in users" :key="user.id">
           <td>{{ user.email }}</td>
           <td>{{ user.personname }}</td>
+          <td>{{ user.role }}</td>
           <td>
             <button @click="editUser(user)" class="button secondary">Editar</button>
             <button @click="deleteUser(user.id)" class="button danger">Borrar</button>
@@ -50,13 +61,22 @@
         <form @submit.prevent="updateUser">
           <label for="email">Email:</label>
           <input type="email" v-model="selectedUser.email" required>
-          
+
           <label for="password">Contraseña:</label>
           <input type="password" v-model="selectedUser.password">
-          
+
           <label for="personname">Nombre:</label>
           <input type="text" v-model="selectedUser.personname" required>
-          
+
+          <label for="profilepicture">Foto de perfil:</label>
+          <input type="text" v-model="selectedUser.profilepicture" required>
+
+          <label for="role">Rol:</label>
+          <select v-model="selectedUser.role" required>
+            <option value="admin">Administrador</option>
+            <option value="user">Usuario</option>
+          </select>
+
           <button type="submit" class="button primary">Actualizar</button>
           <button @click="showEditForm = false" class="button secondary">Cancelar</button>
         </form>
@@ -76,7 +96,9 @@ export default {
       newUser: {
         email: '',
         password: '',
-        personname: ''
+        personname: '',
+        profilepicture: '',
+        role: 'user'
       },
       selectedUser: {}
     };
@@ -99,23 +121,24 @@ export default {
         },
         body: JSON.stringify(this.newUser)
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 'success') {
-          this.fetchUsers();
-          this.showCreateForm = false;
-          this.newUser = { email: '', password: '', personname: '' };
-        } else {
-          alert('Error al crear usuario');
-        }
-      })
-      .catch(error => console.error('Error creating user:', error));
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            this.fetchUsers();
+            this.showCreateForm = false;
+            this.newUser = { email: '', password: '', personname: '' };
+          } else {
+            alert('Error al crear usuario');
+          }
+        })
+        .catch(error => console.error('Error creating user:', error));
     },
     editUser(user) {
-      this.selectedUser = { ...user };
+      this.selectedUser = user;
       this.showEditForm = true;
     },
     updateUser() {
+      console.log(this.selectedUser);
       fetch(`http://54.197.171.146:8080/index.php?path=update-user&id=${this.selectedUser.id}`, {
         method: 'PUT',
         headers: {
@@ -123,30 +146,30 @@ export default {
         },
         body: JSON.stringify(this.selectedUser)
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 'User updated') {
-          this.fetchUsers();
-          this.showEditForm = false;
-        } else {
-          alert('Error al actualizar usuario');
-        }
-      })
-      .catch(error => console.error('Error updating user:', error));
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'User updated') {
+            this.fetchUsers();
+            this.showEditForm = false;
+          } else {
+            alert('Error al actualizar usuario');
+          }
+        })
+        .catch(error => console.error('Error updating user:', error));
     },
     deleteUser(userId) {
       fetch(`http://54.197.171.146:8080/index.php?path=user&id=${userId}`, {
         method: 'DELETE'
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 'User marked as inactive') {
-          this.fetchUsers();
-        } else {
-          alert('Error al borrar usuario');
-        }
-      })
-      .catch(error => console.error('Error deleting user:', error));
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'User marked as inactive') {
+            this.fetchUsers();
+          } else {
+            alert('Error al borrar usuario');
+          }
+        })
+        .catch(error => console.error('Error deleting user:', error));
     }
   },
   mounted() {
@@ -184,11 +207,14 @@ table {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-table, th, td {
+table,
+th,
+td {
   border: 1px solid #ddd;
 }
 
-th, td {
+th,
+td {
   padding: 10px;
   text-align: left;
 }

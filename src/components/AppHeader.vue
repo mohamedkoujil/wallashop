@@ -49,7 +49,7 @@ export default {
     },
     isAdmin() {
       if(this.user) {
-        if(this.user.nivell === 'admin') {
+        if(this.user.role === 'admin') {
           return true;
         } else {
           return false;
