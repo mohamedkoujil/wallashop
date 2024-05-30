@@ -1,34 +1,39 @@
 <template>
-  <AppHeader @search="handleSearch"></AppHeader>
   <div>
-    <!--Listado de categorias-->
-    <div class="categories">
-      <h3>Categories</h3>
-      <button v-if="this.categories" @click="filterCategory('all')">All</button>
-      <button v-for="category in categories" :key="category.id" @click="filterCategory(category.category)">{{ category.category }}</button>
+    <AppHeader @search="handleSearch"></AppHeader>
+    <div>
+      <PopUpInfo ref="popup" @accept="handleAccept" @decline="handleDecline" />
+      <!--Listado de categorias-->
+      <div class="categories">
+        <h3>Categories</h3>
+        <button v-if="this.categories" @click="filterCategory('all')">All</button>
+        <button v-for="category in categories" :key="category.id" @click="filterCategory(category.category)">{{ category.category }}</button>
+      </div>
+
+      <section class="product-section">
+        <div class="product-container">
+          <router-link :to="'/product/' + product.id" v-for="product in products" :key="product.id">
+            <product-card :product="product"></product-card>
+          </router-link>
+        </div>
+      </section>
+      <button id="add-product" @click="showPopUp">Añadir producto</button>
     </div>
 
-    <section class="product-section">
-      <div class="product-container">
-        <router-link :to="'/product/' + product.id" v-for="product in products" :key="product.id">
-          <product-card :product="product"></product-card>
-        </router-link>
-      </div>
-      
-    </section>
-    <button id="add-product" @click="addProduct">Añadir producto</button>
   </div>
 </template>
 
 <script>
 import ProductCard from '../components/productCard.vue';
 import AppHeader from '../components/AppHeader.vue';
+import PopUpInfo from '../components/PopUpInfo.vue';
 
 export default {
   components: {
     ProductCard,
-    AppHeader
-  },
+    AppHeader,
+    PopUpInfo
+},
   data() {
     return {
       allProducts: [],
@@ -41,13 +46,14 @@ export default {
     this.fetchProducts();
     this.fetchCategories();
     window.addEventListener('scroll', this.handleScroll);
+  this.$refs.popup.showModal();
   },
   methods: {
     async fetchProducts() {
       try {
         const response = await fetch('http://54.197.171.146:8080/index.php?path=products');
         const data = await response.json();
-        console.log('Products:', data)
+        console.log('Products:', data);
         this.allProducts = data;
         this.products = data;
       } catch (error) {
@@ -58,7 +64,7 @@ export default {
       try {
         const response = await fetch('http://54.197.171.146:8080/index.php?path=categories');
         const data = await response.json();
-        console.log('Categories:', data)
+        console.log('Categories:', data);
         this.categories = data;
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -77,8 +83,17 @@ export default {
       console.log('Search:', search);
       this.products = this.allProducts.filter(product => product.productname.toLowerCase().includes(search.toLowerCase()));
     },
-    addProduct() {
-      this.$router.push('/add-product');
+    showPopUp() {
+  this.$refs.popup.showModal(); 
+},
+
+    handleAccept() {
+      console.log('Accepted');
+    
+    },
+    handleDecline() {
+      console.log('Declined');
+      
     },
   }
 };
