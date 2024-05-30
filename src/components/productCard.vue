@@ -4,7 +4,6 @@
     <h2 class="product-name">{{ product.productname }}</h2>
     <p class="product-category">{{ product.category }}</p>
     <p class="product-price">Precio: {{ product.price }}€</p>
-    <button v-if="product.status === 'sold'" @click.stop="navigateToAddReview">Añadir Valoración</button>
   </div>
 </template>
 
@@ -15,9 +14,6 @@ export default {
     product: Object
   },
   methods: {
-    navigateToAddReview() {
-      this.$router.push({ name: 'add-review', params: { id: this.product.id } });
-    }
   }
 }
 </script>

@@ -3,11 +3,14 @@
     <AppHeader @search="handleSearch"></AppHeader>
     <div class="container">
       <div class="section-buttons">
-        <button @click="toggleSection('productos')" :class="{ active: currentSection === 'productos' }">Productos</button>
+        <button @click="toggleSection('productos')"
+          :class="{ active: currentSection === 'productos' }">Productos</button>
         <button @click="toggleSection('ventas')" :class="{ active: currentSection === 'ventas' }">Ventas</button>
         <button @click="toggleSection('compras')" :class="{ active: currentSection === 'compras' }">Compras</button>
-        <button @click="toggleSection('favoritos')" :class="{ active: currentSection === 'favoritos' }">Favoritos</button>
-        <button @click="toggleSection('purchaseRequests')" :class="{ active: currentSection === 'purchaseRequests' }">Solicitudes</button>
+        <button @click="toggleSection('favoritos')"
+          :class="{ active: currentSection === 'favoritos' }">Favoritos</button>
+        <button @click="toggleSection('purchaseRequests')"
+          :class="{ active: currentSection === 'purchaseRequests' }">Solicitudes</button>
       </div>
       <section v-show="currentSection === 'productos'" id="productos" class="section">
         <div class="container">
@@ -25,9 +28,12 @@
           <h2>Gestiona tus Ventas</h2>
           <p>Aquí podrás ver tus productos vendidos.</p>
           <div class="productos-lista">
-            <router-link :to="'/product/' + sale.id" v-for="sale in soldProducts" :key="sale.id">
-              <product-card :product="sale"></product-card>
-            </router-link>
+            <div class="productCard" v-for="sale in soldProducts" :key="sale.id">
+              <router-link :to="'/product/' + sale.id">
+                <product-card :product="sale"></product-card>
+              </router-link>
+              <button @click="addValoration(sale)">Añadir valoración</button>
+            </div>
           </div>
         </div>
       </section>
@@ -35,10 +41,13 @@
         <div class="container">
           <h2>Gestiona tus Compras</h2>
           <p>Aquí podrás ver tus productos comprados.</p>
-          <div class="compras-lista">
-            <router-link :to="'/product/' + purchase.id" v-for="purchase in purchases" :key="purchase.id">
-              <product-card :product="purchase"></product-card>
-            </router-link>
+          <div class="productos-lista">
+            <div class="productCard" v-for="purchase in purchases" :key="purchase.id">
+              <router-link :to="'/product/' + purchase.id">
+                <product-card :product="purchase"></product-card>
+              </router-link>
+              <button @click="addValoration(purchase)">Añadir valoración</button>
+              </div>
           </div>
         </div>
       </section>
@@ -59,12 +68,14 @@
           <p>Aquí podrás ver las solicitudes de compra de tus productos o tus solicitudes de compra.</p>
           <h3>Tus solicitudes de compra</h3>
           <div class="purchase-requests-list">
-            <requestCard v-for="purchaseRequest in purchaseRequests" :key="purchaseRequest.id" :request="purchaseRequest" ></requestCard >
+            <requestCard v-for="purchaseRequest in purchaseRequests" :key="purchaseRequest.id"
+              :request="purchaseRequest"></requestCard>
           </div>
 
           <h3>Solicitudes de venta</h3>
           <div class="purchase-requests-list">
-            <requestCard v-for="saleRequest in saleRequests " :key="saleRequest.id" :request="saleRequest" :sale="true" ></requestCard >
+            <requestCard v-for="saleRequest in saleRequests " :key="saleRequest.id" :request="saleRequest" :sale="true">
+            </requestCard>
           </div>
         </div>
       </section>
@@ -158,6 +169,10 @@ export default {
           this.fetchProducts();
         });
     },
+    //redirect to the add valoration page with the parameter of the product
+    addValoration(product) {
+      this.$router.push({ name: 'AddValoration', params: { product } });
+    },
   },
   mounted() {
     this.fetchProducts();
@@ -171,6 +186,34 @@ export default {
 </script>
 
 <style scoped>
+.productos-lista {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.productCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.productCard button {
+  background-color: #0E2945;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: -1em;
+  width: 90%;
+}
+
+.productCard button:hover {
+  background-color: #8292A4;
+}
+
+
 .section-buttons {
   display: flex;
   justify-content: center;
