@@ -3,6 +3,7 @@
 
         <img :src="product ? product.images : 'https://via.placeholder.com/150'" alt="Product image">
         <h3>{{ product ? product.productname : 'Producto no encontrado' }} - {{ product ? product.price + '€' : 'Precio no disponible' }} </h3>
+        <p>{{ owner ? owner.email : 'Usuario no encontrado' }}</p>
 
         <div v-if="sale" class="buttons">
             <button @click="acceptRequest">Aceptar</button>
@@ -27,13 +28,14 @@ export default {
     data() {
         return {
             product: null,
-            user : JSON.parse(localStorage.getItem('user')) || null
+            user : JSON.parse(localStorage.getItem('user')) || null,
+            owner: null
         }
     },
     methods: {
         acceptRequest() {
             console.log('Solicitud aceptada');
-            fetch('http://3.87.167.210:8080/index.php?path=accept-purchase', {
+            fetch('http://54.197.171.146:8080/index.php?path=accept-purchase', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -57,7 +59,7 @@ export default {
         },
         rejectRequest() {
             console.log('Solicitud rechazada');
-            fetch('http://3.87.167.210:8080/index.php?path=reject-purchase&userid=' + this.request.buyerid + '&productid=' + this.request.productid, {
+            fetch('http://54.197.171.146:8080/index.php?path=reject-purchase&userid=' + this.request.buyerid + '&productid=' + this.request.productid, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -70,7 +72,7 @@ export default {
         },
         async fetchProduct() {
             try {
-                const response = await fetch(`http://3.87.167.210:8080/index.php?path=product&id=` + this.request.productid);
+                const response = await fetch(`http://54.197.171.146:8080/index.php?path=product&id=` + this.request.productid);
                 const data = await response.json();
                 if (data.status === 'Product not found') {
                     this.product = null;
@@ -83,9 +85,24 @@ export default {
             console.log('Product:', this.product);
 
         },
+        async fetchOwner() {
+            try {
+                const response = await fetch(`http://54.197.171.146:8080/index.php?path=user&id=` + this.request.ownerid);
+                const data = await response.json();
+                if (data.status === 'User not found') {
+                    this.owner = null;
+                } else {
+                    this.owner = data;
+                }
+            } catch (error) {
+                console.error('Error fetching owner:', error);
+            }
+            console.log('Owner:', this.owner);
+        }
     },
     mounted() {
         this.fetchProduct();
+        this.fetchOwner();
     }
 }
 </script>

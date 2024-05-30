@@ -113,43 +113,43 @@ export default {
       }
     },
     fetchProducts() {
-      this.fetchData(`http://3.87.167.210:8080/index.php?path=products-for-sale&userid=${this.user.id}`, data => {
+      this.fetchData(`http://54.197.171.146:8080/index.php?path=products-for-sale&userid=${this.user.id}`, data => {
         this.products = data;
         console.log('Products:', data);
       });
     },
     fetchSales() {
-      this.fetchData(`http://3.87.167.210:8080/index.php?path=sales-history&userid=${this.user.id}`, data => {
+      this.fetchData(`http://54.197.171.146:8080/index.php?path=sales-history&userid=${this.user.id}`, data => {
         this.soldProducts = data;
         console.log('Sales:', data);
       });
     },
     fetchPurchases() {
-      this.fetchData(`http://3.87.167.210:8080/index.php?path=purchase-history&userid=${this.user.id}`, data => {
+      this.fetchData(`http://54.197.171.146:8080/index.php?path=purchase-history&userid=${this.user.id}`, data => {
         this.purchases = data;
         console.log('Purchases:', data);
       });
     },
     fetchFavorites() {
-      this.fetchData(`http://3.87.167.210:8080/index.php?path=get-favorites&userid=${this.user.id}`, data => {
+      this.fetchData(`http://54.197.171.146:8080/index.php?path=get-favorites&userid=${this.user.id}`, data => {
         this.favorites = data;
         console.log('Favorites:', data);
       });
     },
     fetchPurchaseRequests() {
-      this.fetchData(`http://3.87.167.210:8080/index.php?path=get-purchase-requests&userid=${this.user.id}`, data => {
+      this.fetchData(`http://54.197.171.146:8080/index.php?path=get-purchase-requests&userid=${this.user.id}`, data => {
         this.purchaseRequests = data;
         console.log('Purchase Requests:', data);
       });
     },
     fetchSaleRequests() {
-      this.fetchData(`http://3.87.167.210:8080/index.php?path=get-sale-requests&userid=${this.user.id}`, data => {
+      this.fetchData(`http://54.197.171.146:8080/index.php?path=get-sale-requests&userid=${this.user.id}`, data => {
         this.saleRequests = data;
         console.log('Sale Requests:', data);
       });
     },
     deleteProduct(id) {
-      fetch(`http://3.87.167.210:8080/index.php?path=product&id=${id}`, {
+      fetch(`http://54.197.171.146:8080/index.php?path=product&id=${id}`, {
         method: 'DELETE',
       })
         .then(response => response.json())

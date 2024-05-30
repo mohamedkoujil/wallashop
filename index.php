@@ -211,6 +211,19 @@ elseif ($method == 'POST' && $path == 'login') {
     }
 }
 
+// Obtener información de un usuario por ID
+elseif ($method == 'GET' && $path == 'user') {
+    $userId = $_GET['id'];
+    $query = "SELECT * FROM person WHERE id = '$userId'";
+    $result = pg_query($conn, $query);
+    $user = pg_fetch_assoc($result);
+    if ($user) {
+        echo json_encode($user);
+    } else {
+        echo json_encode(['status' => 'User not found']);
+    }
+}
+
 // Añadir valoración a usuario
 elseif ($method == 'POST' && $path == 'valoracion') {
     $data = json_decode(file_get_contents('php://input'), true);
