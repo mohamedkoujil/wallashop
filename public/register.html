@@ -67,9 +67,27 @@
     #errores {
       color: red;
     }
+    .volver {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px;
+      background-color: #0E2945;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .volver:hover {
+      background-color: #8292A4;
+    }
+
   </style>
 </head>
 <body>
+  <button class="volver" onclick="window.location.href = '/';">Volver</button>
   <div class="register-container">
     <h1>Registrarse</h1>
     <p id="errores"></p>

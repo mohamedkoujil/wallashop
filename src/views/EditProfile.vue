@@ -34,10 +34,12 @@
       </form>
     </div>
   </div>
+  <AppFooter />
 </template>
 
 <script>
 import AppHeader from '../components/AppHeader.vue';
+import AppFooter from '../components/AppFooter.vue';
 
 export default {
   name: 'EditProfile',
@@ -55,7 +57,8 @@ export default {
     };
   },
   components: {
-    AppHeader
+    AppHeader,
+    AppFooter
   },
   created() {
     this.checkAdmin();

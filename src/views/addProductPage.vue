@@ -33,10 +33,12 @@
             <button type="submit" class="submit-button">Agregar Producto</button>
         </form>
     </div>
+    <AppFooter></AppFooter>
 </template>
 
 <script>
 import AppHeader from '../components/AppHeader.vue';
+import AppFooter from '../components/AppFooter.vue';
 
 export default {
     data() {
@@ -51,7 +53,8 @@ export default {
         };
     },
     components: {
-        AppHeader
+        AppHeader,
+        AppFooter
     },
     created() {
         const user = JSON.parse(localStorage.getItem('user'));

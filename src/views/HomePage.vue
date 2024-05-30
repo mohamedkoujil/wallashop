@@ -43,18 +43,21 @@
     </div>
 
   </div>
+  <AppFooter></AppFooter> 
 </template>
 
 <script>
 import ProductCard from '../components/productCard.vue';
 import AppHeader from '../components/AppHeader.vue';
 import PopUpInfo from '../components/PopUpInfo.vue';
+import AppFooter from '../components/AppFooter.vue';
 
 export default {
   components: {
     ProductCard,
     AppHeader,
-    PopUpInfo
+    PopUpInfo,
+    AppFooter
   },
   data() {
     return {

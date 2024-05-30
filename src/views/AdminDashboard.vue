@@ -23,6 +23,7 @@
       </div>
     </div>
   </div>
+  <AppFooter />
 </template>
 
 <script>
@@ -30,13 +31,15 @@ import AppHeader from '../components/AppHeader.vue';
 import ProductList from '../components/ProductList.vue';
 import ReviewList from '../components/ReviewList.vue';
 import UserManagement from '../components/UserManagement.vue';
+import AppFooter from '../components/AppFooter.vue';
 
 export default {
   components: {
     AppHeader,
     ProductList,
     ReviewList,
-    UserManagement
+    UserManagement,
+    AppFooter
   },
   data() {
     return {

@@ -81,19 +81,22 @@
       </section>
     </div>
   </div>
+  <AppFooter></AppFooter>
 </template>
 
 <script>
 import ProductCard from '../components/productCard.vue';
 import AppHeader from '../components/AppHeader.vue';
 import requestCard from '../components/requestComponent.vue';
+import AppFooter from '../components/AppFooter.vue';
 
 export default {
   name: 'ProfilePage',
   components: {
     ProductCard,
     AppHeader,
-    requestCard
+    requestCard,
+    AppFooter,
   },
   data() {
     return {

@@ -12,10 +12,12 @@
       </form>
     </div>
   </div>
+  <AppFooter />
 </template>
 
 <script>
 import AppHeader from '../components/AppHeader.vue';
+import AppFooter from '../components/AppFooter.vue';
 
 export default {
   name: 'AddReview',
@@ -33,7 +35,8 @@ export default {
     };
   },
   components: {
-    AppHeader
+    AppHeader,
+    AppFooter
   },
   methods: {
     async submitReview() {
