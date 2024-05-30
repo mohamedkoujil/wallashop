@@ -63,7 +63,7 @@ export default {
     methods: {
         async getCategories() {
             try {
-                const response = await fetch('http://3.87.167.210:8080/index.php?path=categories');
+                const response = await fetch('http://54.197.171.146:8080/index.php?path=categories');
                 const data = await response.json();
                 this.categories = data;
             } catch (error) {
