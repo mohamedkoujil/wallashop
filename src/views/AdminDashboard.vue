@@ -6,16 +6,11 @@
       <p>Bienvenido al panel de administración. Aquí puedes gestionar el contenido de la plataforma.</p>
       <div class="button-group">
         <button @click="view = 'products'" :class="{ active: view === 'products' }">Ver Productos</button>
-        <button @click="view = 'reviews'" :class="{ active: view === 'reviews' }">Ver Valoraciones</button>
         <button @click="view = 'users'" :class="{ active: view === 'users' }">Gestionar Usuarios</button>
       </div>
       <div v-if="view === 'products'">
         <h2>Productos</h2>
         <ProductList />
-      </div>
-      <div v-else-if="view === 'reviews'">
-        <h2>Valoraciones</h2>
-        <ReviewList />
       </div>
       <div v-else-if="view === 'users'">
         <h2>Usuarios</h2>
@@ -29,7 +24,6 @@
 <script>
 import AppHeader from '../components/AppHeader.vue';
 import ProductList from '../components/ProductList.vue';
-import ReviewList from '../components/ReviewList.vue';
 import UserManagement from '../components/UserManagement.vue';
 import AppFooter from '../components/AppFooter.vue';
 
@@ -37,7 +31,6 @@ export default {
   components: {
     AppHeader,
     ProductList,
-    ReviewList,
     UserManagement,
     AppFooter
   },
