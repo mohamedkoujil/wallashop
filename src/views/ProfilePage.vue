@@ -32,7 +32,7 @@
               <router-link :to="'/product/' + sale.id">
                 <product-card :product="sale"></product-card>
               </router-link>
-              <button @click="addValoration(sale)">Añadir valoración</button>
+              
             </div>
           </div>
         </div>
